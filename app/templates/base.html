@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MSME Compliance & Incentives Navigator{% endblock %}</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Inter for smooth, sleek, modern SaaS typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Custom Modern Design System -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="app-sidebar" id="appSidebar">
+    <!-- Brand Header -->
+    <div class="sidebar-brand-wrapper">
+      {% if is_admin %}
+      <a href="{{ url_for('main.admin_dashboard') }}" class="sidebar-brand-card">
+        <span class="sidebar-brand-badge" style="background: #EF4444; color: #fff;">ADMIN</span>
+        <span class="sidebar-brand-text">Gov Platform</span>
+      </a>
+      {% else %}
+      <a href="{{ url_for('main.dashboard') }}" class="sidebar-brand-card">
+        <span class="sidebar-brand-badge">MSME</span>
+        <span class="sidebar-brand-text">Navigator India</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <!-- Active Context Summary Card -->
+    {% if is_admin %}
+    <!-- Admin Portal Status Card (Only Admin Controls) -->
+    <div class="sidebar-company-card" style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(59, 130, 246, 0.3);">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span class="small fw-bold text-white"><i class="bi bi-shield-lock-fill text-primary me-1"></i> Admin Console</span>
+        <span class="badge bg-danger text-white" style="font-size: 0.65rem;">Platform</span>
+      </div>
+      <div class="d-flex align-items-center gap-1">
+        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.68rem;">Central & State Gov</span>
+        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.68rem;">RAG Engine</span>
+      </div>
+    </div>
+    {% elif active_company %}
+    <!-- Active Company Summary Card (Only for Organization/Company views) -->
+    <div class="sidebar-company-card">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span class="small fw-bold text-white text-truncate" style="max-width: 150px;">{{ active_company.name }}</span>
+        <a href="{{ url_for('main.company_profile') }}" class="text-secondary text-decoration-none small" title="Edit Profile"><i class="bi bi-pencil-square"></i></a>
+      </div>
+      <div class="d-flex align-items-center gap-1">
+        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.7rem;">{{ active_company.state }}</span>
+        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.7rem;">{{ active_company.entity_type.split(' ')[0] }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Sidebar Menu Links -->
+    <div class="sidebar-menu">
+      {% if is_admin %}
+      <!-- ================= ADMIN CONTROLS ONLY ================= -->
+      <div class="sidebar-section-header">Administration</div>
+
+      <a href="{{ url_for('main.admin_dashboard') }}" class="sidebar-link {% if request.endpoint == 'main.admin_dashboard' %}active{% endif %}">
+        <i class="bi bi-speedometer2"></i>
+        <span>Admin Dashboard</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_records') }}" class="sidebar-link {% if request.endpoint in ['main.admin_records', 'main.verify_record'] %}active{% endif %}">
+        <i class="bi bi-database-check"></i>
+        <span>Regulatory Records (628)</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_changes') }}" class="sidebar-link {% if request.endpoint in ['main.admin_changes', 'main.approve_change', 'main.publish_change'] %}active{% endif %}">
+        <i class="bi bi-bell-history"></i>
+        <span>Change Intelligence</span>
+        {% if pending_changes_count and pending_changes_count > 0 %}
+        <span class="badge bg-danger ms-auto rounded-pill" style="font-size: 0.65rem;">{{ pending_changes_count }}</span>
+        {% endif %}
+      </a>
+
+      <div class="sidebar-section-header mt-3">AI Knowledge & RAG</div>
+
+      <a href="{{ url_for('main.admin_knowledge') }}" class="sidebar-link {% if request.endpoint in ['main.admin_knowledge', 'main.admin_knowledge_upload'] %}active{% endif %}">
+        <i class="bi bi-cpu"></i>
+        <span>Knowledge Ingestion</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_knowledge_playground') }}" class="sidebar-link {% if request.endpoint == 'main.admin_knowledge_playground' %}active{% endif %}">
+        <i class="bi bi-terminal"></i>
+        <span>Retrieval Playground</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_knowledge_sources') }}" class="sidebar-link {% if request.endpoint == 'main.admin_knowledge_sources' %}active{% endif %}">
+        <i class="bi bi-link-45deg"></i>
+        <span>Knowledge Sources</span>
+      </a>
+
+      <div class="sidebar-section-header mt-3">Entities & Security</div>
+
+      <a href="{{ url_for('main.admin_companies') }}" class="sidebar-link {% if request.endpoint == 'main.admin_companies' %}active{% endif %}">
+        <i class="bi bi-buildings"></i>
+        <span>Enterprises Directory</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_users') }}" class="sidebar-link {% if request.endpoint == 'main.admin_users' %}active{% endif %}">
+        <i class="bi bi-people"></i>
+        <span>User Accounts</span>
+      </a>
+
+      <a href="{{ url_for('main.admin_audit') }}" class="sidebar-link {% if request.endpoint == 'main.admin_audit' %}active{% endif %}">
+        <i class="bi bi-journal-text"></i>
+        <span>System Audit Logs</span>
+      </a>
+
+      {% else %}
+      <!-- ================= COMPANY CONTROLS ONLY ================= -->
+      <div class="sidebar-section-header">{{ t('nav_overview', 'Core Platform') }}</div>
+      
+      <a href="{{ url_for('main.dashboard') }}" class="sidebar-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+        <i class="bi bi-grid-1x2"></i>
+        <span>{{ t('nav_overview', 'Overview') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.compliance') }}" class="sidebar-link {% if request.endpoint in ['main.compliance', 'main.compliance_detail'] %}active{% endif %}">
+        <i class="bi bi-shield-check"></i>
+        <span>{{ t('nav_compliance', 'Compliance') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.incentives') }}" class="sidebar-link {% if request.endpoint == 'main.incentives' %}active{% endif %}">
+        <i class="bi bi-gift"></i>
+        <span>{{ t('nav_incentives', 'Incentives & Subsidies') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.tasks') }}" class="sidebar-link {% if request.endpoint == 'main.tasks' %}active{% endif %}">
+        <i class="bi bi-calendar-check"></i>
+        <span>{{ t('nav_tasks', 'Action Tasks') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.documents') }}" class="sidebar-link {% if request.endpoint == 'main.documents' %}active{% endif %}">
+        <i class="bi bi-folder2"></i>
+        <span>{{ t('nav_documents', 'Document Vault') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.view_drafts') }}" class="sidebar-link {% if request.endpoint == 'main.view_drafts' %}active{% endif %}">
+        <i class="bi bi-pencil-square"></i>
+        <span>{{ t('nav_drafts', 'AI Drafts') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.advisor') }}" class="sidebar-link {% if request.endpoint == 'main.advisor' %}active{% endif %}">
+        <i class="bi bi-stars text-warning"></i>
+        <span>{{ t('nav_advisor', 'AI Advisor') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.company_profile') }}" class="sidebar-link {% if request.endpoint == 'main.company_profile' %}active{% endif %}">
+        <i class="bi bi-building"></i>
+        <span>{{ t('nav_company', 'Company Profile') }}</span>
+      </a>
+
+      <a href="{{ url_for('main.reports') }}" class="sidebar-link {% if request.endpoint == 'main.reports' %}active{% endif %}">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        <span>{{ t('nav_reports', 'Reports & Export') }}</span>
+      </a>
+
+      <!-- Advisory & CA Workspace (Role Protected for consultant) -->
+      {% if current_user and current_user.role == 'consultant' or session.get('user_role') == 'consultant' %}
+      <div class="sidebar-section-header mt-3">CA Advisory</div>
+      <a href="{{ url_for('main.consultant_workspace') }}" class="sidebar-link {% if request.endpoint in ['main.consultant_workspace', 'main.switch_client'] %}active{% endif %}">
+        <i class="bi bi-briefcase"></i>
+        <span>{{ t('nav_ca_workspace', 'CA Workspace') }}</span>
+      </a>
+      {% endif %}
+
+      {% endif %}
+    </div>
+
+    <!-- User Profile Footer -->
+    <div class="sidebar-footer">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2 overflow-hidden">
+          <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.85rem; flex-shrink: 0;">
+            {{ current_user.name[0] if current_user else 'U' }}
+          </div>
+          <div class="overflow-hidden">
+            <div class="small fw-bold text-white text-truncate" style="max-width: 120px;">{{ current_user.name if current_user else 'User' }}</div>
+            <span class="badge bg-secondary text-light text-capitalize" style="font-size: 0.65rem;">{{ current_user.role if current_user else 'Owner' }}</span>
+          </div>
+        </div>
+
+        <a href="{{ url_for('main.logout') }}" class="btn btn-sm btn-outline-danger py-1 px-2" title="{{ t('nav_logout', 'Sign Out') }}">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout -->
+  <div class="app-main">
+    <header class="app-topbar d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Mobile Sidebar Toggle -->
+        <button class="topbar-icon-btn d-lg-none" type="button" id="sidebarToggle">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+
+        <!-- Breadcrumb: Matching Reference "OctaQube / Super Admin Dashboard" -->
+        <div class="d-none d-md-flex align-items-center gap-2">
+          <div class="topbar-breadcrumb">
+            <span class="breadcrumb-app">{{ t('app_name', 'MSME Platform') }}</span>
+            <span class="breadcrumb-slash">/</span>
+            {% if is_admin %}
+              <span class="breadcrumb-page">{{ t('super_admin_console', 'Super Admin Console') }}</span>
+              <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1" style="font-size: 0.68rem;">{{ t('governance', 'Governance') }}</span>
+            {% else %}
+              <span class="breadcrumb-page">{{ active_company.name if active_company else t('nav_overview', 'Dashboard') }}</span>
+              {% if active_company and active_company.is_onboarded %}
+                <span class="badge badge-online ms-1"><span class="status-dot"></span> {{ t('status_active', 'Active') }}</span>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Controls: Theme + Language + Bell + User Profile Pill -->
+      <div class="d-flex align-items-center gap-2 header-actions">
+        <!-- Theme Toggle Pill -->
+        <button class="topbar-icon-btn" type="button" title="Theme Mode">
+          <i class="bi bi-brightness-high text-warning" style="font-size: 0.95rem;"></i>
+        </button>
+
+        <!-- Language Selector Pill -->
+        <div class="dropdown">
+          <button class="topbar-pill-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Language Selector">
+            <i class="bi bi-translate text-white-50"></i>
+            <span class="d-none d-sm-inline">
+              {% for l in supported_languages %}
+                {% if l.code == current_lang %}{{ l.native }}{% endif %}
+              {% endfor %}
+            </span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+            <li class="dropdown-header text-uppercase small fw-semibold" style="font-size: 0.7rem; color: #64748B;">Select Language / ಭಾಷೆ / भाषा</li>
+            {% for l in supported_languages %}
+            <li>
+              <a class="dropdown-item d-flex justify-content-between align-items-center {% if l.code == current_lang %}active{% endif %}" href="{{ url_for('main.set_language', lang=l.code) }}">
+                <span>{{ l.native }}</span>
+                <span class="text-muted small ps-2">({{ l.name }})</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Notification Bell Pill -->
+        {% if is_admin %}
+        <a href="{{ url_for('main.admin_changes') }}" class="topbar-icon-btn position-relative" title="Regulatory Change Queue">
+          <i class="bi bi-bell text-white-50"></i>
+          {% if pending_changes_count and pending_changes_count > 0 %}
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-dark rounded-circle"></span>
+          {% endif %}
+        </a>
+        {% else %}
+        <a href="{{ url_for('main.tasks') }}" class="topbar-icon-btn position-relative" title="Notifications & Deadlines">
+          <i class="bi bi-bell text-white-50"></i>
+          {% if tasks and tasks|length > 0 %}
+          <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-dark rounded-circle"></span>
+          {% endif %}
+        </a>
+        {% endif %}
+
+        <!-- User Profile Pill (Matching Reference) -->
+        <div class="dropdown">
+          <button class="topbar-profile-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="profile-avatar">
+              {{ (current_user.name[0] if current_user and current_user.name else (current_user.email[0] if current_user and current_user.email else 'H'))|upper }}
+            </div>
+            <div class="profile-meta d-none d-md-flex">
+              <div class="profile-email text-truncate">{{ current_user.email if current_user else 'harshithkd6@gmail.com' }}</div>
+              <div class="profile-role">{% if is_admin %}{{ t('super_admin', 'SUPER ADMIN') }}{% else %}{{ (current_user.role|replace('_', ' ')|upper)|translate_dynamic if current_user else t('role_owner', 'OWNER') }}{% endif %}</div>
+            </div>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="min-width: 220px;">
+            <li class="px-3 py-2 border-bottom">
+              <div class="fw-bold small text-dark">{{ current_user.name if current_user else 'Administrator' }}</div>
+              <div class="text-muted small text-truncate">{{ current_user.email if current_user else 'harshithkd6@gmail.com' }}</div>
+            </li>
+            {% if is_admin %}
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.admin_dashboard') }}">
+                <i class="bi bi-speedometer2"></i> {{ t('admin_dashboard', 'Admin Dashboard') }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.admin_records') }}">
+                <i class="bi bi-database-check"></i> {{ t('regulatory_records', 'Regulatory Records') }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.admin_changes') }}">
+                <i class="bi bi-bell-history"></i> {{ t('change_queue', 'Change Queue') }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.admin_knowledge') }}">
+                <i class="bi bi-cpu"></i> {{ t('knowledge_center', 'Knowledge Center') }}
+              </a>
+            </li>
+            {% else %}
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.company_profile') }}">
+                <i class="bi bi-person-gear"></i> {{ t('profile_entity_settings', 'Profile & Entity Settings') }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.advisor') }}">
+                <i class="bi bi-stars text-warning"></i> {{ t('ai_action_advisor', 'AI Action Advisor') }}
+              </a>
+            </li>
+            {% endif %}
+            <li><hr class="dropdown-divider my-1"></li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="{{ url_for('main.logout') }}">
+                <i class="bi bi-box-arrow-right"></i> {{ t('sign_out', 'Sign Out') }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="container-fluid px-lg-4 mt-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category in ['error', 'danger'] else ('success' if category == 'success' else 'info') }} alert-dismissible fade show small py-2" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <!-- Main Content Block -->
+    <main class="py-3 flex-grow-1">
+      <div class="container-fluid px-lg-4">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-3 border-top bg-white text-muted small mt-auto">
+      <div class="container-fluid px-lg-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div>
+          <strong>{{ t('app_footer_title', 'India MSME Compliance & Incentives Platform') }}</strong> &bull; {{ t('baseline_date', 'Baseline Oct 2026') }}
+        </div>
+        <div class="text-secondary text-center text-md-end" style="font-size: 0.75rem;">
+          {{ t('disclaimer_text', 'Guidance software only. Does not replace professional CA or legal advice. All data verified against official sources.') }}
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- AI Copilot Floating Drawer Button -->
+  <div class="chat-drawer">
+    <button class="chat-bubble-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#copilotOffcanvas" aria-controls="copilotOffcanvas" title="Ask AI what you need to do">
+      <i class="bi bi-stars"></i>
+    </button>
+  </div>
+
+  <!-- AI Copilot Offcanvas -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="copilotOffcanvas" aria-labelledby="copilotLabel" style="width: 440px;">
+    <div class="offcanvas-header border-bottom bg-dark text-white">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-stars text-warning fs-5"></i>
+        <div>
+          <h6 class="offcanvas-title fw-bold mb-0" id="copilotLabel">AI Regulatory Advisor</h6>
+          <span class="small text-white-50" style="font-size: 0.75rem;">Grounded in 628 Central & State Laws</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-3">
+      <div id="copilotMessages" class="flex-grow-1 overflow-auto mb-3" style="min-height: 300px;">
+        <div class="d-flex justify-content-start mb-3">
+          <div class="p-3 rounded bg-light border text-dark" style="font-size: 0.875rem;">
+            <p class="mb-2 fw-semibold">Hello! I am your MSME Regulatory Copilot.</p>
+            <p class="small text-muted mb-2">I analyze your specific headcount, turnover, and state to give you exact statutory next steps in Indian languages.</p>
+            <div class="d-grid gap-1">
+              <a href="{{ url_for('main.advisor') }}" class="btn btn-sm btn-dark text-center">Open Full 5-Part Action Plan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form id="copilotChatForm" class="d-flex gap-2 border-top pt-2">
+        <input type="text" id="copilotInput" class="form-control form-control-sm" placeholder="Ask what to do for your business..." required>
+        <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-send-fill"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Main Application JS -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script>
+    // Toggle mobile sidebar
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('appSidebar');
+    if (toggleBtn && sidebar) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+      });
+    }
+  </script>
+
+  {% if current_lang != 'en' and client_translations %}
+  <!-- Client-Side Universal DOM Auto-Translator -->
+  <script>
+    (function() {
+      const dict = {{ client_translations|tojson|safe }};
+      if (!dict || Object.keys(dict).length === 0) return;
+
+      // Extract dictionary entries sorted by length descending so longer phrases match first
+      const phrases = Object.keys(dict)
+        .filter(k => k && typeof k === 'string' && k.length > 1 && !k.startsWith('nav_') && !k.startsWith('card_') && !k.startsWith('btn_') && !k.startsWith('badge_') && !k.startsWith('section_') && !k.startsWith('label_') && !k.startsWith('auth_') && !k.startsWith('onboarding_') && !k.startsWith('tab_'))
+        .sort((a, b) => b.length - a.length);
+
+      function translateNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          let text = node.nodeValue;
+          if (!text || text.trim().length === 0) return;
+
+          let trimmed = text.trim();
+          if (dict[trimmed]) {
+            node.nodeValue = text.replace(trimmed, dict[trimmed]);
+            return;
+          }
+
+          // Case-insensitive / normalized check
+          for (let p of phrases) {
+            if (text.includes(p)) {
+              text = text.split(p).join(dict[p]);
+            }
+          }
+          if (text !== node.nodeValue) {
+            node.nodeValue = text;
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const tag = node.tagName.toLowerCase();
+          if (tag === 'script' || tag === 'style' || tag === 'code' || tag === 'pre') return;
+
+          if (node.placeholder && dict[node.placeholder.trim()]) {
+            node.placeholder = dict[node.placeholder.trim()];
+          }
+          if (node.title && dict[node.title.trim()]) {
+            node.title = dict[node.title.trim()];
+          }
+
+          for (let child of Array.from(node.childNodes)) {
+            translateNode(child);
+          }
+        }
+      }
+
+      function runAutoTranslation() {
+        if (document.body) {
+          translateNode(document.body);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runAutoTranslation);
+      } else {
+        runAutoTranslation();
+      }
+
+      // Live mutation observer with debounce
+      let debounceTimer = null;
+      const observer = new MutationObserver((mutations) => {
+        let shouldRun = false;
+        for (let m of mutations) {
+          if (m.addedNodes.length > 0) {
+            shouldRun = true;
+            break;
+          }
+        }
+        if (shouldRun) {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(runAutoTranslation, 80);
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+  {% endif %}
+</body>
+</html>

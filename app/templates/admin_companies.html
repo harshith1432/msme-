@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Enterprises & Organizations Directory — Admin | MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-buildings text-dark"></i>
+      Registered Enterprises Directory
+    </h4>
+    <p class="text-muted small mb-0">Platform administrative directory of all MSME enterprises, tenant associations, and onboarding states.</p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Admin Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- Filters and Search -->
+<div class="card border-0 shadow-sm bg-white p-3 rounded-3 mb-4">
+  <form method="GET" action="{{ url_for('main.admin_companies') }}" class="row g-2 align-items-center">
+    <div class="col-md-6">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" name="search" class="form-control border-start-0" placeholder="Search enterprise by name, Udyam, state, sector..." value="{{ request.args.get('search', '') }}">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <select name="state" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All States / UTs</option>
+        {% for s in all_states %}
+        <option value="{{ s }}" {% if request.args.get('state') == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2 d-flex justify-content-end">
+      <button type="submit" class="btn btn-sm btn-dark w-100">Filter</button>
+    </div>
+  </form>
+</div>
+
+<!-- Companies Table -->
+<div class="card border-0 shadow-sm bg-white rounded-3 overflow-hidden mb-4">
+  <div class="table-responsive">
+    <table class="table-custom mb-0">
+      <thead>
+        <tr>
+          <th style="width: 60px;">ID</th>
+          <th>Enterprise Name</th>
+          <th>State / District</th>
+          <th>Sector & Activity</th>
+          <th>Scale & Metrics</th>
+          <th>Udyam / GSTIN</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in companies %}
+        <tr>
+          <td><span class="badge bg-light text-dark border">#{{ c.id }}</span></td>
+          <td>
+            <div class="fw-bold text-dark">{{ c.name }}</div>
+            <div class="text-muted small" style="font-size: 0.72rem;">{{ c.entity_type }}</div>
+            <div class="d-flex gap-1 mt-1">
+              {% if c.is_dpiit_recognized %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.65rem;">DPIIT</span>
+              {% endif %}
+              {% if c.is_zed_certified %}
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle" style="font-size: 0.65rem;">ZED</span>
+              {% endif %}
+              {% if c.is_exporter %}
+                <span class="badge bg-dark text-white" style="font-size: 0.65rem;">Exporter</span>
+              {% endif %}
+            </div>
+          </td>
+          <td>
+            <span class="badge bg-light text-dark border">{{ c.state }}</span>
+            {% if c.district %}<div class="text-muted small" style="font-size: 0.72rem;">{{ c.district }}</div>{% endif %}
+          </td>
+          <td>
+            <div class="small fw-semibold text-dark">{{ c.sector }}</div>
+            <div class="text-muted small" style="font-size: 0.72rem;">{{ c.activity_type }}</div>
+          </td>
+          <td>
+            <div class="small fw-semibold text-dark">{{ c.get_latest_metric('employees')|int }} Employees</div>
+            <div class="text-muted small" style="font-size: 0.72rem;">Turnover: ₹{{ "{:,.1f}".format(c.get_latest_metric('turnover')/10000000) }} Cr</div>
+            <div class="text-muted small" style="font-size: 0.72rem;">Investment: ₹{{ "{:,.1f}".format(c.get_latest_metric('investment')/10000000) }} Cr</div>
+          </td>
+          <td>
+            <div><code>{{ c.udyam_number or 'Not Linked' }}</code></div>
+            {% if c.gstin %}
+            <div class="text-muted small" style="font-size: 0.72rem;">GSTIN: <code>{{ c.gstin }}</code></div>
+            {% endif %}
+          </td>
+          <td>
+            {% if c.is_onboarded %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle">
+                <i class="bi bi-check-circle-fill me-1"></i> Active
+              </span>
+            {% else %}
+              <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                Onboarding Step {{ c.onboarding_step }}
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="text-center py-4 text-muted">No enterprises found matching criteria.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="p-3 border-top bg-light text-muted small d-flex justify-content-between align-items-center">
+    <span>Showing <strong>{{ companies|length }}</strong> of <strong>{{ total_count }}</strong> registered enterprises</span>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}User & Access Governance — Admin | MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-people text-dark"></i>
+      User & Role Governance
+    </h4>
+    <p class="text-muted small mb-0">Platform administrative oversight for all user accounts, role-based segregation, and authentication security.</p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Admin Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- Filters and Search -->
+<div class="card border-0 shadow-sm bg-white p-3 rounded-3 mb-4">
+  <form method="GET" action="{{ url_for('main.admin_users') }}" class="row g-2 align-items-center">
+    <div class="col-md-6">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" name="search" class="form-control border-start-0" placeholder="Search user by name, email, or role..." value="{{ request.args.get('search', '') }}">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Platform Roles</option>
+        <option value="owner" {% if request.args.get('role') == 'owner' %}selected{% endif %}>MSME Enterprise Owner</option>
+        <option value="member" {% if request.args.get('role') == 'member' %}selected{% endif %}>Company Team Member</option>
+        <option value="consultant" {% if request.args.get('role') == 'consultant' %}selected{% endif %}>CA Advisory Consultant</option>
+        <option value="platform_admin" {% if request.args.get('role') == 'platform_admin' %}selected{% endif %}>Platform Super Admin</option>
+      </select>
+    </div>
+    <div class="col-md-2 d-flex justify-content-end">
+      <button type="submit" class="btn btn-sm btn-dark w-100">Filter</button>
+    </div>
+  </form>
+</div>
+
+<!-- Users Table -->
+<div class="card border-0 shadow-sm bg-white rounded-3 overflow-hidden mb-4">
+  <div class="table-responsive">
+    <table class="table-custom mb-0">
+      <thead>
+        <tr>
+          <th style="width: 60px;">ID</th>
+          <th>User Name & Profile</th>
+          <th>Email Address</th>
+          <th>Platform Role</th>
+          <th>Language</th>
+          <th>Status</th>
+          <th>Registered Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td><span class="badge bg-light text-dark border">#{{ u.id }}</span></td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="bg-primary-subtle text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                {{ u.name[0]|upper if u.name else 'U' }}
+              </div>
+              <div class="fw-semibold text-dark">{{ u.name }}</div>
+            </div>
+          </td>
+          <td><code>{{ u.email }}</code></td>
+          <td>
+            {% if u.role == 'platform_admin' %}
+              <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                <i class="bi bi-shield-lock-fill me-1"></i> Super Admin
+              </span>
+            {% elif u.role == 'consultant' %}
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                <i class="bi bi-briefcase me-1"></i> CA Consultant
+              </span>
+            {% elif u.role == 'owner' %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle">
+                <i class="bi bi-person-check-fill me-1"></i> Enterprise Owner
+              </span>
+            {% else %}
+              <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                {{ u.role|capitalize }}
+              </span>
+            {% endif %}
+          </td>
+          <td><span class="badge bg-light text-secondary border text-uppercase" style="font-size: 0.7rem;">{{ u.preferred_language or 'en' }}</span></td>
+          <td>
+            {% if u.is_active %}
+              <span class="badge bg-success text-white" style="font-size: 0.65rem;">Active</span>
+            {% else %}
+              <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">Suspended</span>
+            {% endif %}
+          </td>
+          <td class="text-muted small">
+            {{ u.created_at.strftime('%d %b %Y') if u.created_at else 'Active' }}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="text-center py-4 text-muted">No users found matching criteria.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="p-3 border-top bg-light text-muted small d-flex justify-content-between align-items-center">
+    <span>Showing <strong>{{ users|length }}</strong> of <strong>{{ total_count }}</strong> registered user accounts</span>
+  </div>
+</div>
+{% endblock %}

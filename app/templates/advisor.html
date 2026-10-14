@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}AI Action Advisor — What You Need To Do | MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-stars text-primary"></i>
+      {{ action_plan.headers.title }}
+    </h4>
+    <p class="text-muted small mb-0">
+      Personalized step-by-step guidance tailored for <strong>{{ company.name }}</strong> ({{ profile.employees }} employees &bull; ₹{{ "{:,.1f}".format(profile.turnover/10000000) }} Cr turnover &bull; {{ company.state }}).
+    </p>
+  </div>
+  <div class="header-actions">
+    <span class="badge bg-light text-dark border px-3 py-2 small">
+      <i class="bi bi-translate text-primary me-1"></i>
+      Active Language: <strong>{{ lang_name }}</strong>
+    </span>
+    <button onclick="window.print()" class="btn btn-sm btn-outline-dark">
+      <i class="bi bi-printer"></i>
+      <span>Print / PDF</span>
+    </button>
+  </div>
+</div>
+
+<!-- 5-Part Action Card Workspace -->
+<div class="row g-4">
+  <div class="col-lg-8">
+    
+    <!-- Part 1: Immediate Priorities -->
+    <div class="action-card mb-4">
+      <div class="action-card-header bg-dark">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-exclamation-octagon-fill text-danger"></i>
+          {{ action_plan.headers.p1 }}
+        </h6>
+      </div>
+      <div class="action-card-body">
+        {% for item in action_plan.immediate_priorities %}
+        <div class="action-item">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h6 class="fw-bold text-dark mb-0">{{ item.action }}</h6>
+            <a href="{{ item.portal }}" target="_blank" class="btn btn-xs btn-dark">
+              Open Portal <i class="bi bi-box-arrow-up-right ms-1"></i>
+            </a>
+          </div>
+          <p class="small text-muted mb-2">{{ item.why }}</p>
+          <div class="d-flex justify-content-between align-items-center small text-secondary">
+            <span><strong>Authority:</strong> {{ item.authority }}</span>
+            <span class="badge bg-light text-dark border">Priority: High</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Part 2: Periodic & Recurring Deadlines -->
+    <div class="action-card mb-4">
+      <div class="action-card-header bg-secondary">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-clock-history text-warning"></i>
+          {{ action_plan.headers.p2 }}
+        </h6>
+      </div>
+      <div class="action-card-body p-0">
+        <div class="table-responsive">
+          <table class="table-custom mb-0">
+            <thead>
+              <tr>
+                <th>Compliance Event</th>
+                <th>Statutory Frequency / Due Date</th>
+                <th>Procedural Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in action_plan.periodic_deadlines %}
+              <tr>
+                <td class="fw-semibold text-dark">{{ p.name }}</td>
+                <td><span class="badge bg-light text-dark border">{{ p.due }}</span></td>
+                <td class="small text-muted">{{ p.notes }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 3: Top Government Incentives You Can Claim -->
+    <div class="action-card mb-4">
+      <div class="action-card-header bg-success-subtle text-dark border-bottom border-success-subtle">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2 text-success-emphasis">
+          <i class="bi bi-cash-stack"></i>
+          {{ action_plan.headers.p3 }}
+        </h6>
+      </div>
+      <div class="action-card-body">
+        {% for inc in action_plan.top_incentives %}
+        <div class="action-item">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h6 class="fw-bold text-dark mb-0">{{ inc.title }}</h6>
+            <a href="{{ inc.apply_link }}" target="_blank" class="btn btn-xs btn-outline-success">
+              Apply Link <i class="bi bi-box-arrow-up-right ms-1"></i>
+            </a>
+          </div>
+          <p class="small text-muted mb-0">{{ inc.benefit }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Part 4: Mandatory Document Checklist -->
+    <div class="action-card mb-4">
+      <div class="action-card-header bg-light text-dark border-bottom">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-file-earmark-check-fill text-primary"></i>
+          {{ action_plan.headers.p4 }}
+        </h6>
+      </div>
+      <div class="action-card-body">
+        <div class="list-group list-group-flush">
+          {% for doc in action_plan.documents_checklist %}
+          <div class="list-group-item px-0 py-2 d-flex align-items-center gap-2 border-0">
+            <i class="bi bi-check-circle text-success"></i>
+            <span class="small text-dark">{{ doc }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 5: Direct Action Portals -->
+    <div class="action-card mb-4">
+      <div class="action-card-header bg-dark">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-link-45deg"></i>
+          {{ action_plan.headers.p5 }}
+        </h6>
+      </div>
+      <div class="action-card-body">
+        <div class="row g-2">
+          {% for p in action_plan.action_portals %}
+          <div class="col-md-6">
+            <div class="p-2 border rounded bg-white h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="fw-semibold small text-dark">{{ p.name }}</div>
+                <div class="text-muted" style="font-size: 0.75rem;">{{ p.purpose }}</div>
+              </div>
+              <div class="mt-2">
+                <a href="{{ p.url }}" target="_blank" class="btn btn-xs btn-outline-dark w-100">
+                  Open {{ p.name }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="p-3 bg-light rounded text-muted small border mb-4">
+      <i class="bi bi-info-circle me-1"></i> {{ action_plan.headers.disclaimer }}
+    </div>
+  </div>
+
+  <!-- Right Column: Interactive AI Query Assistant -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm bg-white p-3 p-md-4 rounded-3 sticky-top" style="top: 80px;">
+      <h6 class="fw-bold mb-2 d-flex align-items-center gap-2">
+        <i class="bi bi-chat-left-dots text-primary"></i>
+        Ask AI Regulatory Copilot
+      </h6>
+      <p class="small text-muted mb-3">
+        Ask specific questions about labor laws, GST rules, state grants, or tax audit deadlines in {{ lang_name }}.
+      </p>
+
+      <div class="p-2 bg-light-subtle rounded border small mb-3">
+        <strong>Suggested Questions:</strong>
+        <ul class="list-unstyled mb-0 mt-1" style="font-size: 0.8rem;">
+          <li class="mb-1"><a href="#" class="text-decoration-none text-dark suggestion-prompt">&bull; What are my EPF & ESI duties for 22 staff?</a></li>
+          <li class="mb-1"><a href="#" class="text-decoration-none text-dark suggestion-prompt">&bull; What is the 45-day payment rule under Section 43B(h)?</a></li>
+          <li class="mb-1"><a href="#" class="text-decoration-none text-dark suggestion-prompt">&bull; How do I claim capital subsidies in {{ company.state }}?</a></li>
+          <li><a href="#" class="text-decoration-none text-dark suggestion-prompt">&bull; Does my food processing unit need a central FSSAI licence?</a></li>
+        </ul>
+      </div>
+
+      <div id="advisorChatHistory" class="overflow-auto mb-3 border rounded p-2" style="max-height: 280px; min-height: 140px; background-color: #fafbfc;">
+        <div class="text-muted small text-center py-3">Ask any regulatory or scheme question below.</div>
+      </div>
+
+      <form id="advisorQueryForm" class="d-flex flex-column gap-2">
+        <textarea id="advisorQueryInput" class="form-control form-control-sm" rows="3" placeholder="Type your compliance or incentive question..." required></textarea>
+        <button type="submit" class="btn btn-dark-custom btn-sm w-100 justify-content-center">
+          <i class="bi bi-send-fill"></i> Get Grounded Answer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('advisorQueryForm');
+  const input = document.getElementById('advisorQueryInput');
+  const history = document.getElementById('advisorChatHistory');
+  const suggestions = document.querySelectorAll('.suggestion-prompt');
+
+  suggestions.forEach(s => {
+    s.addEventListener('click', function(e) {
+      e.preventDefault();
+      input.value = this.innerText.replace('• ', '');
+    });
+  });
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) return;
+
+      history.innerHTML += `
+        <div class="d-flex justify-content-end mb-2">
+          <div class="p-2 rounded bg-dark text-white" style="font-size: 0.85rem; max-width: 85%;">${escapeHtml(q)}</div>
+        </div>
+        <div class="d-flex justify-content-start mb-2" id="advisorLoading">
+          <div class="p-2 rounded bg-white border text-muted" style="font-size: 0.85rem;"><span class="spinner-border spinner-border-sm me-1"></span> Grounding in Central & State laws...</div>
+        </div>
+      `;
+      history.scrollTop = history.scrollHeight;
+      input.value = '';
+
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: q, lang: '{{ lang }}' })
+      })
+      .then(r => r.json())
+      .then(data => {
+        const loading = document.getElementById('advisorLoading');
+        if (loading) loading.remove();
+        
+        const answerText = data.text || (data.action_plan && data.action_plan.immediate_priorities[0].why) || 'Guidance generated.';
+        const toolName = data.tool_called ? `<span class="badge bg-light text-secondary border me-1" style="font-size: 0.68rem;"><i class="bi bi-tools me-1"></i>${escapeHtml(data.tool_called)}</span>` : '';
+        
+        let citationsHtml = '';
+        if (data.citations && data.citations.length > 0) {
+          citationsHtml = '<div class="mt-2 pt-1 border-top"><div class="text-muted fw-bold" style="font-size: 0.7rem;">Verified Statutory Citations:</div><div class="d-flex flex-wrap gap-1 mt-1">';
+          data.citations.forEach(c => {
+            const label = c.law || c.authority || c.source || 'Official Source';
+            if (c.link) {
+              citationsHtml += `<a href="${c.link}" target="_blank" class="badge bg-light text-dark border text-decoration-none" style="font-size: 0.7rem;"><i class="bi bi-link-45deg"></i> ${escapeHtml(label)}</a>`;
+            } else {
+              citationsHtml += `<span class="badge bg-light text-dark border" style="font-size: 0.7rem;">${escapeHtml(label)}</span>`;
+            }
+          });
+          citationsHtml += '</div></div>';
+        }
+
+        history.innerHTML += `
+          <div class="d-flex justify-content-start mb-2">
+            <div class="p-2 rounded bg-white border text-dark shadow-sm" style="font-size: 0.85rem; max-width: 95%;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-success"><i class="bi bi-shield-check me-1"></i>Grounded Guidance</span>
+                ${toolName}
+              </div>
+              <p class="mb-1 text-dark" style="line-height: 1.4;">${escapeHtml(answerText)}</p>
+              ${citationsHtml}
+            </div>
+          </div>
+        `;
+        history.scrollTop = history.scrollHeight;
+      });
+    });
+  }
+
+  function escapeHtml(t) {
+    return t.replace(/[&<>"']/g, function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]; });
+  }
+});
+</script>
+{% endblock %}

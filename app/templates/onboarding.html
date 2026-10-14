@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ t('onboarding_title', 'Enterprise Onboarding & Profile Setup') }} — {{ t('app_title', 'MSME Navigator India') }}</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+    }
+    .wizard-nav {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .wizard-step-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .wizard-step-item.active {
+      background: #111827;
+      color: #ffffff;
+    }
+    .wizard-step-item.completed {
+      color: #10b981;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      border: 2px solid currentColor;
+      font-weight: 700;
+    }
+    .wizard-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Simple Navigation -->
+  <header class="navbar navbar-light bg-white border-bottom py-3 sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <span class="badge bg-dark text-white px-2 py-1 fs-6 rounded">MSME</span>
+        <span class="fw-bold fs-6 text-dark">Navigator India &bull; Enterprise Onboarding</span>
+      </a>
+
+      <div class="d-flex align-items-center gap-3">
+        <!-- Language Selector -->
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-translate"></i>
+            <span>
+              {% for l in supported_languages %}
+                {% if l.code == current_lang %}{{ l.native }}{% endif %}
+              {% endfor %}
+            </span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            {% for l in supported_languages %}
+            <li><a class="dropdown-item py-1 small" href="{{ url_for('main.set_language', lang=l.code) }}">{{ l.native }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <a href="{{ url_for('main.logout') }}" class="btn btn-sm btn-outline-danger">
+          <i class="bi bi-box-arrow-right me-1"></i> {{ t('nav_logout', 'Sign Out') }}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container py-4 my-3">
+    <!-- Header Title -->
+    <div class="mb-4 text-center">
+      <h3 class="fw-bold text-dark mb-1">{{ t('onboarding_title', 'Enterprise Onboarding & Profile Setup') }}</h3>
+      <p class="text-secondary small mx-auto" style="max-width: 650px;">
+        {{ t('onboarding_subtitle', 'Provide your verified business details to initialize automated compliance and incentive discovery.') }}
+      </p>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category if category != 'error' else 'danger' }} py-2 small alert-dismissible fade show mb-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row g-4">
+      <!-- Left: Step Progress -->
+      <div class="col-lg-4">
+        <div class="wizard-nav sticky-top" style="top: 85px;">
+          <div class="small fw-bold text-uppercase text-muted mb-3 tracking-wide">Onboarding Steps</div>
+          <div class="d-flex flex-column gap-2">
+            <div class="wizard-step-item {% if current_step == 1 %}active{% elif current_step > 1 %}completed{% endif %}">
+              <span class="step-circle">{% if current_step > 1 %}<i class="bi bi-check-lg"></i>{% else %}1{% endif %}</span>
+              <span>1. Company Identity</span>
+            </div>
+            <div class="wizard-step-item {% if current_step == 2 %}active{% elif current_step > 2 %}completed{% endif %}">
+              <span class="step-circle">{% if current_step > 2 %}<i class="bi bi-check-lg"></i>{% else %}2{% endif %}</span>
+              <span>2. Classification</span>
+            </div>
+            <div class="wizard-step-item {% if current_step == 3 %}active{% elif current_step > 3 %}completed{% endif %}">
+              <span class="step-circle">{% if current_step > 3 %}<i class="bi bi-check-lg"></i>{% else %}3{% endif %}</span>
+              <span>3. Financial Profile</span>
+            </div>
+            <div class="wizard-step-item {% if current_step == 4 %}active{% elif current_step > 4 %}completed{% endif %}">
+              <span class="step-circle">{% if current_step > 4 %}<i class="bi bi-check-lg"></i>{% else %}4{% endif %}</span>
+              <span>4. Registrations</span>
+            </div>
+            <div class="wizard-step-item {% if current_step == 5 %}active{% elif current_step > 5 %}completed{% endif %}">
+              <span class="step-circle">{% if current_step > 5 %}<i class="bi bi-check-lg"></i>{% else %}5{% endif %}</span>
+              <span>5. Documents Vault</span>
+            </div>
+            <div class="wizard-step-item {% if current_step == 6 %}active{% endif %}">
+              <span class="step-circle">6</span>
+              <span>6. Review & Confirm</span>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-top small text-muted">
+            <i class="bi bi-shield-check text-success me-1"></i> Saved data is encrypted. You can save as draft and resume anytime.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form Content for Current Step -->
+      <div class="col-lg-8">
+        <div class="wizard-card">
+          <form method="POST" action="{{ url_for('main.onboarding') }}" enctype="multipart/form-data">
+            <input type="hidden" name="step" value="{{ current_step }}">
+
+            <!-- STEP 1: COMPANY IDENTITY -->
+            {% if current_step == 1 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 1 — Company Identity & Address</h5>
+                <span class="badge bg-light text-dark border">Step 1 of 6</span>
+              </div>
+              <p class="text-secondary small mb-4">Enter the statutory entity details exactly as registered on legal documents.</p>
+
+              <div class="row g-3">
+                <div class="col-md-7">
+                  <label class="form-label small fw-semibold text-dark">Legal Business Name <span class="text-danger">*</span></label>
+                  <input type="text" name="name" class="form-control" placeholder="e.g., Apex Precision Engineering Pvt Ltd" required value="{{ company.name if company.name != 'My Enterprise' else '' }}">
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label small fw-semibold text-dark">Brand / Trade Name</label>
+                  <input type="text" name="trade_name" class="form-control" placeholder="e.g., Apex Tools" value="{{ company.trade_name or '' }}">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Entity Business Structure <span class="text-danger">*</span></label>
+                  <select name="entity_type" class="form-select" required>
+                    <option value="Private Limited Company" {% if company.entity_type == 'Private Limited Company' %}selected{% endif %}>Private Limited Company (Pvt Ltd)</option>
+                    <option value="Limited Liability Partnership" {% if company.entity_type == 'Limited Liability Partnership' %}selected{% endif %}>Limited Liability Partnership (LLP)</option>
+                    <option value="Partnership Firm" {% if company.entity_type == 'Partnership Firm' %}selected{% endif %}>Partnership Firm</option>
+                    <option value="Sole Proprietorship" {% if company.entity_type == 'Sole Proprietorship' %}selected{% endif %}>Sole Proprietorship</option>
+                    <option value="Public Limited Company" {% if company.entity_type == 'Public Limited Company' %}selected{% endif %}>Public Limited Company</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Date of Incorporation / Establishment</label>
+                  <input type="date" name="incorporation_date" class="form-control" value="{{ company.incorporation_date.strftime('%Y-%m-%d') if company.incorporation_date else '' }}">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-semibold text-dark">Registered Office Address</label>
+                  <textarea name="registered_address" class="form-control" rows="2" placeholder="Street address, Industrial Area, Survey No...">{{ company.registered_address or '' }}</textarea>
+                </div>
+
+                <div class="col-md-5">
+                  <label class="form-label small fw-semibold text-dark">State / UT <span class="text-danger">*</span></label>
+                  <select name="state" class="form-select" required>
+                    {% for st in all_states %}
+                    <option value="{{ st }}" {% if company.state == st %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold text-dark">District</label>
+                  <input type="text" name="district" class="form-control" placeholder="e.g., Ahmedabad" value="{{ company.district or '' }}">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small fw-semibold text-dark">PIN Code</label>
+                  <input type="text" name="pincode" class="form-control" placeholder="380015" maxlength="6" value="{{ company.pincode or '' }}">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Primary Contact Email</label>
+                  <input type="email" name="contact_email" class="form-control" placeholder="compliance@company.in" value="{{ company.contact_email or current_user.email if current_user else '' }}">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Primary Contact Phone</label>
+                  <input type="text" name="contact_phone" class="form-control" placeholder="+91 98765 43210" value="{{ company.contact_phone or '' }}">
+                </div>
+              </div>
+
+            <!-- STEP 2: BUSINESS CLASSIFICATION -->
+            {% elif current_step == 2 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 2 — Business Classification & Operations</h5>
+                <span class="badge bg-light text-dark border">Step 2 of 6</span>
+              </div>
+              <p class="text-secondary small mb-4">Industry classification determines applicable environmental, labour, factory, and sector-specific subsidies.</p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Primary Activity Type <span class="text-danger">*</span></label>
+                  <select name="activity_type" class="form-select" required>
+                    <option value="Manufacturing" {% if company.activity_type == 'Manufacturing' %}selected{% endif %}>Manufacturing</option>
+                    <option value="Services" {% if company.activity_type == 'Services' %}selected{% endif %}>Services / IT / ITES</option>
+                    <option value="Trading" {% if company.activity_type == 'Trading' %}selected{% endif %}>Trading / Wholesale / Retail</option>
+                    <option value="Hybrid" {% if company.activity_type == 'Hybrid' %}selected{% endif %}>Hybrid (Manufacturing & Services)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Industry / Sector <span class="text-danger">*</span></label>
+                  <select name="sector" class="form-select" required>
+                    <option value="General Manufacturing" {% if company.sector == 'General Manufacturing' %}selected{% endif %}>General Manufacturing</option>
+                    <option value="Food Processing & Tech" {% if company.sector == 'Food Processing & Tech' %}selected{% endif %}>Food Processing & Tech</option>
+                    <option value="Textiles & Apparel" {% if company.sector == 'Textiles & Apparel' %}selected{% endif %}>Textiles & Apparel</option>
+                    <option value="Automotive & Auto Components" {% if company.sector == 'Automotive & Auto Components' %}selected{% endif %}>Automotive & Auto Components</option>
+                    <option value="Chemicals & Pharmaceuticals" {% if company.sector == 'Chemicals & Pharmaceuticals' %}selected{% endif %}>Chemicals & Pharmaceuticals</option>
+                    <option value="Electronics & Electricals" {% if company.sector == 'Electronics & Electricals' %}selected{% endif %}>Electronics & Electricals</option>
+                    <option value="Information Technology & Software" {% if company.sector == 'Information Technology & Software' %}selected{% endif %}>Information Technology & Software</option>
+                    <option value="Renewable Energy & Green Tech" {% if company.sector == 'Renewable Energy & Green Tech' %}selected{% endif %}>Renewable Energy & Green Tech</option>
+                    <option value="Logistics & Warehousing" {% if company.sector == 'Logistics & Warehousing' %}selected{% endif %}>Logistics & Warehousing</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Current Employee Headcount (Total Workers) <span class="text-danger">*</span></label>
+                  <input type="number" name="employees" class="form-control" min="0" required value="{{ current_employees }}">
+                  <div class="form-text small text-muted">Triggers statutory employer thresholds (ESI at 10, EPF at 20, Factory Act at 10/20).</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Export Business</label>
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" name="is_exporter" id="is_exporter" {% if company.is_exporter %}checked{% endif %}>
+                    <label class="form-check-label small text-dark" for="is_exporter">
+                      We export goods or services outside India (IEC holder)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            <!-- STEP 3: FINANCIAL PROFILE -->
+            {% elif current_step == 3 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 3 — Financial Profile & 2025 MSME Criteria</h5>
+                <span class="badge bg-light text-dark border">Step 3 of 6</span>
+              </div>
+              <p class="text-secondary small mb-4">Calculated under revised MSME notification (in effect 1 April 2025): Investment in Plant & Machinery + Annual Turnover.</p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Annual Turnover (INR ₹) <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input type="number" step="any" name="turnover" class="form-control" required placeholder="45000000" value="{{ current_turnover }}">
+                  </div>
+                  <div class="form-text small text-muted">Micro &le; ₹10 Cr &bull; Small &le; ₹100 Cr &bull; Medium &le; ₹500 Cr (Exports excluded)</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Investment in Plant & Machinery / Equipment (INR ₹) <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input type="number" step="any" name="investment" class="form-control" required placeholder="18000000" value="{{ current_investment }}">
+                  </div>
+                  <div class="form-text small text-muted">Micro &le; ₹2.5 Cr &bull; Small &le; ₹25 Cr &bull; Medium &le; ₹125 Cr</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Financial Year</label>
+                  <select name="financial_year" class="form-select">
+                    <option value="2025-26" selected>FY 2025-26 (Current)</option>
+                    <option value="2024-25">FY 2024-25</option>
+                  </select>
+                </div>
+              </div>
+
+            <!-- STEP 4: REGISTRATIONS & CERTIFICATIONS -->
+            {% elif current_step == 4 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 4 — Registrations & Certifications</h5>
+                <span class="badge bg-light text-dark border">Step 4 of 6</span>
+              </div>
+              <div class="alert alert-light border small text-muted mb-4">
+                <i class="bi bi-info-circle text-primary me-1"></i> <strong>Note:</strong> Registrations declared here will be recorded with <span class="badge bg-warning-subtle text-warning-emphasis border">Pending Verification</span> until backed by verified certificates.
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Udyam Registration Number</label>
+                  <input type="text" name="udyam_number" class="form-control" placeholder="UDYAM-XX-00-0000000" value="{{ company.udyam_number or '' }}">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">GST Identification Number (GSTIN)</label>
+                  <input type="text" name="gstin" class="form-control" placeholder="24AAACZ1234F1Z5" maxlength="15" value="{{ company.gstin or '' }}">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Permanent Account Number (PAN)</label>
+                  <input type="text" name="pan_number" class="form-control" placeholder="AAACZ1234F" maxlength="10" value="{{ company.pan_number or '' }}">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-dark">Certifications & Startup Status</label>
+                  <div class="d-flex flex-column gap-2 mt-1">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="is_dpiit" id="is_dpiit" {% if company.is_dpiit_recognized %}checked{% endif %}>
+                      <label class="form-check-label small text-dark" for="is_dpiit">
+                        DPIIT Recognized Startup (Under 10 yrs, turnover &le; ₹200 Cr)
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="is_deep_tech" id="is_deep_tech" {% if company.is_deep_tech %}checked{% endif %}>
+                      <label class="form-check-label small text-dark" for="is_deep_tech">
+                        Deep Tech Startup (2026 GSR 108(E), under 20 yrs, turnover &le; ₹300 Cr)
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="is_zed_certified" id="is_zed_certified" {% if company.is_zed_certified %}checked{% endif %}>
+                      <label class="form-check-label small text-dark" for="is_zed_certified">
+                        ZED Certified (Bronze / Silver / Gold)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <!-- STEP 5: DOCUMENTS -->
+            {% elif current_step == 5 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 5 — Document Vault (Optional)</h5>
+                <span class="badge bg-light text-dark border">Step 5 of 6</span>
+              </div>
+              <p class="text-secondary small mb-4">Upload registration certificates to verify your declarations and enable automatic OCR field extraction. You can skip this step and upload documents anytime later.</p>
+
+              <div class="border rounded-3 p-4 bg-light mb-4">
+                <label class="form-label small fw-semibold text-dark">Upload Registration Certificate (Udyam, GST, PAN, or Incorporation)</label>
+                <input type="file" name="onboarding_doc" class="form-control mb-2" accept=".pdf,.png,.jpg,.jpeg">
+                <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                  <span>Supported formats: PDF, PNG, JPG (Max 16 MB)</span>
+                  <span>Extracted fields require your confirmation</span>
+                </div>
+              </div>
+
+              <div class="alert alert-info border small">
+                <i class="bi bi-lightbulb me-1"></i> You can skip document uploads during onboarding and use the full Document Vault after launching your dashboard.
+              </div>
+
+            <!-- STEP 6: REVIEW & CONFIRM -->
+            {% elif current_step == 6 %}
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Step 6 — Review & Confirm Profile</h5>
+                <span class="badge bg-success text-white">Final Step</span>
+              </div>
+              <p class="text-secondary small mb-4">Please verify the declared information before initializing automated compliance matching.</p>
+
+              <div class="table-responsive mb-4">
+                <table class="table table-bordered table-sm align-middle">
+                  <tbody>
+                    <tr>
+                      <th class="bg-light text-muted w-35 small">Legal Entity Name</th>
+                      <td class="fw-bold text-dark">{{ company.name }}</td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Structure & State</th>
+                      <td>{{ company.entity_type }} &bull; {{ company.state }}{% if company.district %}, {{ company.district }}{% endif %}</td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Activity & Sector</th>
+                      <td>{{ company.activity_type }} &bull; {{ company.sector }}</td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Employees (Staff)</th>
+                      <td>{{ current_employees }} Employees</td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Turnover & Investment</th>
+                      <td>Turnover: ₹{{ "{:,.2f}".format(current_turnover) }} &bull; Investment: ₹{{ "{:,.2f}".format(current_investment) }}</td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Declared Registrations</th>
+                      <td>
+                        <div>Udyam: <code>{{ company.udyam_number or 'Not Declared' }}</code> <span class="badge bg-warning-subtle text-warning-emphasis border ms-1">Unverified</span></div>
+                        <div>GSTIN: <code>{{ company.gstin or 'Not Declared' }}</code> <span class="badge bg-warning-subtle text-warning-emphasis border ms-1">Unverified</span></div>
+                        <div>PAN: <code>{{ company.pan_number or 'Not Declared' }}</code> <span class="badge bg-warning-subtle text-warning-emphasis border ms-1">Unverified</span></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="bg-light text-muted small">Startup & Certifications</th>
+                      <td>
+                        {% if company.is_dpiit_recognized %}<span class="badge bg-success me-1">DPIIT Recognized</span>{% endif %}
+                        {% if company.is_deep_tech %}<span class="badge bg-info text-dark me-1">Deep Tech</span>{% endif %}
+                        {% if company.is_zed_certified %}<span class="badge bg-warning text-dark me-1">ZED Certified</span>{% endif %}
+                        {% if company.is_exporter %}<span class="badge bg-dark me-1">Exporter</span>{% endif %}
+                        {% if not company.is_dpiit_recognized and not company.is_deep_tech and not company.is_zed_certified and not company.is_exporter %}
+                          <span class="text-muted small">Standard MSME</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="form-check p-3 bg-light rounded border mb-4">
+                <input class="form-check-input" type="checkbox" id="confirm_truth" required>
+                <label class="form-check-label small text-dark fw-semibold" for="confirm_truth">
+                  I confirm that the above enterprise information is true and accurate to the best of my knowledge for regulatory compliance discovery.
+                </label>
+              </div>
+            {% endif %}
+
+            <!-- Actions Bar: Back, Save as Draft, Save & Continue -->
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+              <div>
+                {% if current_step > 1 %}
+                  <a href="{{ url_for('main.onboarding_step_view', step=current_step-1) }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> {{ t('btn_back', 'Back') }}
+                  </a>
+                {% endif %}
+              </div>
+
+              <div class="d-flex gap-2">
+                <button type="submit" name="action" value="draft" class="btn btn-outline-dark">
+                  <i class="bi bi-save me-1"></i> {{ t('btn_save_draft', 'Save as Draft') }}
+                </button>
+
+                {% if current_step < 6 %}
+                  <button type="submit" name="action" value="continue" class="btn btn-dark fw-semibold">
+                    {{ t('btn_save_continue', 'Save & Continue') }} <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                {% else %}
+                  <button type="submit" name="action" value="complete" class="btn btn-primary fw-semibold">
+                    <i class="bi bi-rocket-takeoff me-1"></i> {{ t('btn_complete_onboarding', 'Confirm & Launch Dashboard') }}
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

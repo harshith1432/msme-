@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block title %}Government Incentives & Subsidies — MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-gift text-primary"></i>
+      Government Incentives, Subsidies & Schemes
+    </h4>
+    <p class="text-muted small mb-0">Discover 204 verified central and state schemes covering credit guarantees, grants, equity, and market access for <strong>{{ company.name }}</strong>.</p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.view_drafts') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-pencil-square me-1"></i> View AI Drafts
+    </a>
+    <a href="{{ url_for('main.advisor') }}" class="btn btn-dark btn-sm">
+      <i class="bi bi-stars me-1 text-warning"></i> Check What I Qualify For
+    </a>
+  </div>
+</div>
+
+<!-- Search & Category Filters -->
+<div class="card border-0 shadow-sm bg-white p-3 rounded-3 mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col-md-5">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" id="incentiveSearch" class="form-control border-start-0" placeholder="Search schemes, subsidies, keywords...">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <select id="incentiveCategoryFilter" class="form-select form-select-sm">
+        <option value="">All Incentive Categories</option>
+        {% for c in categories %}
+        <option value="{{ c }}">{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <ul class="nav nav-pills nav-fill bg-light p-1 rounded-2" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active py-1 small fw-semibold" data-bs-toggle="tab" data-bs-target="#central-schemes" type="button">
+            Central Schemes ({{ central_schemes|length }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link py-1 small fw-semibold" data-bs-toggle="tab" data-bs-target="#state-schemes" type="button">
+            State Policies ({{ state_schemes|length }})
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <!-- Central Schemes Tab -->
+  <div class="tab-pane fade show active" id="central-schemes" role="tabpanel">
+    <div class="row g-3">
+      {% for s in central_schemes %}
+      <div class="col-md-6 col-lg-4 incentive-card-wrapper" data-category="{{ s.category }}">
+        <div class="card border border-1 shadow-sm h-100 bg-white rounded-3">
+          <div class="card-body d-flex flex-column justify-content-between p-3">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge badge-custom text-truncate" style="max-width: 180px;">{{ s.category }}</span>
+                <span class="badge bg-light text-muted border small">{{ s.id }}</span>
+              </div>
+              <h6 class="fw-bold text-dark mb-1 scheme-title">{{ s.scheme_name }}</h6>
+              <div class="text-secondary small mb-2"><i class="bi bi-building me-1"></i>{{ s.ministry_agency }}</div>
+              
+              <div class="p-2 rounded bg-light-subtle border small mb-2">
+                <strong class="text-dark">Key Benefit:</strong>
+                <p class="mb-0 text-muted">{{ s.key_benefit }}</p>
+              </div>
+
+              <div class="small text-muted mb-2">
+                <strong>Who can apply:</strong> {{ s.eligibility_criteria }}
+              </div>
+            </div>
+
+            <div class="pt-2 border-top d-flex flex-column gap-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge badge-verified">{{ s.verification_status|capitalize }}</span>
+                {% if s.apply_link %}
+                <a href="{{ s.apply_link }}" target="_blank" class="btn btn-xs btn-outline-dark">
+                  Official Portal <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+                {% endif %}
+              </div>
+              <!-- AI Readiness & Application Preparation -->
+              <button class="btn btn-sm btn-outline-dark w-100 check-readiness-btn" data-scheme-id="{{ s.id }}" data-scheme-name="{{ s.scheme_name }}">
+                <i class="bi bi-file-earmark-check me-1"></i> Document Readiness & Drafts
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- State Schemes Tab -->
+  <div class="tab-pane fade" id="state-schemes" role="tabpanel">
+    <div class="row g-3">
+      {% for s in state_schemes %}
+      <div class="col-md-6 col-lg-4 incentive-card-wrapper" data-category="{{ s.category }}" data-state="{{ s.jurisdiction }}">
+        <div class="card border border-1 shadow-sm h-100 bg-white rounded-3">
+          <div class="card-body d-flex flex-column justify-content-between p-3">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-dark text-white">{{ s.jurisdiction }}</span>
+                <span class="badge bg-light text-muted border small">{{ s.id }}</span>
+              </div>
+              <h6 class="fw-bold text-dark mb-1 scheme-title">{{ s.scheme_name }}</h6>
+              <div class="text-secondary small mb-2">{{ s.category }}</div>
+
+              <div class="p-2 rounded bg-light-subtle border small mb-2">
+                <strong class="text-dark">Key Benefit:</strong>
+                <p class="mb-0 text-muted">{{ s.key_benefit }}</p>
+              </div>
+
+              {% if s.eligibility_criteria %}
+              <div class="small text-muted mb-2">
+                <strong>Criteria:</strong> {{ s.eligibility_criteria }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="pt-2 border-top d-flex flex-column gap-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge badge-verified">{{ s.verification_status|capitalize }}</span>
+                {% if s.apply_link %}
+                <a href="{{ s.apply_link }}" target="_blank" class="btn btn-xs btn-outline-dark">
+                  State Portal <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+                {% endif %}
+              </div>
+              <button class="btn btn-sm btn-outline-dark w-100 check-readiness-btn" data-scheme-id="{{ s.id }}" data-scheme-name="{{ s.scheme_name }}">
+                <i class="bi bi-file-earmark-check me-1"></i> Document Readiness & Drafts
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Scheme Readiness & Paperwork Modal -->
+<div class="modal fade" id="readinessModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h6 class="modal-title fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-patch-check"></i> Paperwork Readiness & Application Drafter
+        </h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="readinessModalBody">
+        <div class="text-center py-4" id="readinessSpinner">
+          <div class="spinner-border text-primary mb-2" role="status"></div>
+          <div class="text-muted">Evaluating required documents against vault uploads...</div>
+        </div>
+        <div id="readinessContent" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h6 class="fw-bold mb-0 text-dark" id="modalSchemeTitle">Scheme Title</h6>
+              <span class="text-muted small">Scheme Ref: <span id="modalSchemeId"></span></span>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-dark fs-6" id="readinessScoreBadge">0% Ready</span>
+            </div>
+          </div>
+
+          <div class="alert alert-light border small mb-3">
+            <i class="bi bi-info-circle me-1"></i> <strong>Readiness Checker</strong>: Shows which mandatory paperwork exists in your private vault and which items are missing or expired before submission.
+          </div>
+
+          <h6 class="fw-bold small mb-2 text-dark">Required Document Audit:</h6>
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle" style="font-size: 0.85rem;">
+              <thead class="table-light">
+                <tr>
+                  <th>Statutory Requirement</th>
+                  <th>Status</th>
+                  <th>Vault Observation</th>
+                </tr>
+              </thead>
+              <tbody id="readinessTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 bg-light rounded border mt-3">
+            <h6 class="fw-bold small mb-2 text-dark"><i class="bi bi-magic me-1"></i> AI Draft Application Assistant</h6>
+            <p class="text-muted small mb-3">Generate auditable paperwork drafts grounded in verified ministry criteria and your business credentials.</p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-sm btn-dark" id="btnGenChecklist">
+                <i class="bi bi-card-checklist me-1"></i> Generate Draft Checklist
+              </button>
+              <button class="btn btn-sm btn-outline-dark" id="btnGenCoverLetter">
+                <i class="bi bi-file-earmark-person me-1"></i> Generate Application Cover Letter
+              </button>
+            </div>
+            <div id="draftSuccessAlert" class="alert alert-success py-2 small mt-2 mb-0" style="display: none;">
+              <i class="bi bi-check-circle me-1"></i> Draft generated successfully! <a href="{{ url_for('main.view_drafts') }}" class="fw-bold text-dark text-decoration-underline">View in AI Drafts</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let activeSchemeId = null;
+  const readinessModal = new bootstrap.Modal(document.getElementById('readinessModal'));
+  const spinner = document.getElementById('readinessSpinner');
+  const content = document.getElementById('readinessContent');
+  const titleEl = document.getElementById('modalSchemeTitle');
+  const idEl = document.getElementById('modalSchemeId');
+  const scoreBadge = document.getElementById('readinessScoreBadge');
+  const tbody = document.getElementById('readinessTableBody');
+  const draftSuccess = document.getElementById('draftSuccessAlert');
+
+  // Trigger readiness check
+  document.querySelectorAll('.check-readiness-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      activeSchemeId = this.getAttribute('data-scheme-id');
+      const schemeName = this.getAttribute('data-scheme-name');
+      titleEl.textContent = schemeName;
+      idEl.textContent = activeSchemeId;
+      draftSuccess.style.display = 'none';
+
+      spinner.style.display = 'block';
+      content.style.display = 'none';
+      readinessModal.show();
+
+      fetch(`/schemes/${activeSchemeId}/readiness`)
+        .then(r => r.json())
+        .then(data => {
+          spinner.style.display = 'none';
+          if (!data.success) {
+            tbody.innerHTML = `<tr><td colspan="3" class="text-danger text-center">${data.error || 'Evaluation failed'}</td></tr>`;
+            content.style.display = 'block';
+            return;
+          }
+
+          const r_data = data.readiness;
+          scoreBadge.textContent = `${r_data.readiness_score}% Ready (${r_data.available_count}/${r_data.total_required})`;
+          scoreBadge.className = r_data.readiness_score >= 80 ? 'badge bg-success fs-6' : (r_data.readiness_score >= 50 ? 'badge bg-warning text-dark fs-6' : 'badge bg-danger fs-6');
+
+          tbody.innerHTML = '';
+          r_data.items.forEach(it => {
+            let badgeClass = 'bg-success';
+            if (it.status === 'missing') badgeClass = 'bg-danger';
+            else if (it.status === 'unverified') badgeClass = 'bg-warning text-dark';
+            else if (it.status === 'expired') badgeClass = 'bg-dark';
+
+            tbody.innerHTML += `
+              <tr>
+                <td class="fw-semibold text-dark">${it.required_item}</td>
+                <td><span class="badge ${badgeClass}">${it.status.toUpperCase()}</span></td>
+                <td class="text-muted small">${it.notes}</td>
+              </tr>
+            `;
+          });
+          content.style.display = 'block';
+        })
+        .catch(err => {
+          spinner.style.display = 'none';
+          tbody.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Error: ${err}</td></tr>`;
+          content.style.display = 'block';
+        });
+    });
+  });
+
+  // Generate Draft Checklist
+  document.getElementById('btnGenChecklist').addEventListener('click', function () {
+    if (!activeSchemeId) return;
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Generating...';
+
+    fetch('/drafts/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scheme_id: activeSchemeId, draft_type: 'checklist' })
+    })
+    .then(r => r.json())
+    .then(data => {
+      this.disabled = false;
+      this.innerHTML = '<i class="bi bi-card-checklist me-1"></i> Generate Draft Checklist';
+      if (data.success) {
+        draftSuccess.style.display = 'block';
+      } else {
+        alert('Draft generation failed: ' + data.error);
+      }
+    })
+    .catch(err => {
+      this.disabled = false;
+      this.innerHTML = '<i class="bi bi-card-checklist me-1"></i> Generate Draft Checklist';
+      alert('Error: ' + err);
+    });
+  });
+
+  // Generate Cover Letter
+  document.getElementById('btnGenCoverLetter').addEventListener('click', function () {
+    if (!activeSchemeId) return;
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Generating...';
+
+    fetch('/drafts/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scheme_id: activeSchemeId, draft_type: 'cover_letter' })
+    })
+    .then(r => r.json())
+    .then(data => {
+      this.disabled = false;
+      this.innerHTML = '<i class="bi bi-file-earmark-person me-1"></i> Generate Application Cover Letter';
+      if (data.success) {
+        draftSuccess.style.display = 'block';
+      } else {
+        alert('Draft generation failed: ' + data.error);
+      }
+    })
+    .catch(err => {
+      this.disabled = false;
+      this.innerHTML = '<i class="bi bi-file-earmark-person me-1"></i> Generate Application Cover Letter';
+      alert('Error: ' + err);
+    });
+  });
+
+  // Client-side search and category filtering
+  const searchInput = document.getElementById('incentiveSearch');
+  const catFilter = document.getElementById('incentiveCategoryFilter');
+  const wrappers = document.querySelectorAll('.incentive-card-wrapper');
+
+  function filterSchemes() {
+    const q = (searchInput.value || '').toLowerCase();
+    const cat = catFilter.value;
+
+    wrappers.forEach(w => {
+      const title = w.querySelector('.scheme-title').textContent.toLowerCase();
+      const cardCat = w.getAttribute('data-category');
+      const matchesQ = !q || title.includes(q) || w.textContent.toLowerCase().includes(q);
+      const matchesCat = !cat || cardCat === cat;
+
+      if (matchesQ && matchesCat) {
+        w.style.display = '';
+      } else {
+        w.style.display = 'none';
+      }
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', filterSchemes);
+  if (catFilter) catFilter.addEventListener('change', filterSchemes);
+});
+</script>
+{% endblock %}

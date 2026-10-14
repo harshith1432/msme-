@@ -1,0 +1,62 @@
+[
+  {
+    "Portal": "myScheme",
+    "What it aggregates": "Search & eligibility discovery for central and state schemes",
+    "Gap": "Scheme discovery (citizen-focused); no compliance calendar; limited enterprise thresholds",
+    "Link": "https://www.myscheme.gov.in"
+  },
+  {
+    "Portal": "National Single Window System (NSWS)",
+    "What it aggregates": "Central approvals + links to state single-window systems",
+    "Gap": "Approvals, not incentives eligibility; state coverage uneven",
+    "Link": "https://www.nsws.gov.in"
+  },
+  {
+    "Portal": "Jan Samarth",
+    "What it aggregates": "Credit-linked government schemes",
+    "Gap": "Credit schemes only",
+    "Link": "https://www.jansamarth.in"
+  },
+  {
+    "Portal": "Udyam / Udyami Mitra",
+    "What it aggregates": "MSME registration; credit & handholding",
+    "Gap": "No state incentives or compliance mapping",
+    "Link": "https://www.udyamimitra.in"
+  },
+  {
+    "Portal": "MSME Champions",
+    "What it aggregates": "MoMSME schemes & grievances",
+    "Gap": "MoMSME only",
+    "Link": "https://champions.gov.in"
+  },
+  {
+    "Portal": "Shram Suvidha",
+    "What it aggregates": "Central labour registrations & returns",
+    "Gap": "Labour only; state rules separate",
+    "Link": "https://shramsuvidha.gov.in"
+  },
+  {
+    "Portal": "Startup India",
+    "What it aggregates": "Startup recognition, central & some state startup schemes",
+    "Gap": "Startups only",
+    "Link": "https://www.startupindia.gov.in"
+  },
+  {
+    "Portal": "PARIVESH",
+    "What it aggregates": "Environment/forest clearances",
+    "Gap": "Environment only",
+    "Link": "https://parivesh.nic.in"
+  },
+  {
+    "Portal": "India Industrial Land Bank",
+    "What it aggregates": "Industrial land & parks across states",
+    "Gap": "Land only",
+    "Link": "https://iilb.gov.in"
+  },
+  {
+    "Portal": "State single-window portals (36)",
+    "What it aggregates": "State approvals and incentive applications",
+    "Gap": "One state at a time; formats differ",
+    "Link": "https://www.nsws.gov.in"
+  }
+]

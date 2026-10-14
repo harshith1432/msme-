@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Regulatory Change Intelligence — Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-bell-history text-dark"></i>
+      Regulatory Change Intelligence Queue
+    </h4>
+    <p class="text-muted small mb-0">Traceable workflow for monitoring, hashing, reviewing, and publishing official gazette notifications: <code>Detected &rarr; Parsed &rarr; Needs Review &rarr; Approved &rarr; Published</code>.</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#ingestCircularModal">
+      <i class="bi bi-plus-circle me-1"></i> Ingest Official Circular
+    </button>
+    <a href="{{ url_for('main.admin_records') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Back to Knowledge Base
+    </a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm bg-white rounded-3 p-3 p-md-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0"><i class="bi bi-broadcast me-1"></i> Monitored Official Updates ({{ changes|length }})</h6>
+        <span class="badge bg-light text-muted border small">Source Allowlist Verified</span>
+      </div>
+
+      <div class="list-group list-group-flush">
+        {% for c in changes %}
+        <div class="list-group-item px-0 py-3 border-bottom">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <h6 class="fw-bold text-dark mb-0">{{ c.title }}</h6>
+                {% if c.review_status == 'published' %}
+                <span class="badge bg-success text-white"><i class="bi bi-check-all me-1"></i>Published (v{{ c.new_version or '1.1' }})</span>
+                {% elif c.review_status == 'approved' %}
+                <span class="badge bg-primary text-white"><i class="bi bi-check2-circle me-1"></i>Approved (Ready to Publish)</span>
+                {% elif c.review_status in ['needs_review', 'pending'] %}
+                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Needs Expert Review</span>
+                {% elif c.review_status == 'detected' %}
+                <span class="badge bg-info text-dark"><i class="bi bi-eye me-1"></i>Detected & Ingested</span>
+                {% else %}
+                <span class="badge bg-secondary">{{ c.review_status|capitalize }}</span>
+                {% endif %}
+              </div>
+              <div class="text-muted small">
+                <span><i class="bi bi-building me-1"></i>{{ c.issuing_authority }}</span> &bull;
+                <span><i class="bi bi-calendar-event me-1"></i>Effective: {{ c.effective_date.strftime('%d %b %Y') if c.effective_date else 'Immediate' }}</span> &bull;
+                <span><i class="bi bi-tag me-1"></i>{{ c.affected_domain or 'General' }}</span>
+                {% if c.content_hash %}
+                &bull; <span class="font-monospace text-secondary" title="Cryptographic SHA-256 Hash"><i class="bi bi-hash"></i>{{ c.content_hash[:12] }}...</span>
+                {% endif %}
+              </div>
+            </div>
+            <div>
+              <a href="{{ c.source_url }}" target="_blank" class="btn btn-sm btn-outline-custom text-nowrap" style="font-size: 0.75rem;">
+                Official Gazette / Source <i class="bi bi-box-arrow-up-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded small mb-2 text-dark">
+            <strong>Summary of Regulatory Amendment:</strong>
+            <p class="mb-0 mt-1 text-muted">{{ c.summary_of_change }}</p>
+          </div>
+
+          {% if c.proposed_diff %}
+          <div class="mb-2">
+            <a class="text-decoration-none small text-muted" data-bs-toggle="collapse" href="#diffCollapse_{{ c.id }}">
+              <i class="bi bi-file-diff me-1"></i> View Proposed Rule Diff / Snapshot
+            </a>
+            <div class="collapse mt-2" id="diffCollapse_{{ c.id }}">
+              <pre class="bg-dark text-white p-2 rounded small font-monospace" style="max-height: 140px; overflow-y: auto;">{{ c.proposed_diff }}</pre>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if c.review_notes %}
+          <div class="small text-secondary mb-2">
+            <strong>Reviewer Sign-off:</strong> {{ c.review_notes }}
+          </div>
+          {% endif %}
+
+          <!-- Step 1: Expert Review & Approval Form -->
+          {% if c.review_status in ['needs_review', 'pending', 'detected'] %}
+          <form method="POST" action="{{ url_for('main.approve_change', change_id=c.id) }}" class="d-flex gap-2 mt-2">
+            <input type="text" name="notes" class="form-control form-control-sm" placeholder="Enter expert regulatory sign-off notes..." required>
+            <button type="submit" class="btn btn-sm btn-dark text-nowrap">
+              <i class="bi bi-check-circle me-1"></i> Human Approve
+            </button>
+          </form>
+          {% endif %}
+
+          <!-- Step 2: Publication to Active Rules Form -->
+          {% if c.review_status == 'approved' %}
+          <div class="d-flex align-items-center gap-2 mt-2 p-2 bg-success-subtle rounded border border-success-subtle">
+            <span class="small text-success fw-semibold"><i class="bi bi-shield-check me-1"></i>Approved by qualified reviewer. Ready to publish.</span>
+            <form method="POST" action="{{ url_for('main.publish_change', change_id=c.id) }}" class="ms-auto">
+              <button type="submit" class="btn btn-sm btn-success text-nowrap">
+                <i class="bi bi-upload me-1"></i> Publish to Active Knowledge Base
+              </button>
+            </form>
+          </div>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-check2-all fs-2 d-block mb-2 text-secondary"></i>
+          <p class="mb-0">All detected official circulars have been reviewed and published.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ingest Official Circular -->
+<div class="modal fade" id="ingestCircularModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('main.detect_regulatory_change') }}" class="modal-content" id="ingestCircularForm">
+      <div class="modal-header">
+        <h6 class="modal-title fw-bold">Ingest Allowlisted Government Circular</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-light border small mb-3">
+          <i class="bi bi-shield-check me-1"></i> Sources must be from authorized government domains (e.g. <code>msme.gov.in</code>, <code>cbic.gov.in</code>, <code>gst.gov.in</code>, <code>epfindia.gov.in</code>). Untrusted domains are prohibited.
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Circular Title *</label>
+          <input type="text" name="title" class="form-control form-control-sm" required placeholder="e.g. Gazette Notification S.O. 2026/89">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Issuing Ministry / Authority *</label>
+          <input type="text" name="issuing_authority" class="form-control form-control-sm" required placeholder="e.g. Ministry of MSME / CBDT">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Official Source URL *</label>
+          <input type="url" name="source_url" class="form-control form-control-sm" required placeholder="https://msme.gov.in/notifications/2026">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Gazette Notification Text / Summary *</label>
+          <textarea name="raw_content" class="form-control form-control-sm" rows="4" required placeholder="Paste official text extract for cryptographic hashing and AI proposed diff..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-dark">Ingest into Queue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('ingestCircularForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch('/admin/changes/detect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          window.location.reload();
+        } else {
+          alert('Ingestion error: ' + (res.error || 'Failed'));
+        }
+      })
+      .catch(err => alert('Error: ' + err));
+    });
+  }
+});
+</script>
+{% endblock %}

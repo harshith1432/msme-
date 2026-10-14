@@ -1,0 +1,1262 @@
+[
+  {
+    "ID": "SI-001",
+    "State / UT": "Andhra Pradesh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "AP Industrial Development Policy 4.0 (2024-29)",
+    "Key benefit": "Capital subsidy, SGST reimbursement, power & stamp-duty concessions",
+    "Apply / info link": "https://www.apindustries.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-002",
+    "State / UT": "Andhra Pradesh",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "AP MSME & Entrepreneurship Development Policy 4.0 (2024-29)",
+    "Key benefit": "Capital subsidy, interest subvention, special support for SC/ST/women/BC entrepreneurs",
+    "Apply / info link": "https://www.apindustries.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-003",
+    "State / UT": "Andhra Pradesh",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "AP Innovation & Startup Policy 4.0",
+    "Key benefit": "Incubation, seed funding, reimbursements",
+    "Apply / info link": "https://www.apindustries.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-004",
+    "State / UT": "Andhra Pradesh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-005",
+    "State / UT": "Arunachal Pradesh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Arunachal Pradesh Industrial & Investment Policy",
+    "Key benefit": "Capital, interest and transport subsidies (plus central UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-006",
+    "State / UT": "Arunachal Pradesh",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Deen Dayal Upadhyaya Swavalamban Yojana",
+    "Key benefit": "Capital subsidy for youth enterprises",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-007",
+    "State / UT": "Arunachal Pradesh",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Arunachal Pradesh Startup Policy",
+    "Key benefit": "Seed support and incubation",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-008",
+    "State / UT": "Arunachal Pradesh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-009",
+    "State / UT": "Assam",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Industrial & Investment Policy of Assam (current)",
+    "Key benefit": "Capital subsidy, SGST reimbursement, interest subvention",
+    "Apply / info link": "https://easeofdoingbusinessinassam.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-010",
+    "State / UT": "Assam",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "CM's Atmanirbhar Asom Abhijan",
+    "Key benefit": "Financial assistance for youth-led enterprises",
+    "Apply / info link": "https://easeofdoingbusinessinassam.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-011",
+    "State / UT": "Assam",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Assam Startup Policy / Assam Startup – The Nest",
+    "Key benefit": "Incubation, seed grants",
+    "Apply / info link": "https://easeofdoingbusinessinassam.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-012",
+    "State / UT": "Assam",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-013",
+    "State / UT": "Bihar",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Bihar Industrial Investment Promotion Policy / Package (current)",
+    "Key benefit": "Capital & interest subsidies, land concessions, SGST reimbursement",
+    "Apply / info link": "https://state.bihar.gov.in/industries",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-014",
+    "State / UT": "Bihar",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Mukhyamantri Udyami Yojana",
+    "Key benefit": "Up to ₹10 lakh (part grant, part interest-free loan) for SC/ST, EBC, women, youth, minority entrepreneurs",
+    "Apply / info link": "https://udyami.bihar.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-015",
+    "State / UT": "Bihar",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Bihar Startup Policy",
+    "Key benefit": "Seed funding, incubation",
+    "Apply / info link": "https://startup.bihar.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-016",
+    "State / UT": "Bihar",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-017",
+    "State / UT": "Chhattisgarh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Chhattisgarh Industrial Development Policy 2024-30",
+    "Key benefit": "Capital subsidy, interest subsidy, SGST reimbursement, employment incentives",
+    "Apply / info link": "https://industries.cg.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-018",
+    "State / UT": "Chhattisgarh",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Chhattisgarh startup support",
+    "Key benefit": "Incubation and seed support",
+    "Apply / info link": "https://industries.cg.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-019",
+    "State / UT": "Chhattisgarh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-020",
+    "State / UT": "Goa",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Goa Investment / Industrial Policy (current)",
+    "Key benefit": "Investment incentives via GIPB",
+    "Apply / info link": "https://goaipb.goa.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-021",
+    "State / UT": "Goa",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Goa Startup Policy",
+    "Key benefit": "Seed capital, lease rental and other reimbursements",
+    "Apply / info link": "https://www.startup.goa.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-022",
+    "State / UT": "Goa",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-023",
+    "State / UT": "Gujarat",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Gujarat Industrial Policy 2020",
+    "Key benefit": "Capital/interest incentives, employment incentives",
+    "Apply / info link": "https://ifp.gujarat.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-024",
+    "State / UT": "Gujarat",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Atmanirbhar Gujarat Scheme for Assistance to MSMEs",
+    "Key benefit": "Capital incentive (up to ₹35 lakh for micro), interest subsidy, net SGST, local-employment incentive",
+    "Apply / info link": "https://ifp.gujarat.gov.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-025",
+    "State / UT": "Gujarat",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Student Startup & Innovation Policy (SSIP 2.0) / Gujarat Startup scheme",
+    "Key benefit": "PoC grants up to ₹2.5 lakh for students; startup support",
+    "Apply / info link": "https://ssip.gujarat.gov.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-026",
+    "State / UT": "Gujarat",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-027",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Make in Haryana Industrial Policy 2026",
+    "Key benefit": "For large/mega units; zones (Core/Growth/Emerging/Aspirational) replace A–D blocks; fast incentive release",
+    "Apply / info link": "https://investharyana.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-028",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Haryana Progressive MSME & Export Promotion Policy 2026",
+    "Key benefit": "Separate MSME policy incl. testing, automation, AI-adoption & R&D incentives",
+    "Apply / info link": "https://investharyana.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-029",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "Legacy policy",
+    "Policy / scheme": "Haryana Enterprises & Employment Policy (HEEP) 2020",
+    "Key benefit": "Continues to govern cases already in the pipeline",
+    "Apply / info link": "https://investharyana.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-030",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "Sector policy",
+    "Policy / scheme": "Haryana Agri-Business & Food Processing Policy 2026 (+ other sector policies)",
+    "Key benefit": "Sector incentives",
+    "Apply / info link": "https://investharyana.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-031",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Haryana State Startup Policy",
+    "Key benefit": "Seed, lease rental, patent reimbursements",
+    "Apply / info link": "https://startupharyana.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-032",
+    "State / UT": "Haryana",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-033",
+    "State / UT": "Himachal Pradesh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "HP Industrial Investment Policy (current)",
+    "Key benefit": "Capital and interest subsidies, concessional power",
+    "Apply / info link": "https://emerginghimachal.hp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-034",
+    "State / UT": "Himachal Pradesh",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Mukhya Mantri Swavalamban Yojana",
+    "Key benefit": "Capital subsidy and interest subvention for local youth/women",
+    "Apply / info link": "https://emerginghimachal.hp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-035",
+    "State / UT": "Himachal Pradesh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-036",
+    "State / UT": "Jharkhand",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Jharkhand Industrial & Investment Promotion Policy (JIIPP) 2021",
+    "Key benefit": "Capital subsidy, SGST reimbursement, interest subsidy",
+    "Apply / info link": "https://jharkhandindustry.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-037",
+    "State / UT": "Jharkhand",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Jharkhand Startup Policy",
+    "Key benefit": "Seed support, incubation",
+    "Apply / info link": "https://jharkhandindustry.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-038",
+    "State / UT": "Jharkhand",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Mukhyamantri Rojgar Srijan Yojana",
+    "Key benefit": "Subsidised loans for self-employment",
+    "Apply / info link": "https://jharkhandindustry.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-039",
+    "State / UT": "Jharkhand",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-040",
+    "State / UT": "Karnataka",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Karnataka Industrial Policy 2025-30 (notified 8 Feb 2025)",
+    "Key benefit": "Choice of capital subsidy or production-linked incentive; zone-wise MSME capital subsidy; stamp-duty exemption; 30% of industrial land for MSMEs",
+    "Apply / info link": "https://www.kum.karnataka.gov.in",
+    "Verification": "Verified against current sources (Oct 2026)"
+  },
+  {
+    "ID": "SI-041",
+    "State / UT": "Karnataka",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Karnataka Startup Policy (Elevate programme, KITS)",
+    "Key benefit": "Grant-in-aid, incubation, IP reimbursement",
+    "Apply / info link": "https://startup.karnataka.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-042",
+    "State / UT": "Karnataka",
+    "Type": "State",
+    "Category": "Sector policy",
+    "Policy / scheme": "Karnataka EV policy & ESDM incentives",
+    "Key benefit": "Capital subsidy and turnover-linked incentives for EV/ESDM units",
+    "Apply / info link": "https://www.kum.karnataka.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-043",
+    "State / UT": "Karnataka",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Chief Minister's Employment Generation Programme (CMEGP)",
+    "Key benefit": "Margin-money subsidy for new micro enterprises",
+    "Apply / info link": "https://www.kum.karnataka.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-044",
+    "State / UT": "Karnataka",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-045",
+    "State / UT": "Kerala",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Kerala Industrial Policy 2023",
+    "Key benefit": "Investment subsidy, sunrise-sector support",
+    "Apply / info link": "https://industry.kerala.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-046",
+    "State / UT": "Kerala",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Entrepreneur Support Scheme (ESS)",
+    "Key benefit": "Start-up, investment and technology support subsidies for MSMEs",
+    "Apply / info link": "https://industry.kerala.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-047",
+    "State / UT": "Kerala",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Kerala Startup Mission",
+    "Key benefit": "Grants, incubation, seed loans",
+    "Apply / info link": "https://startupmission.kerala.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-048",
+    "State / UT": "Kerala",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-049",
+    "State / UT": "Madhya Pradesh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "MP Industrial Promotion Policy 2025",
+    "Key benefit": "Investment promotion assistance, employment incentives",
+    "Apply / info link": "https://invest.mp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-050",
+    "State / UT": "Madhya Pradesh",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "MP MSME Development Policy 2025",
+    "Key benefit": "Capital subsidy, interest subsidy for MSMEs",
+    "Apply / info link": "https://invest.mp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-051",
+    "State / UT": "Madhya Pradesh",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "MP Startup Policy 2025",
+    "Key benefit": "Seed & lease support, incubation",
+    "Apply / info link": "https://startup.mp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-052",
+    "State / UT": "Madhya Pradesh",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Mukhyamantri Udyam Kranti Yojana",
+    "Key benefit": "Interest subvention and guarantee fee support for youth loans",
+    "Apply / info link": "https://invest.mp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-053",
+    "State / UT": "Madhya Pradesh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-054",
+    "State / UT": "Maharashtra",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Maharashtra Industrial Policy & Package Scheme of Incentives (current)",
+    "Key benefit": "Industrial promotion subsidy (SGST-linked), electricity duty & stamp duty exemptions",
+    "Apply / info link": "https://maitri.mahaonline.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-055",
+    "State / UT": "Maharashtra",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Chief Minister Employment Generation Programme (CMEGP)",
+    "Key benefit": "15–35% margin-money subsidy for new micro enterprises",
+    "Apply / info link": "https://maha-cmegp.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-056",
+    "State / UT": "Maharashtra",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Maharashtra State Innovative Startup Policy",
+    "Key benefit": "Grants, incubation, IP and quality-certification reimbursement",
+    "Apply / info link": "https://msins.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-057",
+    "State / UT": "Maharashtra",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-058",
+    "State / UT": "Manipur",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Manipur Industrial & Investment Policy",
+    "Key benefit": "Capital and interest subsidies (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-059",
+    "State / UT": "Manipur",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Startup Manipur",
+    "Key benefit": "Seed grants",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-060",
+    "State / UT": "Manipur",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-061",
+    "State / UT": "Meghalaya",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Meghalaya Industrial & Investment Promotion Policy",
+    "Key benefit": "Capital and other incentives (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-062",
+    "State / UT": "Meghalaya",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "PRIME Meghalaya",
+    "Key benefit": "Incubation and enterprise support",
+    "Apply / info link": "https://primemeghalaya.com",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-063",
+    "State / UT": "Meghalaya",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-064",
+    "State / UT": "Mizoram",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Mizoram Industrial Policy",
+    "Key benefit": "Capital and interest incentives (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-065",
+    "State / UT": "Mizoram",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-066",
+    "State / UT": "Nagaland",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Nagaland Industrial Policy",
+    "Key benefit": "Capital and interest incentives (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-067",
+    "State / UT": "Nagaland",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Startup Nagaland",
+    "Key benefit": "Seed support",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-068",
+    "State / UT": "Nagaland",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-069",
+    "State / UT": "Odisha",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Odisha Industrial Policy Resolution 2022",
+    "Key benefit": "Capital investment subsidy, SGST reimbursement, interest subsidy",
+    "Apply / info link": "https://investodisha.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-070",
+    "State / UT": "Odisha",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Odisha MSME Development Policy 2022",
+    "Key benefit": "Capital subsidy, interest subsidy, power tariff reimbursement",
+    "Apply / info link": "https://investodisha.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-071",
+    "State / UT": "Odisha",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Startup Odisha",
+    "Key benefit": "Monthly allowance, seed funding, incubation",
+    "Apply / info link": "https://startupodisha.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-072",
+    "State / UT": "Odisha",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-073",
+    "State / UT": "Punjab",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Punjab Industrial & Business Development Policy 2022",
+    "Key benefit": "SGST reimbursement, stamp duty & electricity duty exemptions, capital subsidy for MSMEs",
+    "Apply / info link": "https://investpunjab.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-074",
+    "State / UT": "Punjab",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Startup Punjab",
+    "Key benefit": "Seed grants, incubation",
+    "Apply / info link": "https://startuppunjab.org",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-075",
+    "State / UT": "Punjab",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-076",
+    "State / UT": "Rajasthan",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Rajasthan Investment Promotion Scheme (RIPS) 2024",
+    "Key benefit": "Asset-creation incentive, SGST-linked benefits, stamp-duty exemption",
+    "Apply / info link": "https://invest.rajasthan.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-077",
+    "State / UT": "Rajasthan",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Rajasthan MSME Policy 2024",
+    "Key benefit": "Interest subvention, capital subsidy",
+    "Apply / info link": "https://industries.rajasthan.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-078",
+    "State / UT": "Rajasthan",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Vishwakarma Yuva Udyami Protsahan Yojana",
+    "Key benefit": "Interest subvention on loans for young entrepreneurs",
+    "Apply / info link": "https://industries.rajasthan.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-079",
+    "State / UT": "Rajasthan",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "iStart Rajasthan",
+    "Key benefit": "Seed funding, incubation",
+    "Apply / info link": "https://istart.rajasthan.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-080",
+    "State / UT": "Rajasthan",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-081",
+    "State / UT": "Sikkim",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Sikkim Industrial Policy",
+    "Key benefit": "Capital and other incentives (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-082",
+    "State / UT": "Sikkim",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-083",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Tamil Nadu Industrial Policy 2021",
+    "Key benefit": "Capital subsidy, SGST reimbursement, employment incentives",
+    "Apply / info link": "https://tnswp.com",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-084",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Tamil Nadu MSME Policy 2021",
+    "Key benefit": "Capital subsidy, LT power tariff subsidy, back-ended interest subsidy",
+    "Apply / info link": "https://www.msmeonline.tn.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-085",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "NEEDS (New Entrepreneur-cum-Enterprise Development Scheme)",
+    "Key benefit": "Capital subsidy + interest subvention for first-generation entrepreneurs",
+    "Apply / info link": "https://www.msmeonline.tn.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-086",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Annal Ambedkar Business Champions Scheme",
+    "Key benefit": "Capital subsidy and interest subvention for SC/ST entrepreneurs",
+    "Apply / info link": "https://www.msmeonline.tn.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-087",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "StartupTN – TN Startup & Innovation Policy",
+    "Key benefit": "TANSEED grants, incubation",
+    "Apply / info link": "https://startuptn.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-088",
+    "State / UT": "Tamil Nadu",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-089",
+    "State / UT": "Telangana",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "T-IDEA (Telangana State Industrial Development & Entrepreneur Advancement)",
+    "Key benefit": "Capital subsidy, SGST reimbursement, power cost reimbursement",
+    "Apply / info link": "https://ipass.telangana.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-090",
+    "State / UT": "Telangana",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "T-PRIDE",
+    "Key benefit": "Enhanced incentives for SC/ST entrepreneurs",
+    "Apply / info link": "https://ipass.telangana.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-091",
+    "State / UT": "Telangana",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Telangana MSME Policy 2024",
+    "Key benefit": "Credit, land, technology and marketing support for MSMEs",
+    "Apply / info link": "https://ipass.telangana.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-092",
+    "State / UT": "Telangana",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Telangana Innovation ecosystem (T-Hub, TSIC, WE Hub)",
+    "Key benefit": "Incubation, grants",
+    "Apply / info link": "https://t-hub.co",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-093",
+    "State / UT": "Telangana",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-094",
+    "State / UT": "Tripura",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Tripura Industrial Investment Promotion Incentive Scheme",
+    "Key benefit": "Capital and other incentives (plus UNNATI 2024)",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-095",
+    "State / UT": "Tripura",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-096",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "UP Industrial Investment & Employment Promotion Policy 2022",
+    "Key benefit": "Capital subsidy / SGST reimbursement, stamp-duty exemption",
+    "Apply / info link": "https://invest.up.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-097",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "UP MSME Promotion Policy 2022",
+    "Key benefit": "Capital subsidy (higher in backward regions), interest subsidy",
+    "Apply / info link": "https://msme.up.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-098",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "CM Yuva Udyami Vikas Abhiyan (CM-YUVA)",
+    "Key benefit": "Interest-free, collateral-free loans for young first-time entrepreneurs",
+    "Apply / info link": "https://msme.up.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-099",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "One District One Product (ODOP)",
+    "Key benefit": "Margin money, CFCs, marketing, training",
+    "Apply / info link": "https://odopup.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-100",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "UP Startup Policy",
+    "Key benefit": "Seed, sustenance allowance, incubation",
+    "Apply / info link": "https://startinup.up.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-101",
+    "State / UT": "Uttar Pradesh",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-102",
+    "State / UT": "Uttarakhand",
+    "Type": "State",
+    "Category": "MSME policy",
+    "Policy / scheme": "Uttarakhand MSME Policy 2023",
+    "Key benefit": "Capital subsidy (category-wise districts), interest subsidy",
+    "Apply / info link": "https://investuttarakhand.uk.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-103",
+    "State / UT": "Uttarakhand",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Mukhyamantri Swarozgar Yojana",
+    "Key benefit": "Margin-money subsidy for self-employment",
+    "Apply / info link": "https://msy.uk.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-104",
+    "State / UT": "Uttarakhand",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "Uttarakhand Startup Policy 2023",
+    "Key benefit": "Seed and incubation support",
+    "Apply / info link": "https://startuputtarakhand.uk.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-105",
+    "State / UT": "Uttarakhand",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-106",
+    "State / UT": "West Bengal",
+    "Type": "State",
+    "Category": "Industrial policy",
+    "Policy / scheme": "West Bengal industrial incentive schemes (current)",
+    "Key benefit": "Capital and other incentives (check current scheme)",
+    "Apply / info link": "https://wbidc.com",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-107",
+    "State / UT": "West Bengal",
+    "Type": "State",
+    "Category": "Scheme",
+    "Policy / scheme": "Bhabishyat Credit Card",
+    "Key benefit": "Collateral-free loans up to ₹5 lakh for youth entrepreneurs",
+    "Apply / info link": "https://wbmsme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-108",
+    "State / UT": "West Bengal",
+    "Type": "State",
+    "Category": "Startup policy",
+    "Policy / scheme": "West Bengal Startup policy",
+    "Key benefit": "Incubation and seed support",
+    "Apply / info link": "https://wbmsme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-109",
+    "State / UT": "West Bengal",
+    "Type": "State",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-110",
+    "State / UT": "Andaman & Nicobar Islands",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "A&N Islands Industrial Policy",
+    "Key benefit": "UT-level incentives",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-111",
+    "State / UT": "Andaman & Nicobar Islands",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-112",
+    "State / UT": "Chandigarh",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Chandigarh Industrial Policy",
+    "Key benefit": "UT-level incentives",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-113",
+    "State / UT": "Chandigarh",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-114",
+    "State / UT": "Dadra & Nagar Haveli and Daman & Diu",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "DNH&DD Industrial Policy",
+    "Key benefit": "UT-level incentives",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-115",
+    "State / UT": "Dadra & Nagar Haveli and Daman & Diu",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-116",
+    "State / UT": "Delhi (NCT)",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Delhi Industrial Policy / Startup Policy (current)",
+    "Key benefit": "Industrial area redevelopment, startup support",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-117",
+    "State / UT": "Delhi (NCT)",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-118",
+    "State / UT": "Jammu & Kashmir",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "J&K Industrial Policy 2021-30 & J&K Industrial Land Allotment Policy",
+    "Key benefit": "UT incentives, land",
+    "Apply / info link": "https://singlewindow.jk.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-119",
+    "State / UT": "Jammu & Kashmir",
+    "Type": "UT",
+    "Category": "Central scheme for UT",
+    "Policy / scheme": "New Central Sector Scheme for J&K (2021)",
+    "Key benefit": "Capital, interest, GST-linked & working-capital incentives",
+    "Apply / info link": "https://dpiit.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-120",
+    "State / UT": "Jammu & Kashmir",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-121",
+    "State / UT": "Ladakh",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Ladakh Industrial / Investment Policy",
+    "Key benefit": "UT-level incentives",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-122",
+    "State / UT": "Ladakh",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-123",
+    "State / UT": "Lakshadweep",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Lakshadweep enterprise support",
+    "Key benefit": "Limited UT-level schemes",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-124",
+    "State / UT": "Lakshadweep",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-125",
+    "State / UT": "Puducherry",
+    "Type": "UT",
+    "Category": "Industrial policy",
+    "Policy / scheme": "Puducherry Industrial Policy",
+    "Key benefit": "UT-level incentives",
+    "Apply / info link": "https://www.nsws.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  },
+  {
+    "ID": "SI-126",
+    "State / UT": "Puducherry",
+    "Type": "UT",
+    "Category": "Central schemes – state delivery",
+    "Policy / scheme": "PMEGP / PMFME / RAMP / PM Vishwakarma state nodal agencies",
+    "Key benefit": "Central schemes are applied for through state nodal agencies, DICs and banks",
+    "Apply / info link": "https://www.myscheme.gov.in",
+    "Verification": "Knowledge-based; verify on official link"
+  }
+]

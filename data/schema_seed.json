@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "title": "India MSME Compliance & Incentives Navigator – Central + all 28 States & 8 UTs",
+    "prepared_for": "Dr. Sagar Gulati, JAIN (Deemed-to-be University)",
+    "compiled_date": "2026-10-04",
+    "version": "1.0",
+    "summary_counts": {
+      "central_compliance": 94,
+      "central_incentives": 78,
+      "state_compliance": 330,
+      "state_incentives": 126,
+      "total_records": 628
+    },
+    "supported_languages": [
+      {"code": "en", "name": "English", "native": "English"},
+      {"code": "hi", "name": "Hindi", "native": "हिन्दी"},
+      {"code": "mr", "name": "Marathi", "native": "मराठी"},
+      {"code": "gu", "name": "Gujarati", "native": "ગુજરાતી"},
+      {"code": "ta", "name": "Tamil", "native": "தமிழ்"},
+      {"code": "te", "name": "Telugu", "native": "తెలుగు"},
+      {"code": "kn", "name": "Kannada", "native": "ಕನ್ನಡ"},
+      {"code": "bn", "name": "Bengali", "native": "বাংলা"}
+    ]
+  },
+  "msme_classification_2025": {
+    "effective_date": "2025-04-01",
+    "criteria": {
+      "micro": {"max_investment_cr": 2.5, "max_turnover_cr": 10.0},
+      "small": {"max_investment_cr": 25.0, "max_turnover_cr": 100.0},
+      "medium": {"max_investment_cr": 125.0, "max_turnover_cr": 500.0}
+    }
+  },
+  "startup_definition_2026": {
+    "effective_date": "2026-02-01",
+    "notification": "G.S.R. 108(E)",
+    "general": {"max_age_years": 10, "max_turnover_cr": 200.0},
+    "deep_tech": {"max_age_years": 20, "max_turnover_cr": 300.0}
+  },
+  "employer_thresholds": [
+    {
+      "basis": "Employees",
+      "threshold": 1,
+      "what_switches_on": "Minimum wages; timely wage payment; equal remuneration; appointment letters; employee compensation; Shops & Establishments (state thresholds vary); Professional Tax deduction (where levied); Labour Welfare Fund (state thresholds vary)",
+      "source_law": "Code on Wages 2019; OSH Code 2020; SS Code 2020; state acts"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 10,
+      "what_switches_on": "ESI (employees earning <= ₹21,000/month); gratuity; maternity benefit; POSH Internal Committee",
+      "source_law": "SS Code 2020; POSH Act 2013"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 20,
+      "what_switches_on": "EPF; bonus; Grievance Redressal Committee; factory licence if using power",
+      "source_law": "SS Code 2020; Code on Wages 2019; IR Code 2020; OSH Code 2020"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 25,
+      "what_switches_on": "Notification of vacancies to employment exchange (quarterly ER-1)",
+      "source_law": "Employment Exchanges (CNV) Act 1959"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 30,
+      "what_switches_on": "Mandatory engagement of apprentices (2.5%–15% of workforce)",
+      "source_law": "Apprentices Act 1961"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 40,
+      "what_switches_on": "Factory licence even without power",
+      "source_law": "OSH Code 2020"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 50,
+      "what_switches_on": "Crèche; contract-labour licensing threshold",
+      "source_law": "SS Code 2020; OSH Code 2020"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 100,
+      "what_switches_on": "Works Committee; canteen",
+      "source_law": "IR Code 2020; OSH Code 2020"
+    },
+    {
+      "basis": "Employees",
+      "threshold": 300,
+      "what_switches_on": "Certified standing orders; prior permission for lay-off, retrenchment, closure",
+      "source_law": "IR Code 2020"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 1200000,
+      "threshold_label": "> ₹12 lakh",
+      "what_switches_on": "FSSAI state licence instead of basic registration (food businesses)",
+      "source_law": "FSS Act 2006"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 2000000,
+      "threshold_label": "> ₹20 / ₹40 lakh",
+      "what_switches_on": "GST registration (services / goods; lower in special-category states)",
+      "source_law": "CGST Act 2017"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 15000000,
+      "threshold_label": "<= ₹1.5 cr",
+      "what_switches_on": "Eligible for GST composition scheme (goods)",
+      "source_law": "CGST Act s.10"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 10000000,
+      "threshold_label": "> ₹1 cr (₹10 cr if cash <= 5%)",
+      "what_switches_on": "Income-tax audit",
+      "source_law": "Income-tax Act"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 20000000,
+      "threshold_label": "> ₹2 cr (₹3 cr if cash <= 5%)",
+      "what_switches_on": "Presumptive taxation no longer available",
+      "source_law": "Income-tax Act"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 50000000,
+      "threshold_label": "> ₹5 cr",
+      "what_switches_on": "GST e-invoicing; GSTR-9C reconciliation; exits QRMP",
+      "source_law": "CGST Rules"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 100000000,
+      "threshold_label": ">= ₹10 cr",
+      "what_switches_on": "Invoices must be reported on IRP within 30 days",
+      "source_law": "GSTN advisory"
+    },
+    {
+      "basis": "Turnover",
+      "threshold": 200000000,
+      "threshold_label": "> ₹20 cr",
+      "what_switches_on": "FSSAI central licence (food businesses)",
+      "source_law": "FSS Act 2006"
+    }
+  ]
+}

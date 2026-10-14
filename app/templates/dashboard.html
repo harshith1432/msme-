@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('header_welcome', 'Dashboard') }} — {{ company.name }} | {{ t('app_title', 'MSME Navigator') }}{% endblock %}
+
+{% block content %}
+<!-- Company Header Summary Card -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm p-3 p-md-4 bg-white rounded-3">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <h4 class="fw-bold mb-0 text-dark">{{ company.name }}</h4>
+            {% if company.is_dpiit_recognized %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle-fill me-1"></i>{{ t('badge_dpiit', 'DPIIT Startup') }}</span>
+            {% endif %}
+            {% if company.is_zed_certified %}
+              <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="bi bi-award-fill me-1"></i>{{ t('badge_zed', 'ZED Certified') }}</span>
+            {% endif %}
+            {% if company.is_exporter %}
+              <span class="badge bg-dark text-white"><i class="bi bi-globe me-1"></i>{{ t('badge_exporter', 'Exporter') }}</span>
+            {% endif %}
+          </div>
+          <div class="text-muted small d-flex flex-wrap gap-3">
+            <span><i class="bi bi-geo-alt me-1"></i>{{ company.state|translate_dynamic }}{% if company.district %}, {{ company.district }}{% endif %}</span>
+            <span><i class="bi bi-tag me-1"></i>{{ company.sector|translate_dynamic }}</span>
+            <span><i class="bi bi-building me-1"></i>{{ company.entity_type|translate_dynamic }}</span>
+            <span><i class="bi bi-card-checklist me-1"></i>{{ t('label_udyam', 'Udyam') }}: <code>{{ company.udyam_number or t('not_linked', 'Not Linked') }}</code></span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="{{ url_for('main.advisor') }}" class="btn btn-dark shadow-sm">
+            <i class="bi bi-stars text-warning me-1"></i> {{ t('btn_ask_ai', 'What Should I Do? (AI)') }}
+          </a>
+          <a href="{{ url_for('main.company_profile') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-pencil me-1"></i> {{ t('btn_edit_profile', 'Edit Profile') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 Key Executive Stat Cards (Centered Grid) -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="metric-card">
+      <div class="metric-icon-box metric-icon-blue">
+        <i class="bi bi-building-check"></i>
+      </div>
+      <div class="metric-value text-primary">{{ evaluation.msme_classification|translate_dynamic }}</div>
+      <div class="metric-label">{{ t('card_msme_status', 'MSME Status (2025)') }}</div>
+      <div class="metric-sub">
+        ₹{{ "{:,.1f}".format(profile.investment/10000000) }} {{ t('cr_inv', 'Cr Inv') }} &bull; ₹{{ "{:,.1f}".format(profile.turnover/10000000) }} {{ t('cr_turn', 'Cr Turn') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="metric-card">
+      <div class="metric-icon-box metric-icon-slate">
+        <i class="bi bi-shield-check"></i>
+      </div>
+      <div class="metric-value text-dark">{{ evaluation.total_obligations }}</div>
+      <div class="metric-label">{{ t('card_obligations', 'Applicable Obligations') }}</div>
+      <div class="metric-sub">
+        {{ evaluation.matched_central_compliance_count }} {{ t('central', 'Central') }} &bull; {{ evaluation.matched_state_compliance_count }} {{ t('state', 'State') }} ({{ company.state }})
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="metric-card">
+      <div class="metric-icon-box metric-icon-green">
+        <i class="bi bi-gift"></i>
+      </div>
+      <div class="metric-value text-success">{{ evaluation.total_incentives }}</div>
+      <div class="metric-label">{{ t('card_incentives', 'Matched Incentives') }}</div>
+      <div class="metric-sub">
+        {{ evaluation.matched_central_incentives_count }} {{ t('central', 'Central') }} &bull; {{ evaluation.matched_state_incentives_count }} {{ t('state_schemes', 'State Schemes') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="metric-card">
+      <div class="metric-icon-box metric-icon-purple">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+      <div class="metric-value text-dark">{{ tasks|length }}</div>
+      <div class="metric-label">{{ t('card_action_tasks', 'ACTION TASKS') }}</div>
+      <div class="metric-sub">
+        {{ t('pending_compliance_items', 'Pending operational compliance items') }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Statutory Threshold Monitor & Ladder Alerts -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm bg-white p-3 p-md-4 rounded-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0 d-flex align-items-center gap-2 text-dark">
+          <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+          {{ t('statutory_thresholds_title', 'Statutory Thresholds Triggered for Your Scale') }} ({{ profile.employees }} {{ t('workers', 'Workers') }}, ₹{{ "{:,.1f}".format(profile.turnover/10000000) }} {{ t('cr_turnover', 'Cr Turnover') }})
+        </h6>
+        <span class="badge bg-light text-secondary border small">{{ t('statutory_ladder', 'Statutory Ladder') }}</span>
+      </div>
+      <div class="row g-2">
+        {% for trig in evaluation.statutory_ladder %}
+        <div class="col-md-6 col-lg-4">
+          <div class="p-2 border rounded-2 bg-light-subtle h-100">
+            <span class="badge bg-dark text-white mb-1" style="font-size: 0.7rem;">{{ trig.basis|translate_dynamic }}</span>
+            <p class="small mb-1 fw-semibold text-dark">{{ trig.obligations|translate_dynamic }}</p>
+            <span class="text-muted" style="font-size: 0.72rem;">{{ t('source', 'Source') }}: {{ trig.source }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2-Column Progressive Disclosure Section -->
+<div class="row g-4">
+  <!-- Left Column: Immediate Priorities & Top Incentives Summary -->
+  <div class="col-lg-7">
+    <!-- Immediate Action Priorities (AI Curated) -->
+    <div class="card border-0 shadow-sm bg-white rounded-3 mb-4">
+      <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-lightning-charge-fill text-warning fs-5"></i>
+          <span class="fw-bold text-dark">{{ action_plan.headers.p1 }}</span>
+        </div>
+        <a href="{{ url_for('main.advisor') }}" class="btn btn-sm btn-outline-dark">
+          {{ t('view_complete_action_plan', 'View Complete Action Plan') }} <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+      <div class="card-body p-3">
+        {% for item in action_plan.immediate_priorities[:3] %}
+        <div class="p-3 border rounded-3 mb-2 bg-light-subtle">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h6 class="fw-bold mb-0 text-dark">{{ item.action|translate_dynamic }}</h6>
+            <a href="{{ item.portal }}" target="_blank" class="btn btn-xs btn-dark">
+              {{ t('portal', 'Portal') }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+            </a>
+          </div>
+          <p class="small text-secondary mb-1">{{ item.why|translate_dynamic }}</p>
+          <div class="text-muted" style="font-size: 0.75rem;"><strong>{{ t('authority', 'Authority') }}:</strong> {{ item.authority|translate_dynamic }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Top Claimable Incentives Summary -->
+    <div class="card border-0 shadow-sm bg-white rounded-3">
+      <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-cash-coin text-success fs-5"></i>
+          <span class="fw-bold text-dark">{{ t('top_subsidies_title', 'Top Government Subsidies to Claim') }}</span>
+        </div>
+        <a href="{{ url_for('main.incentives') }}" class="btn btn-sm btn-outline-dark">
+          {{ t('view_all_schemes', 'View All Schemes') }} ({{ evaluation.total_incentives }}) <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+      <div class="card-body p-3">
+        {% for inc in action_plan.top_incentives[:2] %}
+        <div class="p-3 border rounded-3 mb-2 bg-light-subtle">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h6 class="fw-bold mb-0 text-dark">{{ inc.title|translate_dynamic }}</h6>
+            <a href="{{ inc.apply_link }}" target="_blank" class="btn btn-xs btn-outline-success">
+              {{ t('apply', 'Apply') }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+            </a>
+          </div>
+          <p class="small text-secondary mb-0">{{ inc.benefit|translate_dynamic }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Upcoming Deadlines & Tasks -->
+  <div class="col-lg-5">
+    <!-- Upcoming Statutory Deadlines -->
+    <div class="card border-0 shadow-sm bg-white rounded-3 mb-4">
+      <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-dark"><i class="bi bi-calendar3 me-1 text-primary"></i> {{ t('upcoming_deadlines', 'Upcoming Deadlines') }}</span>
+        <a href="{{ url_for('main.tasks') }}" class="small text-decoration-none">{{ t('manage_calendar', 'Manage Calendar') }}</a>
+      </div>
+      <div class="card-body p-3">
+        <div class="d-flex flex-column gap-2">
+          {% for p in action_plan.periodic_deadlines[:4] %}
+          <div class="p-2 border rounded d-flex justify-content-between align-items-center bg-light-subtle">
+            <div>
+              <div class="fw-semibold small text-dark">{{ p.name|translate_dynamic }}</div>
+              <div class="text-muted" style="font-size: 0.72rem;">{{ p.notes|translate_dynamic }}</div>
+            </div>
+            <span class="badge bg-white text-dark border ms-2 text-nowrap small">{{ p.due|translate_dynamic }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Operational Tasks Checklist -->
+    <div class="card border-0 shadow-sm bg-white rounded-3">
+      <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-dark"><i class="bi bi-check2-square me-1 text-success"></i> {{ t('priority_tasks', 'Priority Tasks') }}</span>
+        <a href="{{ url_for('main.tasks') }}" class="btn btn-sm btn-dark"><i class="bi bi-plus-lg me-1"></i> {{ t('add_task', 'Add Task') }}</a>
+      </div>
+      <div class="card-body p-3">
+        <div class="list-group list-group-flush">
+          {% for t in tasks %}
+          <div class="list-group-item px-0 py-2 d-flex align-items-center gap-2 border-0">
+            <input class="form-check-input task-checkbox mt-0" type="checkbox" data-task-id="{{ t.id }}" {% if t.status == 'completed' %}checked{% endif %}>
+            <span id="task_text_{{ t.id }}" class="small {% if t.status == 'completed' %}text-decoration-line-through text-muted{% endif %} flex-grow-1">
+              {{ t.title|translate_dynamic }}
+            </span>
+            {% if t.due_date %}
+            <span class="badge bg-light text-secondary border small">{{ t.due_date.strftime('%d %b') }}</span>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="text-muted small py-2">{{ t('no_pending_tasks', 'No pending tasks. Create tasks to track compliance milestones.') }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

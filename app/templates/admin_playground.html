@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Retrieval Playground — AI Knowledge Verification | MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-terminal text-primary"></i>
+      RAG Retrieval Playground & Citation Inspector
+    </h4>
+    <p class="text-muted small mb-0">
+      Simulate live retrieval queries against published knowledge chunks to verify hybrid cosine similarity, token matching, and source grounding.
+    </p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.admin_knowledge') }}" class="btn btn-sm btn-outline-dark">
+      <i class="bi bi-arrow-left me-1"></i> Back to Knowledge Center
+    </a>
+  </div>
+</div>
+
+<!-- Playground Query Form -->
+<div class="card border-0 shadow-sm p-4 mb-4">
+  <form method="GET" action="{{ url_for('main.admin_knowledge_playground') }}">
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <label class="form-label fw-bold small text-dark">Test Query / Natural Language Question *</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" name="query" class="form-control" value="{{ query or '' }}" placeholder="e.g. What is the delayed payment interest rate under Section 16 of MSMED Act?" required>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-lg-2">
+        <label class="form-label fw-bold small text-dark">Jurisdiction</label>
+        <select name="jurisdiction" class="form-select">
+          <option value="All" {% if jurisdiction == 'All' %}selected{% endif %}>All</option>
+          <option value="Central" {% if jurisdiction == 'Central' %}selected{% endif %}>Central</option>
+          <option value="State" {% if jurisdiction == 'State' %}selected{% endif %}>State</option>
+        </select>
+      </div>
+
+      <div class="col-md-3 col-lg-2">
+        <label class="form-label fw-bold small text-dark">State (Optional)</label>
+        <input type="text" name="state" class="form-control" value="{{ state or '' }}" placeholder="e.g. Karnataka">
+      </div>
+
+      <div class="col-md-2 col-lg-1">
+        <label class="form-label fw-bold small text-dark">Top K</label>
+        <select name="top_k" class="form-select">
+          <option value="3" {% if top_k == 3 %}selected{% endif %}>3</option>
+          <option value="5" {% if top_k == 5 %}selected{% endif %}>5</option>
+          <option value="10" {% if top_k == 10 %}selected{% endif %}>10</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 col-lg-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100 fw-bold">
+          Run
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Results Section -->
+{% if query %}
+<div class="mb-3 d-flex justify-content-between align-items-center">
+  <h6 class="fw-bold text-dark mb-0">
+    Retrieved Chunks for: <span class="text-primary font-monospace">"{{ query }}"</span>
+  </h6>
+  <span class="badge bg-dark">{{ results|length }} matches found</span>
+</div>
+
+{% if results %}
+<div class="row g-3">
+  {% for hit in results %}
+  <div class="col-12">
+    <div class="card border-0 shadow-sm p-3">
+      <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+        <div>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold me-2">
+            Hit #{{ loop.index }} &bull; Score: {{ (hit.relevance_score * 100)|round(1) }}%
+          </span>
+          <span class="badge bg-light text-dark border me-1">{{ hit.document_type|capitalize }}</span>
+          <span class="badge bg-dark text-white">{{ hit.jurisdiction }}</span>
+          {% if hit.state %}<span class="badge bg-secondary text-white">{{ hit.state }}</span>{% endif %}
+          <span class="text-muted small ms-2">Page {{ hit.page_number }} &bull; Section: <strong>{{ hit.section_heading }}</strong></span>
+        </div>
+        {% if hit.official_source_url %}
+        <a href="{{ hit.official_source_url }}" target="_blank" class="text-primary small text-decoration-none d-flex align-items-center gap-1">
+          <i class="bi bi-box-arrow-up-right"></i> Source
+        </a>
+        {% endif %}
+      </div>
+
+      <h6 class="fw-bold text-dark mb-2">{{ hit.document_title }}</h6>
+      <div class="text-muted small mb-2">
+        <i class="bi bi-building me-1"></i> Authority: <strong>{{ hit.authority }}</strong>
+      </div>
+
+      <div class="bg-light p-3 rounded-2 border text-dark font-monospace small" style="white-space: pre-wrap; line-height: 1.6;">
+{{ hit.chunk_text }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card border-0 shadow-sm p-5 text-center">
+  <i class="bi bi-search fs-1 text-secondary opacity-50 mb-3"></i>
+  <h5 class="fw-bold text-dark">No Published Chunks Matched</h5>
+  <p class="text-muted small mb-0">
+    No chunks in the published RAG knowledge index scored above the relevance threshold for this query.
+    Make sure relevant regulatory documents are ingested and marked as <span class="badge bg-success">published</span>.
+  </p>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

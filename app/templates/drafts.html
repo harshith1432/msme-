@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}AI Drafts & Paperwork Assistant — MSME Navigator{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-semibold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-pencil-square text-primary"></i>
+      AI Drafts & Paperwork Preparation
+    </h4>
+    <p class="text-muted small mb-0">
+      Auditable checklists, official application cover letters, and document packages generated for <strong>{{ company.name }}</strong>.
+    </p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.documents') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-folder2-open"></i> Document Vault
+    </a>
+    <a href="{{ url_for('main.drafts_wizard') }}" class="btn btn-primary btn-sm shadow-sm">
+      <i class="bi bi-magic"></i> Launch Package Wizard
+    </a>
+  </div>
+</div>
+
+<!-- Active Application Packages (Workspaces) Card -->
+<div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h6 class="fw-semibold mb-0 text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-briefcase text-primary"></i>
+        Application Packages & Reusable Dossiers ({{ workspaces|length }})
+      </h6>
+      <p class="text-muted small mb-0">Multi-document packages with generated PDF checklists and official DOCX cover letters.</p>
+    </div>
+    <div class="header-actions">
+      <a href="{{ url_for('main.drafts_wizard') }}" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-plus-lg"></i> New Package
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    {% for ws in workspaces %}
+    <div class="col-md-6 col-xl-4">
+      <div class="card h-100 border p-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle text-uppercase small">{{ ws.workspace_type }}</span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle small">{{ ws.status|capitalize }}</span>
+        </div>
+        <h6 class="fw-semibold text-dark text-truncate mb-1" title="{{ ws.title }}">{{ ws.title }}</h6>
+        <div class="text-muted small mb-3">
+          <i class="bi bi-paperclip me-1"></i> {{ ws.artifacts|length }} generated artifacts &bull; {{ ws.created_at.strftime('%d %b %Y') }}
+        </div>
+        <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
+          <span class="text-muted small font-monospace">#PKG-{{ ws.id }}</span>
+          <a href="{{ url_for('main.view_workspace_package', workspace_id=ws.id) }}" class="btn btn-sm btn-dark">
+            <span>View Package</span> <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+      <div class="empty-state py-4">
+        <div class="empty-state-icon">
+          <i class="bi bi-folder-plus"></i>
+        </div>
+        <div class="empty-state-title">No application packages created yet</div>
+        <div class="empty-state-desc">
+          Assemble complete filing dossiers for your eligible subsidies and statutory requirements with auto-matched Smart Vault documents.
+        </div>
+        <a href="{{ url_for('main.drafts_wizard') }}" class="btn btn-primary">
+          <i class="bi bi-magic"></i> Start Application Package Wizard
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Generated Individual Drafts Card -->
+<div class="card border-0 shadow-sm p-3 p-md-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h6 class="fw-semibold mb-0 text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-archive text-secondary"></i>
+        Generated Paperwork Drafts ({{ drafts|length }})
+      </h6>
+      <p class="text-muted small mb-0">Single-document drafts, cover letters, and statutory checklists.</p>
+    </div>
+    <span class="badge bg-secondary-subtle text-secondary border">Versioned & Auditable</span>
+  </div>
+
+  <div class="list-group list-group-flush border-top">
+    {% for d in drafts %}
+    <div class="list-group-item px-0 py-3 border-bottom">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="fw-semibold text-dark fs-6">{{ d.title }}</span>
+            <span class="badge bg-light text-secondary border">v{{ d.version }}</span>
+            <span class="badge bg-light text-dark border">{{ d.draft_type|replace('_', ' ')|upper }}</span>
+            {% if d.status == 'approved' %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle">
+              <i class="bi bi-check-circle me-1"></i>Human Approved
+            </span>
+            {% else %}
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+              <i class="bi bi-hourglass-split me-1"></i>Needs Review
+            </span>
+            {% endif %}
+          </div>
+          <div class="text-muted small mt-1">
+            <span>Created: {{ d.created_at.strftime('%d %b %Y, %I:%M %p') }}</span>
+            {% if d.approved_at %}
+            &bull; <span>Approved on: {{ d.approved_at.strftime('%d %b %Y') }}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="header-actions">
+          {% if d.status != 'approved' %}
+          <button class="btn btn-sm btn-outline-success approve-draft-btn" data-draft-id="{{ d.id }}">
+            <i class="bi bi-check2-circle"></i> Approve Draft
+          </button>
+          {% endif %}
+          <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#draftContent_{{ d.id }}">
+            <i class="bi bi-eye"></i> View Content
+          </button>
+        </div>
+      </div>
+
+      <div class="collapse mt-3" id="draftContent_{{ d.id }}">
+        <div class="p-3 bg-light rounded-3 border">
+          <pre class="mb-0 text-dark small" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;">{{ d.content }}</pre>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty-state py-4">
+      <div class="empty-state-icon">
+        <i class="bi bi-file-earmark-diff"></i>
+      </div>
+      <div class="empty-state-title">No individual paperwork drafts yet</div>
+      <div class="empty-state-desc">
+        Explore <a href="{{ url_for('main.incentives') }}" class="text-dark fw-semibold text-decoration-none">Incentives</a> or <a href="{{ url_for('main.compliance') }}" class="text-dark fw-semibold text-decoration-none">Compliance</a> to generate draft checklists or use the package wizard above.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.approve-draft-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const draftId = this.getAttribute('data-draft-id');
+      this.disabled = true;
+      this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Approving...';
+
+      fetch(`/drafts/${draftId}/approve`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            window.location.reload();
+          } else {
+            alert('Failed to approve draft: ' + data.error);
+            this.disabled = false;
+            this.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Approve Draft';
+          }
+        })
+        .catch(err => {
+          alert('Error approving draft: ' + err);
+          this.disabled = false;
+          this.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Approve Draft';
+        });
+    });
+  });
+});
+</script>
+{% endblock %}

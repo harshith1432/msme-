@@ -1,0 +1,990 @@
+/* 
+  MSME Compliance & Incentives Navigator — Modern 2030 Executive Design System
+  Inspired by High-End Corporate Governance Platforms (OctaQube / Linear / Stripe)
+  Primary Font: Inter / Plus Jakarta Sans (Smooth, geometric, anti-aliased, relaxed weights)
+  Palette: Unified Executive Deep Navy Topbar & Sidebar (#07132B / #0B1936), Crisp White Cards (#FFFFFF), Soft Blue-Gray App Canvas (#F4F6F9)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Core Canvas & Surfaces */
+  --bg-app: #F4F6F9;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F1F5F9;
+  --bg-hover: #F8FAFC;
+  
+  /* Executive Navy Foundation (Unified Topbar & Sidebar) */
+  --navy-dark: #07132B;
+  --navy-base: #0B1936;
+  --navy-sidebar: #07132B;
+  --navy-border: #13254C;
+  --navy-link: #8FA0BD;
+  --navy-hover: rgba(255, 255, 255, 0.07);
+  --navy-active: #2563EB;
+  
+  /* Primary Text & Grays */
+  --text-primary: #0A1633;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  --text-label: #8A99AD;
+  
+  /* Borders */
+  --border-subtle: #E5EDF5;
+  --border-strong: #CBD5E1;
+  --border-focus: #2563EB;
+  
+  /* Accents */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-subtle: #EFF6FF;
+  --primary-border: #BFDBFE;
+  
+  --success: #10B981;
+  --success-subtle: #ECFDF5;
+  --success-border: #A7F3D0;
+  
+  --warning: #F59E0B;
+  --warning-subtle: #FFFBEB;
+  --warning-border: #FDE68A;
+  
+  --danger: #EF4444;
+  --danger-subtle: #FEF2F2;
+  --danger-border: #FECACA;
+  
+  /* Modern Clean Elevation */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+  
+  --sidebar-width: 255px;
+}
+
+/* Base Document */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  line-height: 1.55;
+  letter-spacing: -0.011em;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   SMOOTH, CLEAN TYPOGRAPHY (Inter Sans-Serif)
+   ============================================================ */
+
+.fw-bold, b, strong {
+  font-weight: 600 !important;
+}
+
+.fw-bolder {
+  font-weight: 600 !important;
+}
+
+.fw-semibold {
+  font-weight: 500 !important;
+}
+
+.fw-medium {
+  font-weight: 500 !important;
+}
+
+.fw-normal {
+  font-weight: 400 !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  font-weight: 600 !important;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+}
+
+h1, .h1 { font-size: 1.85rem; }
+h2, .h2 { font-size: 1.5rem; }
+h3, .h3 { font-size: 1.3rem; }
+h4, .h4 { font-size: 1.175rem; }
+h5, .h5 { font-size: 1.025rem; }
+h6, .h6 { font-size: 0.9rem; }
+
+p, .small, small {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+code, kbd, samp, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.825em;
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
+   TOPBAR & SIDEBAR (Unified Executive Deep Navy Theme)
+   ============================================================ */
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--navy-sidebar);
+  color: var(--navy-link);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid var(--navy-border);
+}
+
+/* Sidebar Brand Area: White Container like reference image IFQM logo */
+.sidebar-brand-wrapper {
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--navy-border);
+}
+
+.sidebar-brand-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease;
+}
+
+.sidebar-brand-card:hover {
+  transform: scale(1.01);
+}
+
+.sidebar-brand-badge {
+  background: #2563EB;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.725rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.sidebar-brand-text {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-company-card {
+  padding: 0.65rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0.75rem 0.75rem 0.25rem;
+  border-radius: 8px;
+}
+
+.sidebar-menu {
+  padding: 0.65rem 0.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.sidebar-section-header {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4A5B78;
+  font-weight: 700;
+  padding: 0.75rem 0.75rem 0.35rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  color: var(--navy-link);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.sidebar-link i {
+  font-size: 1rem;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.sidebar-link:hover {
+  background: var(--navy-hover);
+  color: #FFFFFF;
+}
+
+/* Active Link: Vibrant Royal Blue Capsule like Dashboard in reference image */
+.sidebar-link.active {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-link.active i {
+  opacity: 1;
+}
+
+.sidebar-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--navy-border);
+  background: #050E22;
+}
+
+.app-main {
+  margin-left: var(--sidebar-width);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Topbar: Unified Deep Navy matching Sidebar */
+.app-topbar {
+  background-color: var(--navy-base) !important;
+  border-bottom: 1px solid var(--navy-border) !important;
+  color: #FFFFFF !important;
+  padding: 0.65rem 1.5rem !important;
+  min-height: 58px !important;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.topbar-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-app {
+  color: #8FA0BD;
+  font-weight: 400;
+}
+
+.breadcrumb-slash {
+  color: #4A5B78;
+}
+
+.breadcrumb-page {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.topbar-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  text-decoration: none;
+}
+
+.topbar-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.topbar-pill-btn {
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 0.75rem;
+  font-size: 0.825rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topbar-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* User Profile Pill in Topbar (Matching Reference) */
+.topbar-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 3px 12px 3px 4px;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  height: 38px;
+}
+
+.topbar-profile-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.profile-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #10B981; /* Emerald green like reference */
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.profile-email {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  max-width: 150px;
+}
+
+.profile-role {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #F59E0B; /* Amber/gold subtitle like reference */
+  text-transform: uppercase;
+}
+
+.badge-online {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.685rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.show {
+    transform: translateX(0);
+  }
+  .app-main {
+    margin-left: 0;
+  }
+}
+
+/* ============================================================
+   METRIC / STAT CARDS (Matching Reference 8-Card Centered Grid)
+   ============================================================ */
+
+.metric-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #CBD5E1;
+}
+
+.metric-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  margin-bottom: 0.55rem;
+}
+
+.metric-icon-slate  { background: #F1F5F9; color: #475569; }
+.metric-icon-green  { background: #ECFDF5; color: #10B981; }
+.metric-icon-amber  { background: #FFFBEB; color: #F59E0B; }
+.metric-icon-rose   { background: #FFF1F2; color: #F43F5E; }
+.metric-icon-red    { background: #FEF2F2; color: #EF4444; }
+.metric-icon-purple { background: #FAF5FF; color: #A855F7; }
+.metric-icon-blue   { background: #EFF6FF; color: #2563EB; }
+.metric-icon-cyan   { background: #ECFEFF; color: #06B6D4; }
+.metric-icon-teal   { background: #F0FDF4; color: #059669; }
+
+.metric-value {
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.685rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-label);
+}
+
+.metric-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Backward compatibility for .card-stat */
+.card-stat {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.stat-value {
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0.2rem 0;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.725rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-label);
+  font-weight: 600;
+}
+
+/* ============================================================
+   BUTTON SYSTEM (Modern Tactile SaaS Buttons matching Reference)
+   ============================================================ */
+
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  white-space: nowrap !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  line-height: 1.25rem !important;
+  padding: 0.45rem 0.95rem !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-xs) !important;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+  height: auto !important;
+  min-height: 36px !important;
+  cursor: pointer !important;
+  align-self: center !important;
+  border: 1px solid transparent !important;
+}
+
+.btn:active {
+  transform: scale(0.985) !important;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--border-focus) !important;
+  outline-offset: 2px !important;
+}
+
+.btn i, .btn svg {
+  font-size: 0.95em;
+  line-height: 1;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.btn-sm {
+  padding: 0.32rem 0.75rem !important;
+  font-size: 0.8rem !important;
+  border-radius: 6px !important;
+  min-height: 32px !important;
+  gap: 0.35rem !important;
+}
+
+.btn-xs {
+  padding: 0.2rem 0.55rem !important;
+  font-size: 0.75rem !important;
+  border-radius: 6px !important;
+  min-height: 26px !important;
+  gap: 0.3rem !important;
+}
+
+.btn-lg {
+  padding: 0.65rem 1.25rem !important;
+  font-size: 0.95rem !important;
+  border-radius: 10px !important;
+  min-height: 44px !important;
+}
+
+.btn.w-100, .btn-block {
+  width: 100% !important;
+  display: flex !important;
+}
+
+/* Primary Button (Vibrant Royal Blue) */
+.btn-primary {
+  background: #2563EB !important;
+  border: 1px solid #1D4ED8 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 2px 0 rgba(37, 99, 235, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background: #1D4ED8 !important;
+  border-color: #1E40AF !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 8px -2px rgba(37, 99, 235, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+/* White Surface Buttons matching reference top buttons (Refresh, Export, Last 30 Days) */
+.btn-outline-dark, .btn-outline-secondary, .btn-outline-custom, .btn-light {
+  background-color: #FFFFFF !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+
+.btn-outline-dark:hover, .btn-outline-secondary:hover, .btn-outline-custom:hover, .btn-light:hover {
+  background-color: #F8FAFC !important;
+  color: var(--text-primary) !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: var(--shadow-sm) !important;
+  transform: translateY(-1px);
+}
+
+/* Dark Slate / Obsidian Button */
+.btn-dark, .btn-dark-custom {
+  background: #0B1936 !important;
+  border: 1px solid #07132B !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.15) !important;
+}
+
+.btn-dark:hover, .btn-dark:focus, .btn-dark-custom:hover {
+  background: #07132B !important;
+  border-color: #020617 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 8px -2px rgba(15, 23, 42, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+/* Outline Primary */
+.btn-outline-primary {
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary-border) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #DBEAFE !important;
+  color: #1E40AF !important;
+  border-color: #93C5FD !important;
+  transform: translateY(-1px);
+}
+
+/* Success Button */
+.btn-success {
+  background: #10B981 !important;
+  border: 1px solid #059669 !important;
+  color: #FFFFFF !important;
+}
+
+.btn-outline-success {
+  background-color: #ECFDF5 !important;
+  color: #059669 !important;
+  border: 1px solid #A7F3D0 !important;
+}
+
+.btn-outline-success:hover {
+  background-color: #D1FAE5 !important;
+  color: #047857 !important;
+  transform: translateY(-1px);
+}
+
+/* Danger Button */
+.btn-outline-danger {
+  background-color: #FFFFFF !important;
+  color: #DC2626 !important;
+  border: 1px solid #FECACA !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: #FEF2F2 !important;
+  color: #991B1B !important;
+  border-color: #F87171 !important;
+  transform: translateY(-1px);
+}
+
+/* Header Actions Flex Container */
+.header-actions,
+.page-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  flex-wrap: wrap !important;
+  align-self: center !important;
+}
+
+/* ============================================================
+   CARDS & SURFACES
+   ============================================================ */
+
+.card {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+.card-header {
+  background-color: var(--bg-surface) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  padding: 0.95rem 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================================
+   BADGES (Pill Badges matching reference)
+   ============================================================ */
+
+.badge {
+  font-family: var(--font-sans);
+  font-weight: 500 !important;
+  font-size: 0.725rem !important;
+  padding: 0.25rem 0.65rem !important;
+  border-radius: 9999px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+}
+
+.badge-custom, .badge-primary, .bg-primary-subtle {
+  background-color: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  border: 1px solid #BFDBFE !important;
+}
+
+.badge-verified, .badge-success, .bg-success-subtle {
+  background-color: #ECFDF5 !important;
+  color: #059669 !important;
+  border: 1px solid #A7F3D0 !important;
+}
+
+.badge-warning, .bg-warning-subtle {
+  background-color: #FFFBEB !important;
+  color: #D97706 !important;
+  border: 1px solid #FDE68A !important;
+}
+
+.badge-danger, .bg-danger-subtle {
+  background-color: #FEF2F2 !important;
+  color: #DC2626 !important;
+  border: 1px solid #FECACA !important;
+}
+
+.badge-secondary, .bg-secondary-subtle, .badge-light {
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+.badge-dark, .bg-dark {
+  background-color: #0B1936 !important;
+  color: #FFFFFF !important;
+}
+
+/* Status Dot inside Badge */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: currentColor;
+}
+
+/* ============================================================
+   TABLES (Clean, Modern SaaS Grid matching Reference)
+   ============================================================ */
+
+.table, .table-custom {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th, .table-custom th {
+  background-color: #F8FAFC !important;
+  color: var(--text-label) !important;
+  font-weight: 600 !important;
+  font-size: 0.725rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  padding: 0.8rem 1rem !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  border-top: none !important;
+  white-space: nowrap;
+}
+
+.table td, .table-custom td {
+  padding: 0.85rem 1rem !important;
+  vertical-align: middle !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  background-color: #FFFFFF;
+}
+
+.table tr:hover td, .table-custom tr:hover td {
+  background-color: #F8FAFC !important;
+}
+
+/* ============================================================
+   FORMS & INPUTS
+   ============================================================ */
+
+.form-control, .form-select {
+  font-family: var(--font-sans) !important;
+  font-size: 0.875rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border-strong) !important;
+  padding: 0.475rem 0.85rem !important;
+  color: var(--text-primary) !important;
+  background-color: #FFFFFF !important;
+  transition: all 0.15s ease !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+  outline: none !important;
+}
+
+.form-label {
+  font-size: 0.825rem !important;
+  font-weight: 500 !important;
+  color: #334155 !important;
+  margin-bottom: 0.35rem !important;
+}
+
+/* Modern Segmented Navigation Tabs */
+.nav-pills {
+  background: #F1F5F9;
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.nav-pills .nav-link {
+  border-radius: 6px;
+  color: #64748B;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  padding: 0.4rem 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.nav-pills .nav-link.active {
+  background: #FFFFFF !important;
+  color: #0A1633 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+}
+
+.empty-state-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+}
+
+.empty-state-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.empty-state-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin: 0 auto 1.5rem;
+}
+
+/* ============================================================
+   ACTION CARDS & ADVISORY ITEMS
+   ============================================================ */
+
+.action-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-card-header {
+  background-color: var(--navy-base);
+  color: #FFFFFF;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-card-body {
+  padding: 1.25rem;
+}
+
+.action-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background-color: #FFFFFF;
+  transition: all 0.15s ease;
+}
+
+.action-item:hover {
+  border-color: #94A3B8;
+  box-shadow: var(--shadow-xs);
+}
+
+/* ============================================================
+   AI COPILOT FLOATING BUTTON
+   ============================================================ */
+
+.chat-drawer {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 1050;
+}
+
+.chat-bubble-btn {
+  background: linear-gradient(135deg, #1E293B 0%, #0B1936 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 52px;
+  height: 52px;
+  border-radius: 26px;
+  box-shadow: 0 4px 14px rgba(11, 25, 54, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-bubble-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 20px rgba(11, 25, 54, 0.45);
+}

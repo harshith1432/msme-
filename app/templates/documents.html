@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block title %}Paperwork Agent & Document Vault — MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-file-earmark-text text-primary"></i>
+      Paperwork Agent & Evidence Vault
+    </h4>
+    <p class="text-muted small mb-0">OCR text extraction, candidate field proposals, human review gate, and verified readiness checklist for <strong>{{ company.name }}</strong>.</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#createFolderModal">
+      <i class="bi bi-folder-plus me-1"></i> New Virtual Folder
+    </button>
+    <a href="{{ url_for('main.view_drafts') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-pencil-square me-1"></i> View AI Drafts
+    </a>
+    <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#uploadDocModal">
+      <i class="bi bi-upload me-1"></i> Upload Document
+    </button>
+  </div>
+</div>
+
+<!-- Virtual Folder Navigation Pills -->
+<div class="d-flex align-items-center gap-2 overflow-auto pb-2 mb-3">
+  <span class="text-muted small fw-bold text-uppercase me-1"><i class="bi bi-folder2 me-1"></i>Folders:</span>
+  <a href="{{ url_for('main.documents') }}" class="btn btn-sm {% if not active_folder %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-3">
+    All Documents
+  </a>
+  {% for f in folders %}
+  <a href="{{ url_for('main.documents', folder_id=f.id) }}" class="btn btn-sm {% if active_folder and active_folder.id == f.id %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-3 d-inline-flex align-items-center gap-1">
+    <i class="bi bi-folder-fill {% if active_folder and active_folder.id == f.id %}text-warning{% else %}text-secondary{% endif %}"></i>
+    <span>{{ f.name }}</span>
+    <span class="badge bg-light text-dark rounded-pill ms-1" style="font-size: 0.65rem;">{{ f.links|length }}</span>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="row g-4">
+  <!-- Document List -->
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm bg-white rounded-3 p-3 p-md-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">
+          <i class="bi bi-files me-1"></i>
+          {% if active_folder %}Folder: {{ active_folder.name }} ({{ documents|length }}){% else %}Central Physical Vault ({{ documents|length }}){% endif %}
+        </h6>
+        <span class="badge bg-light text-muted border small">Multi-Tenant Vault</span>
+      </div>
+
+      <div class="list-group list-group-flush">
+        {% for d in documents %}
+        <div class="list-group-item px-0 py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="p-2 bg-light rounded text-dark fs-4">
+              <i class="bi {% if 'pdf' in (d.mime_type or '') or 'pdf' in d.filename %}bi-file-earmark-pdf text-danger{% else %}bi-file-earmark-text text-primary{% endif %}"></i>
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-semibold text-dark">{{ d.title }}</span>
+                {% if d.verification_status == 'verified' %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem;"><i class="bi bi-check-circle me-1"></i>Verified</span>
+                {% elif d.verification_status == 'expired' %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 0.7rem;"><i class="bi bi-clock-history me-1"></i>Expired</span>
+                {% else %}
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split me-1"></i>Unverified</span>
+                {% endif %}
+              </div>
+              <div class="text-muted small mt-1">
+                <span class="badge bg-light text-secondary border me-1">{{ d.doc_type|replace('_', ' ')|upper }}</span>
+                <span>{{ "{:,.1f}".format(d.file_size / 1024) if d.file_size else '0' }} KB</span> &bull;
+                <span>Uploaded: {{ d.uploaded_at.strftime('%d %b %Y') }}</span>
+                {% if d.expiry_date %}
+                &bull; <span class="text-warning-emphasis">Expires: {{ d.expiry_date.strftime('%d %b %Y') }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <!-- Link to Virtual Folder Dropdown -->
+            {% if folders %}
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle py-1" type="button" data-bs-toggle="dropdown" title="Link to Folder">
+                <i class="bi bi-folder-symlink"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm small">
+                <li class="dropdown-header small text-uppercase">Link to Virtual Folder</li>
+                {% for f in folders %}
+                <li>
+                  <form action="{{ url_for('main.link_document') }}" method="POST">
+                    <input type="hidden" name="document_id" value="{{ d.id }}">
+                    <input type="hidden" name="folder_id" value="{{ f.id }}">
+                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                      <i class="bi bi-folder"></i> {{ f.name }}
+                    </button>
+                  </form>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            <!-- AI Extraction Trigger -->
+            <button class="btn btn-sm btn-outline-primary extract-btn" data-doc-id="{{ d.id }}" data-doc-title="{{ d.title }}">
+              <i class="bi bi-magic me-1"></i> Extract Data
+            </button>
+            <a href="{{ url_for('main.download_document', doc_id=d.id) }}" class="btn btn-sm btn-outline-custom">
+              <i class="bi bi-download"></i>
+            </a>
+          </div>
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-folder-x fs-2 d-block mb-2 text-secondary"></i>
+          <p class="mb-2">No documents found in this view.</p>
+          <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#uploadDocModal">Upload Document</button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Document Readiness Checklist -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm bg-white rounded-3 p-3 p-md-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0"><i class="bi bi-patch-check me-1"></i> Statutory Readiness</h6>
+        <span class="badge bg-light text-dark border">Core Rules</span>
+      </div>
+      <p class="small text-muted mb-3">Paperwork readiness is evaluated against verified central guidelines. Keep documents valid to unlock government incentives.</p>
+      <div class="d-flex flex-column gap-2 small">
+        <div class="p-2 border rounded bg-light-subtle d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success"></i>
+          <div>
+            <div class="fw-semibold text-dark">Udyam Registration Certificate</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Required for Priority Sector Lending & subsidies.</div>
+          </div>
+        </div>
+        <div class="p-2 border rounded bg-light-subtle d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success"></i>
+          <div>
+            <div class="fw-semibold text-dark">GST Registration (REG-06)</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Proof of active commercial operations.</div>
+          </div>
+        </div>
+        <div class="p-2 border rounded bg-light-subtle d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success"></i>
+          <div>
+            <div class="fw-semibold text-dark">EPFO / ESIC Registration Letters</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Required for employee headcount >= 10 / 20.</div>
+          </div>
+        </div>
+        <div class="p-2 border rounded bg-light-subtle d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success"></i>
+          <div>
+            <div class="fw-semibold text-dark">Audited Financials / Tax Audit Report</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Required for bank guarantee and scheme applications.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Document Modal -->
+<div class="modal fade" id="uploadDocModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('main.documents') }}" enctype="multipart/form-data" class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title fw-bold">Upload Evidence Document</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Document Title *</label>
+          <input type="text" name="title" class="form-control form-control-sm" required placeholder="e.g. Udyam Registration Certificate">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Classification Type</label>
+          <select name="doc_type" class="form-select form-select-sm">
+            <option value="udyam_cert">Udyam Registration Certificate</option>
+            <option value="gst_cert">GSTIN Registration (REG-06)</option>
+            <option value="pan_card">PAN Card / Incorporation Certificate</option>
+            <option value="audit_report">Tax Audit / Balance Sheet</option>
+            <option value="fssai_licence">FSSAI Licence / Registration</option>
+            <option value="spcb_consent">SPCB Consent (CTE / CTO)</option>
+            <option value="other">Other Compliance Proof</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Choose File (PDF, PNG, JPG, CSV, XLSX, DOCX) *</label>
+          <input type="file" name="file" class="form-control form-control-sm" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Document Expiry Date (if applicable)</label>
+          <input type="date" name="expiry_date" class="form-control form-control-sm">
+        </div>
+        {% if folders %}
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Save to Virtual Folder (Optional)</label>
+          <select name="folder_id" class="form-select form-select-sm">
+            <option value="">-- Central Vault (Uncategorized) --</option>
+            {% for f in folders %}
+            <option value="{{ f.id }}" {% if active_folder and active_folder.id == f.id %}selected{% endif %}>{{ f.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-dark">Upload Securely</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Create Virtual Folder Modal -->
+<div class="modal fade" id="createFolderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <form method="POST" action="{{ url_for('main.create_folder') }}" class="modal-content border-0 shadow">
+      <div class="modal-header bg-dark text-white">
+        <h6 class="modal-title fw-bold"><i class="bi bi-folder-plus me-2"></i>New Virtual Folder</h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-3">
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Folder Name *</label>
+          <input type="text" name="name" class="form-control form-control-sm" placeholder="e.g. Tax & GST Filings" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label small fw-semibold">Folder Purpose</label>
+          <select name="folder_type" class="form-select form-select-sm">
+            <option value="vault">Standard Vault Folder</option>
+            <option value="compliance_package">Compliance Dossier</option>
+            <option value="incentive_application">Incentive Application Package</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer bg-light p-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-dark px-3">Create Folder</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- AI Extraction Review & Human Confirmation Modal -->
+<div class="modal fade" id="extractionModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h6 class="modal-title fw-bold d-flex align-items-center gap-2">
+          <i class="bi bi-cpu"></i> Paperwork Agent — Field Extraction Review
+        </h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="extractionModalBody">
+        <div class="text-center py-4 text-muted" id="extractionSpinner">
+          <div class="spinner-border text-primary mb-2" role="status"></div>
+          <div>Performing OCR text extraction and field identification...</div>
+        </div>
+        <div id="extractionContent" style="display: none;">
+          <div class="alert alert-info py-2 small mb-3">
+            <i class="bi bi-info-circle me-1"></i> <strong>Human Confirmation Gate</strong>: AI proposes candidate fields extracted from your document. You must review, edit, or reject values before they update the authoritative company profile.
+          </div>
+          
+          <h6 class="fw-bold text-dark small mb-2">Candidate Fields Detected:</h6>
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle" style="font-size: 0.85rem;">
+              <thead class="table-light">
+                <tr>
+                  <th>Field</th>
+                  <th>Proposed Value</th>
+                  <th>Confidence</th>
+                  <th>Source Location</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="extractedFieldsTableBody">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-3">
+            <a class="text-decoration-none small text-muted" data-bs-toggle="collapse" href="#rawTextCollapse">
+              <i class="bi bi-chevron-down"></i> View Raw Extracted Text Preview
+            </a>
+            <div class="collapse mt-2" id="rawTextCollapse">
+              <pre class="bg-light p-2 rounded small border text-muted" style="max-height: 150px; overflow-y: auto;" id="rawTextPreview"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="extractionModalFooter" style="display: none;">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-sm btn-dark" id="btnConfirmFields">
+          <i class="bi bi-check2-circle me-1"></i> Confirm & Update Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let activeExtractionId = null;
+  const extractionModal = new bootstrap.Modal(document.getElementById('extractionModal'));
+  const spinner = document.getElementById('extractionSpinner');
+  const content = document.getElementById('extractionContent');
+  const footer = document.getElementById('extractionModalFooter');
+  const tbody = document.getElementById('extractedFieldsTableBody');
+  const rawPreview = document.getElementById('rawTextPreview');
+
+  document.querySelectorAll('.extract-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const docId = this.getAttribute('data-doc-id');
+      spinner.style.display = 'block';
+      content.style.display = 'none';
+      footer.style.display = 'none';
+      tbody.innerHTML = '';
+      extractionModal.show();
+
+      fetch(`/documents/${docId}/extract`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          spinner.style.display = 'none';
+          if (!data.success) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-danger text-center">${data.error || 'Failed to extract text'}</td></tr>`;
+            content.style.display = 'block';
+            return;
+          }
+
+          activeExtractionId = data.extraction_id;
+          rawPreview.textContent = data.raw_text_preview || 'No raw text';
+
+          if (!data.fields || data.fields.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">No structured statutory fields (Udyam, PAN, GSTIN, etc.) could be confidently identified in this document.</td></tr>`;
+          } else {
+            data.fields.forEach(f => {
+              const confBadge = f.confidence === 'high' ? 'bg-success' : (f.confidence === 'medium' ? 'bg-primary' : 'bg-warning text-dark');
+              tbody.innerHTML += `
+                <tr data-field-id="${f.id}">
+                  <td class="fw-semibold text-dark">${f.field_name}</td>
+                  <td>
+                    <input type="text" class="form-control form-control-sm field-val-input" value="${f.proposed_value || ''}" style="font-size: 0.8rem;">
+                  </td>
+                  <td><span class="badge ${confBadge}" style="font-size: 0.7rem;">${f.confidence}</span></td>
+                  <td class="text-muted small">${f.source_location || 'Page 1'}</td>
+                  <td>
+                    <select class="form-select form-select-sm field-action-select" style="font-size: 0.8rem;">
+                      <option value="confirm" selected>Confirm</option>
+                      <option value="reject">Reject</option>
+                    </select>
+                  </td>
+                </tr>
+              `;
+            });
+            footer.style.display = 'flex';
+          }
+          content.style.display = 'block';
+        })
+        .catch(err => {
+          spinner.style.display = 'none';
+          tbody.innerHTML = `<tr><td colspan="5" class="text-danger text-center">Extraction error: ${err}</td></tr>`;
+          content.style.display = 'block';
+        });
+    });
+  });
+
+  document.getElementById('btnConfirmFields').addEventListener('click', function () {
+    if (!activeExtractionId) return;
+
+    const payload = { extraction_id: activeExtractionId, fields: {} };
+    document.querySelectorAll('#extractedFieldsTableBody tr').forEach(row => {
+      const fid = row.getAttribute('data-field-id');
+      const valInput = row.querySelector('.field-val-input');
+      const actionSelect = row.querySelector('.field-action-select');
+      if (fid && valInput && actionSelect) {
+        payload.fields[fid] = {
+          action: actionSelect.value,
+          corrected_value: valInput.value.trim()
+        };
+      }
+    });
+
+    this.disabled = true;
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Applying...';
+
+    fetch('/documents/confirm-fields', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        extractionModal.hide();
+        window.location.reload();
+      } else {
+        alert('Error updating profile: ' + (data.error || 'Failed'));
+        this.disabled = false;
+        this.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Confirm & Update Profile';
+      }
+    })
+    .catch(err => {
+      alert('Error updating profile: ' + err);
+      this.disabled = false;
+      this.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Confirm & Update Profile';
+    });
+  });
+});
+</script>
+{% endblock %}

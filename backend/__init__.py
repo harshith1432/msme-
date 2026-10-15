@@ -39,8 +39,13 @@ def create_app(config_class=None):
     setup_middleware(app)
 
     # Ensure required directories exist
-    os.makedirs(app.config.get('UPLOAD_FOLDER', os.path.join(base_dir, 'uploads')), exist_ok=True)
-    os.makedirs(app.config.get('DATA_DIR', os.path.join(base_dir, 'data')), exist_ok=True)
+    upload_dir = '/tmp/uploads' if os.environ.get('VERCEL') else app.config.get('UPLOAD_FOLDER', os.path.join(base_dir, 'uploads'))
+    data_dir = '/tmp/data' if os.environ.get('VERCEL') else app.config.get('DATA_DIR', os.path.join(base_dir, 'data'))
+    try:
+        os.makedirs(upload_dir, exist_ok=True)
+        os.makedirs(data_dir, exist_ok=True)
+    except OSError:
+        pass
 
     # Context processor to inject active language, user, and supported languages into templates
     from backend.services.i18n import translate, translate_dynamic

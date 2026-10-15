@@ -11,11 +11,19 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload
     ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'xlsx', 'csv', 'docx'}
     
-    # Primary PostgreSQL Database Configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL', 
-        'postgresql://postgres:Harshith%401432@127.0.0.1:5432/msme'
-    )
+    # Primary Database Configuration
+    _raw_db_url = os.environ.get('DATABASE_URL')
+    if _raw_db_url:
+        if _raw_db_url.startswith('postgres://'):
+            _raw_db_url = _raw_db_url.replace('postgres://', 'postgresql://', 1)
+        SQLALCHEMY_DATABASE_URI = _raw_db_url
+    else:
+        if os.environ.get('VERCEL'):
+            SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/msme_navigator.db'
+        else:
+            _default_sqlite = os.path.join(BASE_DIR, 'data', 'msme_navigator.db')
+            SQLALCHEMY_DATABASE_URI = f'sqlite:///{_default_sqlite}'
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     DEBUG = False

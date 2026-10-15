@@ -13,3 +13,7 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
+      - key: HF_MODEL
+        value: Qwen/Qwen2.5-72B-Instruct
+      - key: HF_TOKEN
+        sync: false

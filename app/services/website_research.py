@@ -13,7 +13,10 @@ import urllib.parse
 from datetime import datetime
 import re
 import requests
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 
 ALLOWED_DOMAIN_PATTERNS = [
     r'\.gov\.in$',
@@ -131,29 +134,35 @@ class WebsiteResearchService:
 
                 html_content = b"".join(content_chunks).decode('utf-8', errors='ignore')
 
-            soup = BeautifulSoup(html_content, 'html.parser')
+            if BeautifulSoup is not None:
+                soup = BeautifulSoup(html_content, 'html.parser')
 
-            # Remove scripts, styles, navigations
-            for s in soup(['script', 'style', 'nav', 'footer', 'aside']):
-                s.decompose()
+                # Remove scripts, styles, navigations
+                for s in soup(['script', 'style', 'nav', 'footer', 'aside']):
+                    s.decompose()
 
-            title = (soup.title.string or '').strip() if soup.title else 'Official Portal'
-            headings = [h.get_text().strip() for h in soup.find_all(['h1', 'h2', 'h3']) if h.get_text().strip()][:10]
+                title = (soup.title.string or '').strip() if soup.title else 'Official Portal'
+                headings = [h.get_text().strip() for h in soup.find_all(['h1', 'h2', 'h3']) if h.get_text().strip()][:10]
 
-            # Extract body text
-            paragraphs = [p.get_text().strip() for p in soup.find_all('p') if len(p.get_text().strip()) > 20]
-            main_text = "\n\n".join(paragraphs[:15])
+                # Extract body text
+                paragraphs = [p.get_text().strip() for p in soup.find_all('p') if len(p.get_text().strip()) > 20]
+                main_text = "\n\n".join(paragraphs[:15])
 
-            # Extract document requirements or checklists
-            checklist_items = []
-            for li in soup.find_all('li'):
-                text = li.get_text().strip()
-                if any(w in text.lower() for w in ['pan', 'aadhaar', 'udyam', 'certificate', 'gst', 'bank', 'itr', 'financial', 'statement', 'turnover']):
-                    if 10 < len(text) < 200:
-                        checklist_items.append(text)
+                # Extract document requirements or checklists
+                checklist_items = []
+                for li in soup.find_all('li'):
+                    text = li.get_text().strip()
+                    if any(w in text.lower() for w in ['pan', 'aadhaar', 'udyam', 'certificate', 'gst', 'bank', 'itr', 'financial', 'statement', 'turnover']):
+                        if 10 < len(text) < 200:
+                            checklist_items.append(text)
 
-            # Deduplicate checklist
-            unique_docs = list(dict.fromkeys(checklist_items))[:10]
+                # Deduplicate checklist
+                unique_docs = list(dict.fromkeys(checklist_items))[:10]
+            else:
+                title = 'Official Portal'
+                headings = []
+                main_text = re.sub(r'<[^>]+>', ' ', html_content)[:1000]
+                unique_docs = []
 
             return {
                 'success': True,

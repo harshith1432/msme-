@@ -1,0 +1,10 @@
+Dockerfile
+docker-compose.yml
+.git
+.github
+tests
+data/*.db
+uploads
+*.pyc
+__pycache__
+.pytest_cache

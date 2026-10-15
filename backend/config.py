@@ -19,8 +19,8 @@ class Config:
     TEMPLATES_DIR = os.path.join(FRONTEND_DIR, 'templates')
     STATIC_DIR = os.path.join(FRONTEND_DIR, 'static')
     DATA_DIR = os.path.join(BASE_DIR, 'data')
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-    STORAGE_LOCAL_ROOT = os.environ.get('STORAGE_LOCAL_ROOT', os.path.join(BASE_DIR, 'uploads'))
+    UPLOAD_FOLDER = '/tmp/uploads' if os.environ.get('VERCEL') else os.path.join(BASE_DIR, 'uploads')
+    STORAGE_LOCAL_ROOT = os.environ.get('STORAGE_LOCAL_ROOT', '/tmp/uploads' if os.environ.get('VERCEL') else os.path.join(BASE_DIR, 'uploads'))
 
     # Security & limits
     MAX_CONTENT_LENGTH = int(os.environ.get('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))  # 16 MB max

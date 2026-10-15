@@ -7,7 +7,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'msme-navigator-in-secret-key-2026')
     DATA_DIR = os.path.join(BASE_DIR, 'data')
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    UPLOAD_FOLDER = '/tmp/uploads' if os.environ.get('VERCEL') else os.path.join(BASE_DIR, 'uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload
     ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'xlsx', 'csv', 'docx'}
     

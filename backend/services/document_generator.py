@@ -19,9 +19,15 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 class DocumentGenerator:
     def __init__(self, output_dir=None):
         if not output_dir:
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-            output_dir = os.environ.get('GENERATED_DOCS_DIR') or os.path.join(base_dir, 'uploads', 'generated_docs')
-        os.makedirs(output_dir, exist_ok=True)
+            if os.environ.get('VERCEL'):
+                output_dir = '/tmp/generated_docs'
+            else:
+                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+                output_dir = os.environ.get('GENERATED_DOCS_DIR') or os.path.join(base_dir, 'uploads', 'generated_docs')
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+        except OSError:
+            pass
         self.output_dir = output_dir
 
     def generate_checklist_pdf(self, company_name, udyam_reg, workspace_title, checklist_items, filename=None):

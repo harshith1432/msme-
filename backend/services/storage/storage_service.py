@@ -42,7 +42,10 @@ class LocalStorageProvider(StorageProvider):
     """Local filesystem storage provider for dev, test, and isolated deployments."""
     def __init__(self, root_dir):
         self.root_dir = os.path.abspath(root_dir)
-        os.makedirs(self.root_dir, exist_ok=True)
+        try:
+            os.makedirs(self.root_dir, exist_ok=True)
+        except OSError:
+            pass
 
     def _get_full_path(self, object_key):
         safe_key = object_key.replace('\\', '/').lstrip('/')

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Chartered Accountant & Consultant Workspace — MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-briefcase-fill text-success"></i>
+      CA & Consultant Practice Management
+    </h4>
+    <p class="text-muted small mb-0">Multi-client portfolio oversight, statutory audit compliance, and delegated access management.</p>
+  </div>
+  <div class="header-actions d-flex align-items-center gap-2">
+    <span class="badge bg-white text-dark border p-2 shadow-sm">
+      <i class="bi bi-person-badge text-success me-1"></i> Practice Role: <strong>Chartered Accountant</strong>
+    </span>
+  </div>
+</div>
+
+<!-- Portfolio Executive KPI Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm p-3 bg-white rounded-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small fw-semibold text-uppercase">Client Entities</span>
+        <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+          <i class="bi bi-buildings"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-1">{{ portfolio|length }}</h3>
+      <span class="small text-muted"><i class="bi bi-check-circle text-success me-1"></i>Active delegated client mandates</span>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm p-3 bg-white rounded-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small fw-semibold text-uppercase">Statutory Obligations</span>
+        <div class="bg-info-subtle text-info rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+          <i class="bi bi-shield-check"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-1">
+        {% set total_obs = namespace(val=0) %}
+        {% for item in portfolio %}{% set total_obs.val = total_obs.val + item.obligations_count %}{% endfor %}
+        {{ total_obs.val }}
+      </h3>
+      <span class="small text-muted"><i class="bi bi-geo-alt me-1"></i>Across Central & State jurisdictions</span>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm p-3 bg-white rounded-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small fw-semibold text-uppercase">Eligible Subsidies</span>
+        <div class="bg-success-subtle text-success rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+          <i class="bi bi-gift"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-success mb-1">
+        {% set total_inc = namespace(val=0) %}
+        {% for item in portfolio %}{% set total_inc.val = total_inc.val + item.incentives_count %}{% endfor %}
+        {{ total_inc.val }}
+      </h3>
+      <span class="small text-muted"><i class="bi bi-graph-up-arrow text-success me-1"></i>Grants & capital incentive matches</span>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm p-3 bg-white rounded-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small fw-semibold text-uppercase">Pending Tasks</span>
+        <div class="bg-warning-subtle text-warning-emphasis rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+          <i class="bi bi-clock-history"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-1">
+        {% set total_tasks = namespace(val=0) %}
+        {% for item in portfolio %}{% set total_tasks.val = total_tasks.val + item.open_tasks %}{% endfor %}
+        {{ total_tasks.val }}
+      </h3>
+      <span class="small text-muted"><i class="bi bi-exclamation-circle text-warning me-1"></i>Requiring compliance action</span>
+    </div>
+  </div>
+</div>
+
+<!-- Portfolio Table: Client Audit & Delegation Controls -->
+<div class="card border-0 shadow-sm bg-white rounded-3 overflow-hidden mb-4" id="compliance-overview">
+  <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+      <i class="bi bi-buildings-fill text-secondary"></i>
+      Delegated Client Portfolios & Audits
+    </h6>
+    <span class="badge bg-light text-dark border">{{ portfolio|length }} Mandates</span>
+  </div>
+  <div class="table-responsive">
+    <table class="table-custom mb-0">
+      <thead>
+        <tr>
+          <th>Client Legal Entity</th>
+          <th>State / UT</th>
+          <th>Industry Sector</th>
+          <th>MSME Scale (2025/2026)</th>
+          <th>Active Obligations</th>
+          <th>Matched Incentives</th>
+          <th>Pending Tasks</th>
+          <th>Delegation Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in portfolio %}
+        <tr>
+          <td>
+            <div class="fw-bold text-dark">{{ item.company.name }}</div>
+            <div class="text-muted small">{{ item.company.entity_type }}</div>
+          </td>
+          <td><span class="badge bg-light text-dark border">{{ item.company.state }}</span></td>
+          <td><span class="small text-muted">{{ item.company.sector }}</span></td>
+          <td><span class="badge badge-custom">{{ item.msme_class }}</span></td>
+          <td><span class="fw-bold text-dark">{{ item.obligations_count }} items</span></td>
+          <td><span class="fw-bold text-success">{{ item.incentives_count }} schemes</span></td>
+          <td>
+            {% if item.open_tasks > 0 %}
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">{{ item.open_tasks }} Pending</span>
+            {% else %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2"></i> All Clear</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+              <i class="bi bi-shield-check me-1"></i> Verified Active
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CA Practice Guidance & Isolation Controls -->
+<div class="card border-0 shadow-sm bg-white p-4 rounded-3" id="delegated-access">
+  <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+    <i class="bi bi-shield-lock-fill text-success"></i>
+    Chartered Accountant Governance & Statutory Isolation Policy
+  </h6>
+  <p class="text-muted small mb-3">
+    Under Section 8 delegation rules, consultant workspaces operate under zero-trust tenant barriers. Each client enterprise's documents, balance sheets, and tax filings remain isolated in their respective tenant encryption zones. Cross-client queries and data leaks are blocked by the platform tool dispatcher.
+  </p>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="border rounded-3 p-3 bg-light h-100">
+        <div class="fw-bold text-dark small mb-1"><i class="bi bi-lock text-primary me-1"></i> Multi-Tenant Cryptographic Boundaries</div>
+        <div class="text-muted small">Vault artifacts and uploaded GST/PAN files are locked to specific company ID object keys.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border rounded-3 p-3 bg-light h-100">
+        <div class="fw-bold text-dark small mb-1"><i class="bi bi-clock-history text-warning me-1"></i> Full Audit Trail Logging</div>
+        <div class="text-muted small">Every view, export, and status change is immutably timestamped in system audit records.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border rounded-3 p-3 bg-light h-100">
+        <div class="fw-bold text-dark small mb-1"><i class="bi bi-file-earmark-check text-success me-1"></i> Statutory Compliance Ladder</div>
+        <div class="text-muted small">Automatic alerts for Tax Audits (Form 3CA/3CB + 3CD) and Revised MSME 1 April 2025 limits.</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

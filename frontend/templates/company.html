@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Company Profile — MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <div>
+        <h4 class="fw-bold mb-1 text-dark">Business Profile & Operational Parameters</h4>
+        <p class="text-muted small mb-0">Update your facts to automatically recalculate MSME category (2025 rules), Startup India eligibility, and state obligations.</p>
+      </div>
+      <div class="header-actions">
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-dark btn-sm">
+          <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('main.company_profile') }}" class="card border-0 shadow-sm bg-white p-4 rounded-3">
+      <!-- Section 1: Business Identity -->
+      <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-building me-1"></i> 1. Business Identity & Registration</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Legal Entity Name *</label>
+          <input type="text" name="name" class="form-control form-control-sm" value="{{ company.name }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Trade Name (Brand / Operating Name)</label>
+          <input type="text" name="trade_name" class="form-control form-control-sm" value="{{ company.trade_name or '' }}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Legal Structure</label>
+          <select name="entity_type" class="form-select form-select-sm">
+            <option value="Private Limited Company" {% if company.entity_type == 'Private Limited Company' %}selected{% endif %}>Private Limited Company</option>
+            <option value="Limited Liability Partnership (LLP)" {% if company.entity_type == 'Limited Liability Partnership (LLP)' %}selected{% endif %}>Limited Liability Partnership (LLP)</option>
+            <option value="Partnership Firm" {% if company.entity_type == 'Partnership Firm' %}selected{% endif %}>Partnership Firm</option>
+            <option value="Sole Proprietorship" {% if company.entity_type == 'Sole Proprietorship' %}selected{% endif %}>Sole Proprietorship</option>
+            <option value="Public Limited Company" {% if company.entity_type == 'Public Limited Company' %}selected{% endif %}>Public Limited Company</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Udyam Registration Number</label>
+          <input type="text" name="udyam_number" class="form-control form-control-sm" value="{{ company.udyam_number or '' }}" placeholder="UDYAM-XX-00-0000000">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">GSTIN</label>
+          <input type="text" name="gstin" class="form-control form-control-sm" value="{{ company.gstin or '' }}" placeholder="24AAAAA0000A1Z5">
+        </div>
+      </div>
+
+      <!-- Section 2: Location & Jurisdiction -->
+      <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-geo-alt me-1"></i> 2. Location & Jurisdiction</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">State / Union Territory *</label>
+          <select name="state" class="form-select form-select-sm" required>
+            {% for s in all_states %}
+            <option value="{{ s }}" {% if company.state == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <div class="form-text small" style="font-size: 0.75rem;">Determines state single-window approvals, shops & establishments, professional tax, and state industrial policies.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">District</label>
+          <input type="text" name="district" class="form-control form-control-sm" value="{{ company.district or '' }}">
+        </div>
+      </div>
+
+      <!-- Section 3: Sector & Activities -->
+      <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-tags me-1"></i> 3. Industry Sector & Activities</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Industry Sector *</label>
+          <select name="sector" class="form-select form-select-sm" required>
+            <option value="Food Processing & Tech" {% if 'Food' in company.sector %}selected{% endif %}>Food Processing & Agro Industries</option>
+            <option value="General Manufacturing" {% if company.sector == 'General Manufacturing' %}selected{% endif %}>General Manufacturing (Engineering, Auto, Metals)</option>
+            <option value="IT, Software & Deep Tech" {% if 'IT' in company.sector or 'Tech' in company.sector %}selected{% endif %}>IT, Software, AI & Deep Tech Services</option>
+            <option value="Textiles & Apparel" {% if 'Textile' in company.sector %}selected{% endif %}>Textiles & Apparel</option>
+            <option value="Pharmaceuticals & Biotech" {% if 'Pharma' in company.sector %}selected{% endif %}>Pharmaceuticals & Biotechnology</option>
+            <option value="Trading & Retail Services" {% if 'Trading' in company.sector %}selected{% endif %}>Trading & Retail Distribution</option>
+          </select>
+        </div>
+        <div class="col-md-6 d-flex flex-wrap gap-4 align-items-center pt-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_dpiit" id="is_dpiit" {% if company.is_dpiit_recognized %}checked{% endif %}>
+            <label class="form-check-label small fw-semibold" for="is_dpiit">DPIIT Recognized Startup</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_deep_tech" id="is_deep_tech" {% if company.is_deep_tech %}checked{% endif %}>
+            <label class="form-check-label small fw-semibold" for="is_deep_tech">Deep Tech Startup</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_exporter" id="is_exporter" {% if company.is_exporter %}checked{% endif %}>
+            <label class="form-check-label small fw-semibold" for="is_exporter">Active Exporter</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Scale Metrics -->
+      <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-speedometer2 me-1"></i> 4. Operational Scale (Threshold Inputs)</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Annual Turnover (in ₹) *</label>
+          <input type="number" step="100000" name="turnover" class="form-control form-control-sm" value="{{ profile.turnover }}" required>
+          <div class="form-text small" style="font-size: 0.75rem;">Currently: ₹{{ "{:,.1f}".format(profile.turnover/10000000) }} Crore</div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Plant & Machinery Investment (in ₹) *</label>
+          <input type="number" step="100000" name="investment" class="form-control form-control-sm" value="{{ profile.investment }}" required>
+          <div class="form-text small" style="font-size: 0.75rem;">Currently: ₹{{ "{:,.1f}".format(profile.investment/10000000) }} Crore</div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Number of Employees (Headcount) *</label>
+          <input type="number" name="employees" class="form-control form-control-sm" value="{{ profile.employees }}" required>
+          <div class="form-text small" style="font-size: 0.75rem;">Triggers ESI (10+), EPF (20+), Vacancy (25+), Apprentices (30+), Crèche (50+)</div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-dark">Cancel</a>
+        <button type="submit" class="btn btn-dark">
+          <i class="bi bi-check-lg"></i> Save Profile & Re-evaluate
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

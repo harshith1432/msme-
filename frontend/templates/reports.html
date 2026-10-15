@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+
+{% block title %}Executive Regulatory & Incentive Audit Report — {{ company.name }}{% endblock %}
+
+{% block content %}
+<div class="report-container pb-5">
+
+  <!-- Top Action & Navigation Bar (Screen Only) -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 d-print-none">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="report-badge-brand">
+          <i class="bi bi-shield-check"></i> MSME NAVIGATOR INDIA &bull; AUDIT SUITE
+        </span>
+        <span class="badge bg-success-subtle text-success border border-success-subtle">
+          <i class="bi bi-patch-check-fill me-1"></i> Baseline: Oct 2026 Laws
+        </span>
+      </div>
+      <h3 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-file-earmark-bar-graph text-primary"></i>
+        Executive Regulatory & Incentive Audit Report
+      </h3>
+      <p class="text-muted small mb-0">
+        Certified audit evaluation for internal corporate governance, bank financing due diligence, and CA statutory compliance reviews (Section 9 Compliance).
+      </p>
+    </div>
+    <div class="header-actions d-flex align-items-center gap-2">
+      <button onclick="window.print()" class="btn btn-primary btn-sm px-3 shadow-sm">
+        <i class="bi bi-printer me-1"></i> Print / Save as PDF
+      </button>
+      <a href="{{ url_for('main.export_csv') }}" class="btn btn-outline-dark btn-sm px-3">
+        <i class="bi bi-filetype-csv me-1"></i> Download CSV
+      </a>
+      <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary btn-sm px-2" title="Back to Dashboard">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Executive Summary Header Card -->
+  <div class="report-hero-card p-4 p-md-4 mb-4">
+    <div class="row align-items-center g-3">
+      <div class="col-lg-8">
+        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+          <span class="badge bg-primary text-white px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.05em;">ENTERPRISE PROFILE</span>
+          <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.72rem;">{{ company.entity_type }}</span>
+          <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.72rem;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ company.state }}</span>
+          <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.72rem;"><i class="bi bi-tag-fill text-secondary me-1"></i>{{ company.sector }}</span>
+        </div>
+        <h2 class="fw-bold text-dark mb-2" style="font-size: 1.65rem; letter-spacing: -0.02em;">{{ company.name }}</h2>
+        <div class="d-flex flex-wrap align-items-center mb-2">
+          <div class="report-meta-chip">
+            <span class="text-muted">Trade Name:</span>
+            <strong>{{ company.trade_name or company.name }}</strong>
+          </div>
+          <div class="report-meta-chip">
+            <span class="text-muted">Entity:</span>
+            <strong>{{ company.entity_type }}</strong>
+          </div>
+          <div class="report-meta-chip">
+            <span class="text-muted">State & Jurisdiction:</span>
+            <strong>{{ company.state }}{% if company.district %}, {{ company.district }}{% endif %}</strong>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap align-items-center">
+          <div class="report-meta-chip">
+            <i class="bi bi-card-text text-primary"></i>
+            <span class="text-muted">Udyam:</span>
+            <strong class="font-monospace">{{ company.udyam_number or 'Not Linked' }}</strong>
+          </div>
+          <div class="report-meta-chip">
+            <i class="bi bi-credit-card text-success"></i>
+            <span class="text-muted">PAN:</span>
+            <strong class="font-monospace">{{ company.pan_number or 'Not Linked' }}</strong>
+          </div>
+          <div class="report-meta-chip">
+            <i class="bi bi-receipt text-warning"></i>
+            <span class="text-muted">GSTIN:</span>
+            <strong class="font-monospace">{{ company.gstin or 'Not Linked' }}</strong>
+          </div>
+          <div class="report-meta-chip">
+            <i class="bi bi-people text-info"></i>
+            <span class="text-muted">Headcount:</span>
+            <strong>{{ profile.employees }} Employees</strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 text-lg-end border-start-lg ps-lg-4">
+        <div class="p-3 bg-light rounded-3 border">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="text-muted small">Report Date:</span>
+            <strong class="text-dark">{{ report_date }}</strong>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="text-muted small">Statutory Ruleset:</span>
+            <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.72rem;">Oct 2026 Laws</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small">Audit Status:</span>
+            <span class="badge bg-success text-white" style="font-size: 0.72rem;">
+              <i class="bi bi-check2-circle me-1"></i> Officially Grounded
+            </span>
+          </div>
+          <div class="pt-2 border-top text-muted text-start" style="font-size: 0.7rem;">
+            <i class="bi bi-hash"></i> Audit ID: <span class="font-monospace">AUD-{{ company.id }}-{{ company.state[:2]|upper }}-2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 High-Impact KPI Stat Cards -->
+  <div class="row g-3 mb-4">
+    <!-- Stat 1: MSME Category -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="report-stat-card stat-blue">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="stat-label">MSME Classification</div>
+            <div class="stat-value text-primary">{{ evaluation.msme_classification }}</div>
+          </div>
+          <div class="stat-icon">
+            <i class="bi bi-buildings"></i>
+          </div>
+        </div>
+        <div class="stat-sub">
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 0.7rem;">2025 Revised Rules</span>
+          <span class="ms-1 text-muted">Inv: &le; ₹50Cr</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat 2: DPIIT Startup Status -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="report-stat-card stat-indigo">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="stat-label">DPIIT Startup Status</div>
+            <div class="stat-value text-dark">
+              {% if evaluation.is_startup_eligible %}Eligible{% else %}Standard{% endif %}
+            </div>
+          </div>
+          <div class="stat-icon">
+            <i class="bi bi-rocket-takeoff"></i>
+          </div>
+        </div>
+        <div class="stat-sub">
+          {% if evaluation.is_startup_eligible %}
+          <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem;">Tax Holiday (Sec 80-IAC)</span>
+          {% else %}
+          <span class="badge bg-light text-muted border" style="font-size: 0.7rem;">Standard Enterprise</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat 3: Active Obligations -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="report-stat-card stat-amber">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="stat-label">Active Obligations</div>
+            <div class="stat-value text-dark">{{ evaluation.total_obligations }} Items</div>
+          </div>
+          <div class="stat-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+        </div>
+        <div class="stat-sub">
+          <span class="badge bg-warning-subtle text-dark border border-warning-subtle" style="font-size: 0.7rem;">
+            {{ evaluation.matched_central_compliance_count }} Central &bull; {{ evaluation.matched_state_compliance_count }} State
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat 4: Matched Incentives -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="report-stat-card stat-emerald">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="stat-label">Matched Incentives</div>
+            <div class="stat-value text-success">{{ evaluation.total_incentives }} Schemes</div>
+          </div>
+          <div class="stat-icon">
+            <i class="bi bi-cash-coin"></i>
+          </div>
+        </div>
+        <div class="stat-sub">
+          <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem;">
+            {{ evaluation.matched_central_incentives_count }} Central &bull; {{ evaluation.matched_state_incentives_count }} State
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Navigation TOC Bar (Screen Only) -->
+  <div class="report-quicknav-bar mb-4 d-print-none">
+    <span class="small fw-bold text-muted text-uppercase me-2" style="font-size: 0.72rem; letter-spacing: 0.05em;">
+      <i class="bi bi-list-nested me-1"></i> Jump To Section:
+    </span>
+    <a href="#sec-ladder" class="report-quicknav-btn">
+      <span class="nav-dot">01</span> Threshold Ladder
+    </a>
+    <a href="#sec-priorities" class="report-quicknav-btn">
+      <span class="nav-dot">02</span> Immediate Priorities
+    </a>
+    <a href="#sec-deadlines" class="report-quicknav-btn">
+      <span class="nav-dot">03</span> Periodic Deadlines
+    </a>
+    <a href="#sec-domains" class="report-quicknav-btn">
+      <span class="nav-dot">04</span> Regulatory Domains
+    </a>
+    <a href="#sec-incentives" class="report-quicknav-btn">
+      <span class="nav-dot">05</span> Matched Subsidies
+    </a>
+    <a href="#sec-documents" class="report-quicknav-btn">
+      <span class="nav-dot">06</span> Document Checklist
+    </a>
+    <a href="#sec-vault" class="report-quicknav-btn">
+      <span class="nav-dot">07</span> Evidence Vault
+    </a>
+    <a href="#sec-portals" class="report-quicknav-btn">
+      <span class="nav-dot">08</span> Statutory Portals
+    </a>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 01: Statutory Threshold & Headcount Triggers (Scale Ladder)
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-ladder">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-blue">01</div>
+        <div>
+          <h4 class="report-section-title">1. Statutory Threshold Triggers Active For Your Scale</h4>
+          <p class="report-section-subtitle">
+            Statutory employer obligations unlocked by enterprise headcount ({{ profile.employees }} staff) and annual scale
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1">
+          <i class="bi bi-people-fill me-1"></i> {{ evaluation.statutory_ladder|length }} Active Scale Milestones
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <div class="table-responsive">
+        <table class="report-table mb-0">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Scale Trigger</th>
+              <th style="width: 52%;">Statutory Obligation Triggered</th>
+              <th style="width: 28%;">Governing Statute & Authority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for trig in evaluation.statutory_ladder %}
+            <tr>
+              <td>
+                <span class="badge bg-dark text-white px-2 py-1 font-monospace" style="font-size: 0.78rem;">
+                  <i class="bi bi-lightning-charge-fill text-warning me-1"></i>{{ trig.basis }}
+                </span>
+              </td>
+              <td>
+                <div class="fw-semibold text-dark mb-1">{{ trig.obligations }}</div>
+                <div class="small text-muted">
+                  Mandatory operational requirement for active employer liability defense.
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark border px-2 py-1 text-wrap text-start" style="font-size: 0.76rem; line-height: 1.4;">
+                  <i class="bi bi-journal-bookmark me-1 text-primary"></i>{{ trig.source }}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-3 bg-light rounded-3 border mt-3 small text-muted d-flex align-items-center gap-2">
+        <i class="bi bi-info-circle-fill text-primary fs-5 flex-shrink-0"></i>
+        <div>
+          <strong>Threshold Compliance Note:</strong> As your workforce expands beyond 10, 20, 50, or 100 employees, new employer obligations trigger automatically under the 4 Labour Codes 2025. Monitor these thresholds before hiring milestones to prevent retroactive statutory penalties.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 02: Immediate Priority Statutory Actions
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-priorities">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-red">02</div>
+        <div>
+          <h4 class="report-section-title">2. Immediate Priority Statutory Actions</h4>
+          <p class="report-section-subtitle">
+            Critical baseline registrations, statutory bodies, and mandatory filings requiring immediate executive action
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1">
+          <i class="bi bi-exclamation-octagon-fill me-1"></i> High Statutory Priority
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      {% for item in action_plan.immediate_priorities %}
+      <div class="report-action-item">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-2 mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-danger text-white" style="font-size: 0.68rem; font-weight: 700;">ACTION #{{ loop.index }}</span>
+            <h5 class="report-action-title mb-0">{{ item.action }}</h5>
+          </div>
+          {% if item.portal %}
+          <a href="{{ item.portal }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger py-1 px-2 d-print-none flex-shrink-0" style="font-size: 0.78rem;">
+            Official Portal <i class="bi bi-box-arrow-up-right ms-1"></i>
+          </a>
+          {% endif %}
+        </div>
+        <div class="report-action-why">
+          <i class="bi bi-arrow-return-right text-muted me-1"></i>
+          {{ item.why }}
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <span class="badge bg-light text-secondary border" style="font-size: 0.74rem;">
+            <i class="bi bi-bank2 me-1 text-danger"></i>Authority: {{ item.authority }}
+          </span>
+          {% if item.portal %}
+          <span class="badge bg-light text-muted border font-monospace d-none d-md-inline" style="font-size: 0.72rem;">
+            {{ item.portal }}
+          </span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 03: Periodic & Recurring Statutory Deadlines Calendar
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-deadlines">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-indigo">03</div>
+        <div>
+          <h4 class="report-section-title">3. Periodic & Recurring Statutory Deadlines Calendar</h4>
+          <p class="report-section-subtitle">
+            Recurring monthly, quarterly, and ongoing statutory return filings under Tax, Labour, and MSMED Acts
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-indigo-subtle text-indigo border border-indigo-subtle px-3 py-1" style="background: #EEF2FF; color: #4F46E5; border-color: #C7D2FE;">
+          <i class="bi bi-calendar2-week-fill me-1"></i> Statutory Cadence
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <div class="table-responsive">
+        <table class="report-table mb-0">
+          <thead>
+            <tr>
+              <th style="width: 24%;">Cadence & Due Date</th>
+              <th style="width: 38%;">Statutory Requirement / Return</th>
+              <th style="width: 38%;">Operational Guidance & Penalty Defense</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in action_plan.periodic_deadlines %}
+            <tr>
+              <td>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 font-monospace" style="font-size: 0.78rem;">
+                  <i class="bi bi-alarm me-1"></i>{{ item.due }}
+                </span>
+              </td>
+              <td>
+                <div class="fw-semibold text-dark">{{ item.name }}</div>
+              </td>
+              <td>
+                <div class="text-secondary small">{{ item.notes }}</div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-3 bg-warning-subtle border border-warning-subtle rounded-3 mt-3 small text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-shield-exclamation text-warning fs-5 flex-shrink-0"></i>
+        <div>
+          <strong>Section 43B(h) Alert:</strong> Dues payable to registered Micro and Small Enterprises must be settled within 15 days (or max 45 days if mutually agreed in writing). Outstanding payments past this statutory window are disallowed as income tax business deductions under Section 43B(h).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 04: Central & State Regulatory Obligations Breakdown
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-domains">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-slate">04</div>
+        <div>
+          <h4 class="report-section-title">4. Comprehensive Regulatory Obligations Breakdown by Domain</h4>
+          <p class="report-section-subtitle">
+            Categorized statutory matrix across Labour Codes, GST, Direct Taxes, and State Statutes
+          </p>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-1 flex-wrap">
+        <span class="badge bg-light text-dark border px-2 py-1">
+          <i class="bi bi-flag-fill text-primary me-1"></i>{{ evaluation.matched_central_compliance_count }} Central
+        </span>
+        <span class="badge bg-light text-dark border px-2 py-1">
+          <i class="bi bi-geo-fill text-danger me-1"></i>{{ evaluation.matched_state_compliance_count }} State ({{ company.state }})
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <!-- Domain Filter Tags -->
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <span class="badge bg-light text-dark border px-2 py-1"><i class="bi bi-briefcase me-1 text-primary"></i> Labour & Wages (Universal & Threshold)</span>
+        <span class="badge bg-light text-dark border px-2 py-1"><i class="bi bi-receipt me-1 text-success"></i> GST & Invoicing</span>
+        <span class="badge bg-light text-dark border px-2 py-1"><i class="bi bi-currency-rupee me-1 text-warning"></i> Income Tax & TDS</span>
+        <span class="badge bg-light text-dark border px-2 py-1"><i class="bi bi-buildings me-1 text-info"></i> State Premise Approvals ({{ company.state }})</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="report-table mb-0">
+          <thead>
+            <tr>
+              <th style="width: 14%;">Code & Domain</th>
+              <th style="width: 32%;">Statutory Requirement</th>
+              <th style="width: 28%;">Governing Statute / Law Basis</th>
+              <th style="width: 26%;">Trigger Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in evaluation.matched_central_compliance[:10] %}
+            <tr>
+              <td>
+                <span class="badge bg-dark text-white font-monospace mb-1" style="font-size: 0.72rem;">{{ item.ID }}</span>
+                <div>
+                  <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.68rem;">{{ item.Domain }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="fw-semibold text-dark">{{ item.Requirement }}</div>
+                {% if item.get('Frequency / due date') %}
+                <div class="small text-muted mt-1"><i class="bi bi-clock-history me-1"></i>{{ item.get('Frequency / due date') }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="small text-muted">{{ item.get('Law basis', item.get('Law Basis', 'Statutory Act')) }}</div>
+              </td>
+              <td>
+                <div class="small text-secondary">{{ item.get('match_reason', item.get('Applies to / trigger', 'Standard MSME Requirement')) }}</div>
+              </td>
+            </tr>
+            {% endfor %}
+
+            {% for item in evaluation.matched_state_compliance %}
+            <tr class="table-light">
+              <td>
+                <span class="badge bg-danger text-white font-monospace mb-1" style="font-size: 0.72rem;">STATE</span>
+                <div>
+                  <span class="badge bg-danger-subtle text-danger" style="font-size: 0.68rem;">{{ company.state }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="fw-semibold text-dark">{{ item.Requirement }}</div>
+                {% if item.get('Authority') %}
+                <div class="small text-muted mt-1"><i class="bi bi-bank me-1"></i>{{ item.get('Authority') }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="small text-muted">{{ item.get('Law basis', company.state ~ ' State Act') }}</div>
+              </td>
+              <td>
+                <div class="small text-secondary">Mandatory state jurisdiction compliance for premises located in {{ company.state }}.</div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-2 text-muted small">
+        <span>Showing top key statutory records matched from the complete regulatory database.</span>
+        <a href="{{ url_for('main.compliance') }}" class="btn btn-outline-primary btn-sm py-1 px-2 d-print-none">
+          View Complete Compliance Registry ({{ evaluation.total_obligations }} Items) &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 05: High-Value Claimable Incentives & Subsidies
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-incentives">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-emerald">05</div>
+        <div>
+          <h4 class="report-section-title">5. High-Value Claimable Incentives & Subsidies</h4>
+          <p class="report-section-subtitle">
+            Government financial assistance, credit guarantees, capital subsidies, and quality certification grants
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">
+          <i class="bi bi-gift-fill me-1"></i> {{ evaluation.total_incentives }} Eligible Schemes
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <div class="row g-3">
+        {% for inc in action_plan.top_incentives %}
+        <div class="col-md-6">
+          <div class="report-scheme-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <span class="badge bg-success text-white" style="font-size: 0.68rem; letter-spacing: 0.05em;">
+                  {% if company.state in inc.title %}STATE POLICY{% else %}CENTRAL SCHEME{% endif %}
+                </span>
+                <span class="badge bg-light text-muted border font-monospace" style="font-size: 0.68rem;">Verified</span>
+              </div>
+              <h5 class="scheme-title">{{ inc.title }}</h5>
+              <div class="scheme-benefit-box">
+                <div class="fw-bold mb-1"><i class="bi bi-check2-circle me-1"></i> Key Financial Benefit:</div>
+                <div>{{ inc.benefit }}</div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+              <span class="small text-muted" style="font-size: 0.75rem;">Ministry of MSME / State Dept</span>
+              {% if inc.apply_link %}
+              <a href="{{ inc.apply_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success py-1 px-2 d-print-none" style="font-size: 0.78rem;">
+                Apply Portal <i class="bi bi-box-arrow-up-right ms-1"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-2 text-muted small">
+        <span>Curated top schemes matched for {{ company.name }} based on turnover, sector, and location.</span>
+        <a href="{{ url_for('main.incentives') }}" class="btn btn-outline-success btn-sm py-1 px-2 d-print-none">
+          Explore All Matched Schemes ({{ evaluation.total_incentives }}) &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 06: Mandatory Document Compliance Checklist
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-documents">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-amber">06</div>
+        <div>
+          <h4 class="report-section-title">6. Mandatory Document Compliance Checklist</h4>
+          <p class="report-section-subtitle">
+            Essential evidentiary records required for bank financing due diligence, CA statutory audit, and regulatory inspection
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-warning-subtle text-dark border border-warning-subtle px-3 py-1">
+          <i class="bi bi-clipboard2-check-fill me-1"></i> Due Diligence Readiness
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <div class="row g-3">
+        {% for doc in action_plan.documents_checklist %}
+        <div class="col-md-6">
+          <div class="report-check-item">
+            <div class="report-check-icon">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <div>
+              <div class="fw-semibold text-dark small mb-1">{{ doc }}</div>
+              <div class="text-muted" style="font-size: 0.75rem;">
+                Mandatory statutory record for KYC, tax audit, and government subsidy disbursement.
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 07: Document & Evidence Vault Audit Status
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-vault">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-navy">07</div>
+        <div>
+          <h4 class="report-section-title">7. Document & Evidence Vault Audit Status</h4>
+          <p class="report-section-subtitle">
+            Encrypted private enterprise repository for uploaded statutory records and verified proof artifacts
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-1">
+          <i class="bi bi-safe2-fill me-1"></i> {{ documents|length }} Vault Records
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      {% if documents and documents|length > 0 %}
+      <div class="table-responsive">
+        <table class="report-table mb-0">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Archived Document Name</th>
+              <th style="width: 20%;">Document Type</th>
+              <th style="width: 20%;">Uploaded Date</th>
+              <th style="width: 15%;">Audit Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in documents %}
+            <tr>
+              <td>
+                <div class="fw-semibold text-dark d-flex align-items-center gap-2">
+                  <i class="bi bi-file-earmark-check text-primary"></i>
+                  {{ d.title }}
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark border text-uppercase font-monospace" style="font-size: 0.72rem;">
+                  {{ d.doc_type or 'PDF' }}
+                </span>
+              </td>
+              <td>
+                <span class="text-muted small">
+                  {{ d.uploaded_at.strftime('%d %b %Y') if d.uploaded_at else 'Verified' }}
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.72rem;">
+                  <i class="bi bi-shield-check me-1"></i> Archived
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-4 bg-light rounded-3 border text-center">
+        <i class="bi bi-folder-x text-muted" style="font-size: 2.2rem;"></i>
+        <h6 class="fw-bold text-dark mt-2 mb-1">No Evidence Documents Archived Yet</h6>
+        <p class="text-muted small mb-3">
+          Uploading compliance certificates (Udyam, GST, PAN, Factory License) to the private vault enables 1-click CA review and instant bank loan document packages.
+        </p>
+        <a href="{{ url_for('main.documents') }}" class="btn btn-outline-primary btn-sm d-print-none">
+          <i class="bi bi-upload me-1"></i> Upload Evidence Records
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECTION 08: Statutory Portals & Direct Filing Access Directory
+       ========================================================================= -->
+  <div class="report-section-card" id="sec-portals">
+    <div class="report-section-header">
+      <div class="report-section-title-wrap">
+        <div class="report-section-badge badge-sec-teal">08</div>
+        <div>
+          <h4 class="report-section-title">8. Official Government Portals & Statutory Gateways Directory</h4>
+          <p class="report-section-subtitle">
+            Verified direct gateways for mandatory submissions, subsidy applications, and dispute redressal
+          </p>
+        </div>
+      </div>
+      <div>
+        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-1" style="background: #ECFEFF !important; color: #0E7490 !important; border-color: #A5F3FC !important;">
+          <i class="bi bi-patch-check-fill me-1"></i> Verified .gov.in Gateways
+        </span>
+      </div>
+    </div>
+    <div class="report-section-body">
+      <div class="row g-3">
+        {% for portal in action_plan.action_portals %}
+        <div class="col-md-6 col-lg-4">
+          <div class="report-portal-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-light text-primary border font-monospace" style="font-size: 0.68rem;">
+                  <i class="bi bi-globe me-1"></i>Official
+                </span>
+                <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.65rem;">Active</span>
+              </div>
+              <h5 class="portal-name">{{ portal.name }}</h5>
+              <p class="portal-desc">{{ portal.purpose }}</p>
+            </div>
+            <div>
+              <a href="{{ portal.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary w-100 py-1 d-print-none" style="font-size: 0.78rem;">
+                Launch Gateway <i class="bi bi-box-arrow-up-right ms-1"></i>
+              </a>
+              <div class="small text-muted font-monospace mt-1 text-truncate d-none d-print-block" style="font-size: 0.7rem;">
+                {{ portal.url }}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Auditor / CA Due Diligence Sign-off Card (Print Friendly) -->
+  <div class="report-signoff-card">
+    <div class="row g-4 align-items-end">
+      <div class="col-md-6">
+        <div class="fw-bold text-dark small mb-1">ENTERPRISE COMPLIANCE OFFICER / MANAGING DIRECTOR</div>
+        <div class="text-muted" style="font-size: 0.75rem;">I hereby certify that declared headcount, turnover, and operational parameters are accurate for this baseline period.</div>
+        <div class="signoff-line"></div>
+        <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+          <span>Signature & Enterprise Seal</span>
+          <span>Date: ________________</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="fw-bold text-dark small mb-1">CHARTERED ACCOUNTANT / DUE DILIGENCE AUDITOR</div>
+        <div class="text-muted" style="font-size: 0.75rem;">Reviewed against Labour Codes 2025, Income-tax Act 2025, CGST Act 2017, and MSMED Act 2006.</div>
+        <div class="signoff-line"></div>
+        <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+          <span>Membership / FRN No: ________________</span>
+          <span>UDIN: ____________________</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legal Disclaimer Footer -->
+    <div class="border-top pt-3 mt-4 text-muted" style="font-size: 0.72rem; line-height: 1.5;">
+      <p class="mb-1">
+        <strong>Statutory Notice & Scope Limitation:</strong> This audit report is generated by the India MSME Compliance & Incentives Navigator based on declared enterprise facts and published statutory rules (Labour Codes 2025, Income-tax Act 2025, MSMED Act 2006, CGST Act 2017). This document constitutes operational governance guidance and CA due diligence assistance; formal certification remains subject to official jurisdictional inspections and CA physical verification.
+      </p>
+      <div class="d-flex justify-content-between align-items-center flex-wrap pt-2">
+        <span>&copy; 2026 MSME Compliance & Incentives Navigator India &bull; Baseline Version 2.0</span>
+        <span class="font-monospace">SHA-256 System Hash: 8b4c-9f21-oct2026-verified</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

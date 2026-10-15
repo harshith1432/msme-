@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Official Regulatory Sources — AI Knowledge Feeds | MSME Navigator{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <i class="bi bi-link-45deg text-primary"></i>
+      Official Regulatory Portals & Gazette Feeds
+    </h4>
+    <p class="text-muted small mb-0">
+      Authorized portals, ministries, and gazette repositories providing verified regulatory intelligence.
+    </p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.admin_knowledge') }}" class="btn btn-sm btn-outline-dark">
+      <i class="bi bi-arrow-left me-1"></i> Back to Knowledge Center
+    </a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Registered Sources Table -->
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold text-dark">Registered Official Feeds</h6>
+        <span class="badge bg-secondary-subtle text-secondary border">{{ sources|length }} sources</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr class="small text-uppercase text-muted">
+              <th>Source Name</th>
+              <th>Authority</th>
+              <th>Jurisdiction</th>
+              <th>Portal URL</th>
+            </tr>
+          </thead>
+          <tbody class="small">
+            {% for src in sources %}
+            <tr>
+              <td class="fw-bold text-dark">{{ src.name }}</td>
+              <td>{{ src.issuing_authority or 'Government of India' }}</td>
+              <td>
+                <span class="badge bg-dark text-white">{{ src.jurisdiction }}</span>
+                {% if src.state %}<div class="text-muted small">{{ src.state }}</div>{% endif %}
+              </td>
+              <td>
+                <a href="{{ src.portal_url }}" target="_blank" class="text-primary text-decoration-none d-flex align-items-center gap-1 font-monospace" style="font-size: 0.75rem;">
+                  <i class="bi bi-box-arrow-up-right"></i> {{ src.portal_url }}
+                </a>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="4" class="text-center py-4 text-muted">
+                No custom sources added yet. Baseline official sources are active.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Source Form -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm p-4">
+      <h6 class="fw-bold text-dark mb-3">Register New Official Source</h6>
+      <form method="POST" action="{{ url_for('main.admin_knowledge_sources') }}">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Source Name *</label>
+          <input type="text" name="name" class="form-control" placeholder="e.g. Gazette of India MSME Feed" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Official Portal URL *</label>
+          <input type="url" name="portal_url" class="form-control" placeholder="https://egazette.gov.in" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Issuing Authority</label>
+          <input type="text" name="issuing_authority" class="form-control" placeholder="e.g. Directorate of Printing">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Jurisdiction</label>
+          <select name="jurisdiction" class="form-select">
+            <option value="Central">Central</option>
+            <option value="State">State</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">State / UT (if State)</label>
+          <input type="text" name="state" class="form-control" placeholder="e.g. Gujarat">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fw-bold">
+          <i class="bi bi-plus-lg me-1"></i> Register Source
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

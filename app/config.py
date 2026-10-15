@@ -23,6 +23,21 @@ class Config:
     DEFAULT_LANGUAGE = 'en'
     SUPPORTED_LANGUAGES = ['en', 'hi', 'kn', 'te', 'ta', 'ml', 'mr', 'gu', 'bn']
 
+    # Hugging Face Inference Providers (RAG LLM Layer)
+    HF_TOKEN = os.environ.get('HF_TOKEN')
+    HF_MODEL = os.environ.get('HF_MODEL', 'meta-llama/Llama-3.2-3B-Instruct')
+    HF_PROVIDER = os.environ.get('HF_PROVIDER')
+    HF_TIMEOUT_SECONDS = int(os.environ.get('HF_TIMEOUT_SECONDS', 20))
+    HF_MAX_RETRIES = int(os.environ.get('HF_MAX_RETRIES', 2))
+    HF_MAX_NEW_TOKENS = int(os.environ.get('HF_MAX_NEW_TOKENS', 512))
+
+    # Mandatory RAG Knowledge-Base Boundaries & Refusals
+    RAG_REFUSAL_MESSAGE = os.environ.get(
+        'RAG_REFUSAL_MESSAGE',
+        "I can only answer questions supported by the information available in my authorized knowledge base. Please ask a question related to the available documents."
+    )
+    RAG_RELEVANCE_THRESHOLD = float(os.environ.get('RAG_RELEVANCE_THRESHOLD', '0.25'))
+
 class DevelopmentConfig(Config):
     DEBUG = True
 

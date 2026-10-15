@@ -174,6 +174,32 @@ def test_rag_ingestion_and_strict_publication_barrier(app, test_setup):
 def test_ai_advisor_rag_grounded_answer(app, test_setup):
     with app.app_context():
         comp = Company.query.get(test_setup['company_id'])
+
+        # Ensure at least one published circular exists for self-contained isolation
+        if not KnowledgeDocument.query.filter(KnowledgeDocument.title.ilike('%CGTMSE%'), KnowledgeDocument.status == 'published').first():
+            k_doc = KnowledgeDocument(
+                title="Master Circular on CGTMSE Coverage 2026",
+                filename="cgtmse_circular.txt",
+                file_path="uploads/cgtmse_circular.txt",
+                document_type="circular",
+                issuing_authority="Ministry of MSME / SIDBI",
+                official_source_url="https://www.cgtmse.in/circulars/2026",
+                jurisdiction="Central",
+                status="published",
+                published_at=datetime.utcnow()
+            )
+            db.session.add(k_doc)
+            db.session.flush()
+            chunk = DocumentChunk(
+                document_id=k_doc.id,
+                chunk_index=0,
+                chunk_text="All scheduled commercial banks and NBFCs shall extend collateral-free loans to Micro and Small Enterprises with an annual guarantee fee concession of 10% for women and SC/ST entrepreneurs under CGTMSE.",
+                token_count=35,
+                embedding_json=json.dumps([0.1]*64)
+            )
+            db.session.add(chunk)
+            db.session.commit()
+
         advisor = AIAdvisor()
         profile = {
             'name': comp.name,
@@ -317,3 +343,85 @@ def test_application_workspace_and_artifact_generation(app, client, test_setup):
     dl_docx = client.get(f'/drafts/download/{docx_art_id}')
     assert dl_docx.status_code == 200
     assert dl_docx.headers.get('Content-Disposition') is not None
+
+
+# --- 7. Safe Deletion Workflow (Folders, Vault Documents, Packages & Drafts) ---
+
+def test_deletion_workflows(app, client, test_setup):
+    from app.models import AIDraft
+    # Authenticate session
+    with client.session_transaction() as sess:
+        sess['user_id'] = test_setup['user_id']
+        sess['user_role'] = 'owner'
+        sess['company_id'] = test_setup['company_id']
+
+    # 1. Create a test folder and delete it
+    with app.app_context():
+        folder = DocumentFolder(
+            company_id=test_setup['company_id'],
+            name="Temporary Deletion Test Folder",
+            folder_type="custom"
+        )
+        db.session.add(folder)
+        db.session.commit()
+        folder_id = folder.id
+
+    del_res = client.post(f'/documents/folders/{folder_id}/delete', follow_redirects=True)
+    assert del_res.status_code == 200
+    with app.app_context():
+        assert DocumentFolder.query.get(folder_id) is None
+
+    # 2. Create a test document and delete it
+    with app.app_context():
+        doc = Document(
+            company_id=test_setup['company_id'],
+            title="Temporary Test Certificate",
+            filename="temp_test_cert.pdf",
+            file_path="uploads/temp_test_cert.pdf",
+            doc_type="gst_cert",
+            verification_status="verified"
+        )
+        db.session.add(doc)
+        db.session.commit()
+        doc_id = doc.id
+
+    del_doc_res = client.post(f'/documents/{doc_id}/delete', follow_redirects=True)
+    assert del_doc_res.status_code == 200
+    with app.app_context():
+        assert Document.query.get(doc_id) is None
+
+    # 3. Create a test application package and delete it
+    with app.app_context():
+        ws = ApplicationWorkspace(
+            company_id=test_setup['company_id'],
+            title="Temp Workspace for Deletion",
+            workspace_type="incentive",
+            reference_id="TEMP-001",
+            status="draft"
+        )
+        db.session.add(ws)
+        db.session.commit()
+        ws_id = ws.id
+
+    del_ws_res = client.post(f'/drafts/package/{ws_id}/delete', follow_redirects=True)
+    assert del_ws_res.status_code == 200
+    with app.app_context():
+        assert ApplicationWorkspace.query.get(ws_id) is None
+
+    # 4. Create an individual draft and delete it
+    with app.app_context():
+        draft = AIDraft(
+            company_id=test_setup['company_id'],
+            draft_type="checklist",
+            title="Temp Draft for Deletion",
+            content="This is a test draft."
+        )
+        db.session.add(draft)
+        db.session.commit()
+        draft_id = draft.id
+
+    del_draft_res = client.post(f'/drafts/{draft_id}/delete', follow_redirects=True)
+    assert del_draft_res.status_code == 200
+    with app.app_context():
+        assert AIDraft.query.get(draft_id) is None
+

@@ -12,7 +12,12 @@
     </div>
     <h4 class="fw-bold mb-0 text-dark">{{ workspace.title }}</h4>
   </div>
-  <div class="header-actions">
+  <div class="header-actions d-flex align-items-center gap-2">
+    <form action="{{ url_for('main.delete_workspace_package', workspace_id=workspace.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Permanently delete application package \'{{ workspace.title }}\' and its generated files?');">
+      <button type="submit" class="btn btn-sm btn-outline-danger">
+        <i class="bi bi-trash me-1"></i> Delete Package
+      </button>
+    </form>
     <a href="{{ url_for('main.view_drafts') }}" class="btn btn-sm btn-outline-dark">
       <i class="bi bi-arrow-left me-1"></i> All Packages & Drafts
     </a>

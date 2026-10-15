@@ -55,9 +55,16 @@
         </div>
         <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
           <span class="text-muted small font-monospace">#PKG-{{ ws.id }}</span>
-          <a href="{{ url_for('main.view_workspace_package', workspace_id=ws.id) }}" class="btn btn-sm btn-dark">
-            <span>View Package</span> <i class="bi bi-arrow-right"></i>
-          </a>
+          <div class="d-flex align-items-center gap-2">
+            <form action="{{ url_for('main.delete_workspace_package', workspace_id=ws.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Permanently delete application package \'{{ ws.title }}\' and its generated files?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Package">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+            <a href="{{ url_for('main.view_workspace_package', workspace_id=ws.id) }}" class="btn btn-sm btn-dark">
+              <span>View Package</span> <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -119,7 +126,7 @@
             {% endif %}
           </div>
         </div>
-        <div class="header-actions">
+        <div class="header-actions d-flex align-items-center gap-2">
           {% if d.status != 'approved' %}
           <button class="btn btn-sm btn-outline-success approve-draft-btn" data-draft-id="{{ d.id }}">
             <i class="bi bi-check2-circle"></i> Approve Draft
@@ -128,6 +135,11 @@
           <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#draftContent_{{ d.id }}">
             <i class="bi bi-eye"></i> View Content
           </button>
+          <form action="{{ url_for('main.delete_draft_endpoint', draft_id=d.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete draft \'{{ d.title }}\'?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Draft">
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
         </div>
       </div>
 

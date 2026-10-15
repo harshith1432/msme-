@@ -25,12 +25,23 @@
   --navy-hover: rgba(255, 255, 255, 0.07);
   --navy-active: #2563EB;
   
-  /* Primary Text & Grays */
-  --text-primary: #0A1633;
-  --text-secondary: #475569;
-  --text-muted: #64748B;
-  --text-light: #94A3B8;
-  --text-label: #8A99AD;
+  /* ============================================================
+     SOFT MODERN SLATE & GRAPHITE TYPOGRAPHY SYSTEM
+     Eliminates harsh pitch-black contrast and gives a soft, silky feel
+     ============================================================ */
+  --text-heading: #2D3748;   /* Refined Slate-Charcoal: Warm, soft executive dark without glare (RGB: 45, 55, 72) */
+  --text-primary: #334155;   /* Slate-700: Gentle, soft graphite for primary content (RGB: 51, 65, 85) */
+  --text-body: #475569;      /* Slate-600: Balanced, soft, easy-to-read body text (RGB: 71, 85, 105) */
+  --text-secondary: #64748B; /* Slate-500: Subdued secondary information (RGB: 100, 116, 139) */
+  --text-muted: #94A3B8;     /* Slate-400: Soft helper notes and metadata (RGB: 148, 163, 184) */
+  --text-light: #CBD5E1;     /* Slate-300: Soft borders & light indicators */
+  --text-label: #64748B;
+
+  /* Bootstrap 5 Theme Variable Overrides */
+  --bs-body-color: #475569;
+  --bs-heading-color: #2D3748;
+  --bs-dark: #334155;
+  --bs-dark-rgb: 51, 65, 85;
   
   /* Borders */
   --border-subtle: #E5EDF5;
@@ -67,40 +78,47 @@
 /* Base Document */
 *, *::before, *::after {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 }
 
 html, body {
   font-family: var(--font-sans);
   background-color: var(--bg-app);
-  color: var(--text-primary);
+  color: var(--text-body);
   margin: 0;
   padding: 0;
-  line-height: 1.55;
-  letter-spacing: -0.011em;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
   font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 }
 
 /* ============================================================
-   SMOOTH, CLEAN TYPOGRAPHY (Inter Sans-Serif)
+   SMOOTH, SOFT TYPOGRAPHY (Inter / Plus Jakarta Sans)
    ============================================================ */
 
 .fw-bold, b, strong {
   font-weight: 600 !important;
+  color: var(--text-heading);
 }
 
 .fw-bolder {
   font-weight: 600 !important;
+  color: var(--text-heading);
 }
 
 .fw-semibold {
   font-weight: 500 !important;
+  color: var(--text-primary);
 }
 
 .fw-medium {
   font-weight: 500 !important;
+  color: var(--text-primary);
 }
 
 .fw-normal {
@@ -110,40 +128,99 @@ html, body {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: var(--font-sans);
-  color: var(--text-primary);
+  color: var(--text-heading);
   font-weight: 600 !important;
-  letter-spacing: -0.022em;
-  line-height: 1.25;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+/* Ensure headings inside dark surfaces, dark card headers, and text-white remain crisp white */
+.text-white,
+.text-white *,
+.bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4, .bg-dark h5, .bg-dark h6,
+.bg-secondary h1, .bg-secondary h2, .bg-secondary h3, .bg-secondary h4, .bg-secondary h5, .bg-secondary h6,
+.bg-primary h1, .bg-primary h2, .bg-primary h3, .bg-primary h4, .bg-primary h5, .bg-primary h6,
+.bg-navy h1, .bg-navy h2, .bg-navy h3, .bg-navy h4, .bg-navy h5, .bg-navy h6,
+.action-card-header.bg-dark,
+.action-card-header.bg-dark h1,
+.action-card-header.bg-dark h2,
+.action-card-header.bg-dark h3,
+.action-card-header.bg-dark h4,
+.action-card-header.bg-dark h5,
+.action-card-header.bg-dark h6,
+.action-card-header.bg-dark *,
+.action-card-header.bg-secondary,
+.action-card-header.bg-secondary h1,
+.action-card-header.bg-secondary h2,
+.action-card-header.bg-secondary h3,
+.action-card-header.bg-secondary h4,
+.action-card-header.bg-secondary h5,
+.action-card-header.bg-secondary h6,
+.action-card-header.bg-secondary * {
+  color: #FFFFFF !important;
+}
+
+/* Ensure headings inside subtle/light surfaces keep their contrasting dark/colored text */
+.action-card-header.bg-light h1, .action-card-header.bg-light h2, .action-card-header.bg-light h3,
+.action-card-header.bg-light h4, .action-card-header.bg-light h5, .action-card-header.bg-light h6,
+.action-card-header.bg-light *,
+.action-card-header.text-dark h1, .action-card-header.text-dark h2, .action-card-header.text-dark h3,
+.action-card-header.text-dark h4, .action-card-header.text-dark h5, .action-card-header.text-dark h6,
+.action-card-header.text-dark * {
+  color: var(--text-heading) !important;
+}
+
+.action-card-header.bg-success-subtle h1,
+.action-card-header.bg-success-subtle h2,
+.action-card-header.bg-success-subtle h3,
+.action-card-header.bg-success-subtle h4,
+.action-card-header.bg-success-subtle h5,
+.action-card-header.bg-success-subtle h6,
+.action-card-header.bg-success-subtle * {
+  color: #14532D !important;
 }
 
 h1, .h1 { font-size: 1.85rem; }
 h2, .h2 { font-size: 1.5rem; }
 h3, .h3 { font-size: 1.3rem; }
-h4, .h4 { font-size: 1.175rem; }
+h4, .h4 { font-size: 1.15rem; }
 h5, .h5 { font-size: 1.025rem; }
 h6, .h6 { font-size: 0.9rem; }
 
 p, .small, small {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-weight: 400;
+  line-height: 1.6;
 }
 
 .text-muted {
-  color: var(--text-muted) !important;
+  color: var(--text-secondary) !important;
 }
 
-.text-dark {
-  color: var(--text-primary) !important;
+.text-dark, .text-black {
+  color: var(--text-heading) !important;
 }
 
-code, kbd, samp, pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.825em;
-  background-color: var(--bg-subtle);
-  color: var(--text-primary);
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  border: 1px solid var(--border-subtle);
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+code, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.825em !important;
+  background-color: #F1F5F9 !important;
+  color: #2563EB !important;
+  padding: 0.15rem 0.45rem !important;
+  border-radius: 5px !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+  border-radius: 8px !important;
+  padding: 0.85rem !important;
 }
 
 /* ============================================================
@@ -163,6 +240,8 @@ code, kbd, samp, pre {
   z-index: 1030;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border-right: 1px solid var(--navy-border);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Sidebar Brand Area: White Container like reference image IFQM logo */
@@ -198,10 +277,10 @@ code, kbd, samp, pre {
 }
 
 .sidebar-brand-text {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.85rem;
-  color: #0F172A;
-  letter-spacing: -0.02em;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
 }
 
 .sidebar-company-card {
@@ -216,6 +295,16 @@ code, kbd, samp, pre {
   padding: 0.65rem 0.5rem;
   flex-grow: 1;
   overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.sidebar-menu::-webkit-scrollbar,
+.app-sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .sidebar-section-header {
@@ -276,6 +365,15 @@ code, kbd, samp, pre {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 992px) {
+  .app-main {
+    width: calc(100vw - var(--sidebar-width));
+    max-width: calc(100vw - var(--sidebar-width));
+  }
 }
 
 /* Topbar: Unified Deep Navy matching Sidebar */
@@ -536,26 +634,38 @@ code, kbd, samp, pre {
    ============================================================ */
 
 .btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.45rem !important;
-  white-space: nowrap !important;
-  font-family: var(--font-sans) !important;
-  font-weight: 500 !important;
-  font-size: 0.85rem !important;
-  line-height: 1.25rem !important;
-  padding: 0.45rem 0.95rem !important;
-  border-radius: 8px !important;
-  box-shadow: var(--shadow-xs) !important;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  text-decoration: none !important;
-  flex-shrink: 0 !important;
-  height: auto !important;
-  min-height: 36px !important;
-  cursor: pointer !important;
-  align-self: center !important;
-  border: 1px solid transparent !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.25rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  height: auto;
+  min-height: 36px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn:not(.text-wrap):not(.selection-tile):not(.btn-card) {
+  white-space: nowrap;
+}
+
+.btn.text-start {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.btn.text-wrap {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .btn:active {
@@ -599,7 +709,10 @@ code, kbd, samp, pre {
 
 .btn.w-100, .btn-block {
   width: 100% !important;
+  max-width: 100% !important;
   display: flex !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Primary Button (Vibrant Royal Blue) */
@@ -834,7 +947,7 @@ code, kbd, samp, pre {
    FORMS & INPUTS
    ============================================================ */
 
-.form-control, .form-select {
+.form-control {
   font-family: var(--font-sans) !important;
   font-size: 0.875rem !important;
   border-radius: 8px !important;
@@ -845,10 +958,78 @@ code, kbd, samp, pre {
   transition: all 0.15s ease !important;
 }
 
+.form-select {
+  font-family: var(--font-sans) !important;
+  font-size: 0.875rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border-strong) !important;
+  padding: 0.475rem 2.25rem 0.475rem 0.85rem !important;
+  color: var(--text-primary) !important;
+  background-color: #FFFFFF !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 16px 12px !important;
+  max-width: 100% !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  transition: all 0.15s ease !important;
+}
+
+.form-select option {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+}
+
 .form-control:focus, .form-select:focus {
   border-color: var(--border-focus) !important;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
   outline: none !important;
+}
+
+/* ============================================================
+   SELECTION TILES & RADIO CARDS (Drafts Wizard, Interactive Options)
+   ============================================================ */
+
+.selection-tile {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: stretch !important;
+  text-align: left !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  padding: 1.15rem !important;
+  border-radius: 12px !important;
+  border: 1.5px solid var(--border-subtle) !important;
+  background-color: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+
+.selection-tile:hover {
+  border-color: var(--primary-border) !important;
+  background-color: var(--bg-hover) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transform: translateY(-1px);
+}
+
+.btn-check:checked + .selection-tile,
+.selection-tile.active {
+  border-color: var(--primary) !important;
+  background-color: var(--primary-subtle) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), var(--shadow-sm) !important;
 }
 
 .form-label {
@@ -987,4 +1168,692 @@ code, kbd, samp, pre {
 .chat-bubble-btn:hover {
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 8px 20px rgba(11, 25, 54, 0.45);
+}
+
+/* Copilot Offcanvas & Responsive Chat Protection */
+#copilotOffcanvas {
+  max-width: 100vw;
+}
+
+#copilotOffcanvas .offcanvas-body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+#copilotMessages,
+#advisorChatHistory {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.copilot-msg-bubble {
+  max-width: 100% !important;
+  width: 100% !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  box-sizing: border-box !important;
+}
+
+.user-msg-bubble {
+  max-width: 85% !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  box-sizing: border-box !important;
+}
+
+.suggestion-chip {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  text-align: left !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.4rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  line-height: 1.35 !important;
+  box-sizing: border-box !important;
+}
+
+.suggestion-chip i {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.suggestion-chip span,
+.suggestion-chip .chip-text {
+  flex-grow: 1;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+/* ============================================================
+   EXECUTIVE REGULATORY & INCENTIVE AUDIT REPORT STYLES
+   ============================================================ */
+
+.report-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Executive Hero Header Card */
+.report-hero-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.report-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2563EB 0%, #3B82F6 40%, #10B981 100%);
+}
+
+.report-badge-brand {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2563EB;
+  background-color: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.report-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 6px !important;
+  padding: 0.25rem 0.6rem !important;
+  font-size: 0.78rem !important;
+  color: var(--text-body) !important;
+  margin-right: 0.35rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.report-meta-chip strong {
+  color: var(--text-heading) !important;
+  font-weight: 550 !important;
+}
+
+/* 4 Executive KPI Metric Cards */
+.report-stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.report-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+}
+
+.report-stat-card .stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.report-stat-card.stat-blue {
+  border-top: 3.5px solid #2563EB;
+}
+.report-stat-card.stat-blue .stat-icon {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.report-stat-card.stat-indigo {
+  border-top: 3.5px solid #6366F1;
+}
+.report-stat-card.stat-indigo .stat-icon {
+  background: #EEF2FF;
+  color: #6366F1;
+}
+
+.report-stat-card.stat-amber {
+  border-top: 3.5px solid #F59E0B;
+}
+.report-stat-card.stat-amber .stat-icon {
+  background: #FFFBEB;
+  color: #D97706;
+}
+
+.report-stat-card.stat-emerald {
+  border-top: 3.5px solid #10B981;
+}
+.report-stat-card.stat-emerald .stat-icon {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.report-stat-card .stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+  margin-bottom: 0.25rem;
+}
+
+.report-stat-card .stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.report-stat-card .stat-sub {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  margin-top: 0.25rem;
+}
+
+/* Quick Navigation Anchor Bar */
+.report-quicknav-bar {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  white-space: nowrap;
+}
+
+.report-quicknav-btn {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #475569;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  text-decoration: none;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.report-quicknav-btn:hover {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border-color: #BFDBFE;
+}
+
+.report-quicknav-btn .nav-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: #E2E8F0;
+  color: #334155;
+  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.report-quicknav-btn:hover .nav-dot {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+/* 8 Separated Section Cards */
+.report-section-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  scroll-margin-top: 80px;
+}
+
+.report-section-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.report-section-header {
+  padding: 1.15rem 1.5rem;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.report-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.report-section-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.badge-sec-blue { background: #2563EB; box-shadow: 0 2px 5px rgba(37, 99, 235, 0.28); }
+.badge-sec-red { background: #EF4444; box-shadow: 0 2px 5px rgba(239, 68, 68, 0.28); }
+.badge-sec-indigo { background: #6366F1; box-shadow: 0 2px 5px rgba(99, 102, 241, 0.28); }
+.badge-sec-slate { background: #475569; box-shadow: 0 2px 5px rgba(71, 85, 105, 0.28); }
+.badge-sec-emerald { background: #10B981; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.28); }
+.badge-sec-amber { background: #F59E0B; box-shadow: 0 2px 5px rgba(245, 158, 11, 0.28); }
+.badge-sec-navy { background: #0B1936; box-shadow: 0 2px 5px rgba(11, 25, 54, 0.28); }
+.badge-sec-teal { background: #0D9488; box-shadow: 0 2px 5px rgba(13, 148, 136, 0.28); }
+
+.report-section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 0.15rem;
+  letter-spacing: -0.01em;
+}
+
+.report-section-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.report-section-body {
+  padding: 1.5rem;
+}
+
+/* Action Priority Cards (Section 2) */
+.report-action-item {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-left: 4.5px solid #EF4444;
+  border-radius: 10px;
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 0.9rem;
+  transition: all 0.15s ease;
+}
+
+.report-action-item:hover {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  border-left-color: #DC2626;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.08);
+}
+
+.report-action-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 0.35rem;
+}
+
+.report-action-why {
+  font-size: 0.84rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+/* Incentive Scheme Cards (Section 5) */
+.report-scheme-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-scheme-card:hover {
+  border-color: #A7F3D0;
+  background: #F0FDF4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+}
+
+.report-scheme-card .scheme-title {
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.report-scheme-card .scheme-benefit-box {
+  background: #F0FDF4;
+  border: 1px dashed #A7F3D0;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #065F46;
+  margin-bottom: 0.85rem;
+}
+
+/* Checklist Cards (Section 6) */
+.report-check-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.report-check-item:hover {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  box-shadow: var(--shadow-xs);
+}
+
+.report-check-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #ECFDF5;
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+/* Portal Directory Cards (Section 8) */
+.report-portal-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.15rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+}
+
+.report-portal-card:hover {
+  border-color: #93C5FD;
+  background: #F0F9FF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+}
+
+.report-portal-card .portal-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 0.25rem;
+}
+
+.report-portal-card .portal-desc {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-bottom: 0.85rem;
+  line-height: 1.45;
+}
+
+/* Sign-off Block */
+.report-signoff-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 14px;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.signoff-line {
+  border-bottom: 1.5px dashed #94A3B8;
+  height: 50px;
+  margin-bottom: 0.5rem;
+}
+
+/* Clean Table Styling in Report */
+.report-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.84rem;
+}
+
+.report-table th {
+  background: #F8FAFC;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+}
+
+.report-table th:last-child {
+  border-right: none;
+}
+
+.report-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #F1F5F9;
+  border-right: 1px solid #F1F5F9;
+  vertical-align: middle;
+  color: #334155;
+}
+
+.report-table td:last-child {
+  border-right: none;
+}
+
+.report-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-table tbody tr:hover td {
+  background: #F8FAFC;
+}
+
+/* Print Enhancements */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .app-sidebar, .app-topbar, .chat-drawer, .header-actions, .report-quicknav-bar, .d-print-none {
+    display: none !important;
+  }
+  .app-main {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  .report-section-card {
+    break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .report-hero-card {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+  }
+  .report-stat-card {
+    border: 1px solid #CBD5E1 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ============================================================
+   REGULATORY CHANGE INTELLIGENCE & GOVERNANCE WORKFLOW SYSTEM
+   ============================================================ */
+.workflow-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.85rem 1.15rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+}
+
+.workflow-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.workflow-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.workflow-step.active .workflow-step-num {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+.workflow-step.active {
+  color: var(--text-heading);
+  font-weight: 600;
+}
+
+.workflow-arrow {
+  color: var(--text-light);
+  font-size: 0.75rem;
+}
+
+.change-stat-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1.15rem 1.25rem;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+}
+
+.change-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-strong);
+}
+
+.change-item-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1.25rem;
+}
+
+.change-item-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+.change-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  background: #F8FAFC;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+}
+
+.change-filter-pill {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 0.95rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: #FFFFFF;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.change-filter-pill:hover {
+  background: #F8FAFC;
+  color: var(--text-heading);
+  border-color: var(--border-strong);
+}
+
+.change-filter-pill.active {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #1D4ED8;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.25);
 }

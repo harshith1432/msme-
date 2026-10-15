@@ -241,124 +241,39 @@ class AIAdvisor:
 
     def answer_query(self, user_question, profile, lang='en'):
         """
-        Natural language advisor that responds to specific queries grounded in verified RAG knowledge
-        and statutory rules engine.
-        Returns plain-language answer, citations, tool mapping, and the 5-part Action Card.
+        Natural language advisor that responds to specific queries through the mandatory RAG pipeline
+        using Hugging Face Inference Providers.
+        Enforces strict knowledge-base boundaries and refusal protocols.
         """
-        from app.services.rag_service import rag_service
-        from app.services.translation_service import translation_service
+        from backend.services.rag_chat_service import rag_chat_service
+        from backend.services.translation_service import translation_service
 
         plan = self.generate_action_plan(profile, lang)
-        q = (user_question or '').lower().strip()
-        state = profile.get('state', 'India')
-        employees = profile.get('employees', 0)
-        turnover = profile.get('turnover', 0)
-        msme_class = plan['msme_classification']
-
-        citations = []
-        tool_called = "evaluate_compliance_rules"
-        answer_text = ""
-        grounded_source = "statutory_database"
-
-        # Step 1: Query published RAG Knowledge Index
-        rag_results = []
-        try:
-            rag_results = rag_service.hybrid_retrieve(user_question, jurisdiction=state, state=state, top_k=3)
-        except Exception:
-            rag_results = []
-
-        if rag_results and rag_results[0]['relevance_score'] >= 0.15:
-            tool_called = "rag_knowledge_retrieval"
-            grounded_source = "published_rag_knowledge"
-            top_hit = rag_results[0]
-            answer_text = (
-                f"According to official published document '{top_hit['document_title']}' "
-                f"issued by {top_hit['authority'] or 'Government of India'} "
-                f"(Section: {top_hit['section_heading']}, Page {top_hit['page_number']}):\n\n"
-                f"{top_hit['chunk_text']}"
-            )
-            for hit in rag_results:
-                citations.append({
-                    'law': hit['document_title'],
-                    'authority': hit['authority'] or 'Regulatory Authority',
-                    'link': hit['official_source_url'] or 'https://www.india.gov.in',
-                    'section': hit['section_heading'],
-                    'page': hit['page_number'],
-                    'score': hit['relevance_score']
-                })
-        else:
-            # Step 2: Fall back to evaluated 628 statutory compliance and incentive rules
-            if any(w in q for w in ['epf', 'pf', 'esi', 'labour', 'labor', 'staff', 'worker', 'headcount']):
-                tool_called = "evaluate_compliance_rules"
-                citations = [
-                    {'law': 'Employees Provident Funds Act 1952 / Social Security Code 2020', 'authority': 'EPFO', 'link': 'https://unifiedportal-emp.epfindia.gov.in'},
-                    {'law': 'Employees State Insurance Act 1948', 'authority': 'ESIC', 'link': 'https://www.esic.gov.in'}
-                ]
-                if employees >= 20:
-                    answer_text = f"Your enterprise has {employees} employees. By statutory law, EPF registration is mandatory (threshold is 20+ staff), requiring 12% employer + 12% employee contribution. ESI registration is also mandatory (threshold is 10+ staff) for workers earning up to ₹21,000/month."
-                elif employees >= 10:
-                    answer_text = f"Your enterprise has {employees} employees. ESI registration is mandatory under Social Security Code (threshold is 10+ employees). EPF is currently optional until your workforce reaches 20, but POSH Internal Committee is mandatory."
-                else:
-                    answer_text = f"With {employees} employees, you are below the mandatory EPF (20+) and ESI (10+) statutory thresholds. However, compliance with the Code on Wages (minimum wages and wage slips by 7th of the month) remains mandatory."
-
-            elif any(w in q for w in ['45-day', '43b', '43b(h)', 'payment', 'delayed', 'samadhaan', 'vendor']):
-                tool_called = "search_approved_compliance_records"
-                citations = [
-                    {'law': 'Section 43B(h) Income-tax Act 1961 & Section 15 MSMED Act 2006', 'authority': 'Ministry of MSME & CBDT', 'link': 'https://samadhaan.msme.gov.in'}
-                ]
-                answer_text = "Under Section 43B(h) of the Income-tax Act read with Section 15 of the MSMED Act, buyers must clear payments to Micro and Small enterprises within 15 days (without agreement) or up to a maximum of 45 days (with written agreement). Any delayed payments cannot be claimed as tax-deductible expenses by the buyer and attract compound interest at 3x the RBI Bank Rate under Section 16."
-
-            elif any(w in q for w in ['subsidy', 'grant', 'incentive', 'scheme', 'cgtmse', 'loan', 'credit']):
-                tool_called = "search_published_schemes"
-                citations = [
-                    {'law': 'Credit Guarantee Fund Trust for Micro & Small Enterprises (CGTMSE)', 'authority': 'SIDBI / Ministry of MSME', 'link': 'https://www.cgtmse.in'},
-                    {'law': f'{state} Industrial Policy 2020-2025', 'authority': f'{state} Industries Dept', 'link': 'https://www.nsws.gov.in'}
-                ]
-                answer_text = f"As a verified {msme_class} enterprise in {state}, you can access: (1) Collateral-free credit loans up to ₹5 Crore under CGTMSE with guarantee fee subsidies, (2) Interest subvention and capital investment subsidies under the {state} Industrial Policy, and (3) ZED Sustainable Certification subsidies up to 80% for MSME units."
-
-            elif any(w in q for w in ['udyam', 'registration', 'certificate']):
-                tool_called = "get_document_checklist"
-                citations = [
-                    {'law': 'Udyam Registration Notification S.O. 2119(E)', 'authority': 'Ministry of MSME', 'link': 'https://udyamregistration.gov.in'}
-                ]
-                answer_text = "Udyam Registration is completely free and paperless on udyamregistration.gov.in using your Aadhaar, PAN, and GSTIN. It provides statutory MSME status, unlocks priority sector lending, lower bank interest rates, and guarantees legal rights under MSME Samadhaan for delayed payments."
-
-            elif any(w in q for w in ['fssai', 'food']):
-                tool_called = "search_approved_compliance_records"
-                citations = [
-                    {'law': 'Food Safety and Standards Act 2006', 'authority': 'FSSAI', 'link': 'https://foscos.fssai.gov.in'}
-                ]
-                answer_text = f"Under FSSAI rules, food businesses with annual turnover up to ₹12 Lakh require basic Petty Food Registration. Enterprises with turnover exceeding ₹12 Lakh (your turnover is ₹{turnover:,}) require a State Food Licence (or Central Licence if operating in multiple states or exceeding ₹20 Crore)."
-
-            elif any(w in q for w in ['gst', 'gstr', 'tax', 'invoice', 'e-invoice']):
-                tool_called = "evaluate_compliance_rules"
-                citations = [
-                    {'law': 'Central Goods and Services Tax Act 2017', 'authority': 'GST Council / CBIC', 'link': 'https://www.gst.gov.in'}
-                ]
-                answer_text = "For GST compliance: GSTR-1 (outward supplies) is due on the 11th of each month, and GSTR-3B (monthly tax payment and return) is due on the 20th of each month. E-invoicing is mandatory on B2B supplies if aggregate turnover exceeds ₹5 Crore in any preceding financial year."
-
-            else:
-                top_action = plan['immediate_priorities'][0]
-                answer_text = f"Based on your profile as a {msme_class} in {state}: Your immediate statutory priority is '{top_action['action']}' - {top_action['why']}."
-                citations = [
-                    {'law': 'Statutory Compliance Register', 'authority': top_action['authority'], 'link': top_action['portal']}
-                ]
+        
+        # Execute mandatory RAG pipeline with Hugging Face LLM layer
+        rag_response = rag_chat_service.answer_question(user_question, profile, lang)
+        answer_text = rag_response.get("text", "")
 
         # Dynamic translation if target language is not English
-        if lang and lang != 'en':
+        if lang and lang != 'en' and answer_text:
             try:
                 translated_ans = translation_service.translate_text(answer_text, target_lang=lang, preserve_tokens=True)
                 answer_text = translated_ans
             except Exception:
                 pass
 
-        response = {
+        return {
             'question': user_question,
             'language': lang,
             'text': answer_text,
-            'tool_called': tool_called,
-            'grounded_source': grounded_source,
-            'citations': citations,
-            'action_plan': plan
+            'refusal': rag_response.get("refusal", False),
+            'is_greeting': rag_response.get("is_greeting", False),
+            'tool_called': rag_response.get("tool_called", "rag_huggingface_llm"),
+            'grounded_source': rag_response.get("grounded_source", "published_rag_knowledge"),
+            'citations': rag_response.get("citations", []),
+            'suggestions': rag_response.get("suggestions", []),
+            'available_topics': rag_response.get("available_topics", {}),
+            'action_plan': plan,
+            'metadata': rag_response.get("metadata", {})
         }
-        return response
+

@@ -1,0 +1,486 @@
+{% extends "base.html" %}
+
+{% block title %}Regulatory Change Intelligence — Admin Governance | MSME Navigator{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fw-bold" style="font-size: 0.72rem;">
+        <i class="bi bi-shield-check me-1"></i> STATUTORY GOVERNANCE RADAR
+      </span>
+      <span class="badge bg-light text-secondary border small">Section 4 & Gazette Monitor</span>
+    </div>
+    <h3 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+      <div class="p-2 rounded-3 bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+        <i class="bi bi-broadcast fs-5"></i>
+      </div>
+      <span>Regulatory Change Intelligence Queue</span>
+    </h3>
+    <p class="text-muted small mb-0">
+      Continuous statutory monitoring, cryptographic SHA-256 hashing, human-in-the-loop legal review, and knowledge base synchronization.
+    </p>
+  </div>
+  <div class="header-actions d-flex flex-wrap gap-2">
+    <button class="btn btn-primary btn-sm shadow-sm d-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#ingestCircularModal">
+      <i class="bi bi-plus-circle"></i>
+      <span>Ingest Official Circular</span>
+    </button>
+    <a href="{{ url_for('main.admin_records') }}" class="btn btn-outline-dark btn-sm d-flex align-items-center gap-1.5">
+      <i class="bi bi-arrow-left"></i>
+      <span>Back to Knowledge Base</span>
+    </a>
+  </div>
+</div>
+
+<!-- Section 1: Visual Regulatory Governance Lifecycle Stepper -->
+<div class="card border-0 shadow-sm bg-white rounded-3 p-3 mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">
+      <i class="bi bi-diagram-3 me-1 text-primary"></i> Traceable Governance Pipeline
+    </span>
+    <span class="badge bg-light text-secondary border small">ISO-Compliant Audit Trail</span>
+  </div>
+  <div class="workflow-stepper">
+    <div class="workflow-step active">
+      <span class="workflow-step-num">1</span>
+      <span>Detected & Ingested</span>
+    </div>
+    <span class="workflow-arrow"><i class="bi bi-chevron-right"></i></span>
+    <div class="workflow-step active">
+      <span class="workflow-step-num">2</span>
+      <span>NLP Extraction & Diff</span>
+    </div>
+    <span class="workflow-arrow"><i class="bi bi-chevron-right"></i></span>
+    <div class="workflow-step active">
+      <span class="workflow-step-num">3</span>
+      <span>Expert Legal Review</span>
+    </div>
+    <span class="workflow-arrow"><i class="bi bi-chevron-right"></i></span>
+    <div class="workflow-step">
+      <span class="workflow-step-num">4</span>
+      <span>Approved & Staged</span>
+    </div>
+    <span class="workflow-arrow"><i class="bi bi-chevron-right"></i></span>
+    <div class="workflow-step">
+      <span class="workflow-step-num">5</span>
+      <span>Published (628 Active Rules & RAG)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Executive KPI Metrics Cards -->
+{% set total_count = stats.total if stats else changes|length %}
+{% set needs_review_count = stats.needs_review if stats else (changes|selectattr('review_status', 'in', ['needs_review', 'pending', 'detected'])|list|length) %}
+{% set approved_count = stats.approved if stats else (changes|selectattr('review_status', 'equalto', 'approved')|list|length) %}
+{% set published_count = stats.published if stats else (changes|selectattr('review_status', 'equalto', 'published')|list|length) %}
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="change-stat-card">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Monitored</span>
+        <div class="bg-primary-subtle text-primary p-2 rounded-2" style="font-size: 1rem; line-height: 1;">
+          <i class="bi bi-broadcast"></i>
+        </div>
+      </div>
+      <div class="h3 fw-bold text-dark mb-1">{{ total_count }}</div>
+      <div class="text-muted small" style="font-size: 0.75rem;">Official gazettes & circulars</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="change-stat-card">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Needs Review</span>
+        <div class="bg-warning-subtle text-warning-emphasis p-2 rounded-2" style="font-size: 1rem; line-height: 1;">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+      </div>
+      <div class="h3 fw-bold mb-1 {% if needs_review_count > 0 %}text-warning-emphasis{% else %}text-dark{% endif %}">
+        {{ needs_review_count }}
+      </div>
+      <div class="text-muted small" style="font-size: 0.75rem;">Awaiting legal expert sign-off</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="change-stat-card">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Approved (Staged)</span>
+        <div class="bg-info-subtle text-primary p-2 rounded-2" style="font-size: 1rem; line-height: 1;">
+          <i class="bi bi-check2-circle"></i>
+        </div>
+      </div>
+      <div class="h3 fw-bold text-dark mb-1">{{ approved_count }}</div>
+      <div class="text-muted small" style="font-size: 0.75rem;">Ready for 1-click publishing</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-lg-3">
+    <div class="change-stat-card">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Live Published</span>
+        <div class="bg-success-subtle text-success p-2 rounded-2" style="font-size: 1rem; line-height: 1;">
+          <i class="bi bi-check-all"></i>
+        </div>
+      </div>
+      <div class="h3 fw-bold text-success mb-1">{{ published_count }}</div>
+      <div class="text-muted small" style="font-size: 0.75rem;">Synced to live compliance index</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Filter Toolbar & Search Controls -->
+<div class="card border-0 shadow-sm bg-white rounded-3 p-3 mb-4">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+    <!-- Filter Pills -->
+    <div class="d-flex flex-wrap gap-2" id="statusFilterTabs">
+      <button type="button" class="change-filter-pill active" data-filter="all">
+        All Updates <span class="badge bg-secondary ms-1 rounded-pill">{{ total_count }}</span>
+      </button>
+      <button type="button" class="change-filter-pill" data-filter="needs_review">
+        Needs Review <span class="badge bg-warning text-dark ms-1 rounded-pill">{{ needs_review_count }}</span>
+      </button>
+      <button type="button" class="change-filter-pill" data-filter="approved">
+        Approved & Ready <span class="badge bg-primary ms-1 rounded-pill">{{ approved_count }}</span>
+      </button>
+      <button type="button" class="change-filter-pill" data-filter="published">
+        Published <span class="badge bg-success ms-1 rounded-pill">{{ published_count }}</span>
+      </button>
+    </div>
+
+    <!-- Keyword Search & Trust Badge -->
+    <div class="d-flex align-items-center gap-2">
+      <div class="input-group input-group-sm" style="max-width: 280px;">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" id="changeSearchInput" class="form-control border-start-0 ps-0" placeholder="Filter by title, ministry, domain...">
+      </div>
+      <span class="badge bg-success-subtle text-success border border-success-subtle py-1.5 px-2 text-nowrap" style="font-size: 0.72rem;">
+        <i class="bi bi-shield-check me-1"></i> Allowlisted Sources Only
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Individual Regulatory Change Items List -->
+<div id="changeItemsContainer">
+  {% for c in changes %}
+  {% set status_class = 'published' if c.review_status == 'published' else ('approved' if c.review_status == 'approved' else 'needs_review') %}
+  <div class="change-item-card" data-status="{{ status_class }}" data-search="{{ (c.title ~ ' ' ~ c.issuing_authority ~ ' ' ~ (c.affected_domain or '') ~ ' ' ~ (c.summary_of_change or ''))|lower }}">
+    
+    <!-- Top Metadata Bar -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2 mb-2">
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        {% if c.review_status == 'published' %}
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 fw-semibold">
+          <i class="bi bi-check-all me-1"></i> Published (v{{ c.new_version or '1.1' }})
+        </span>
+        {% elif c.review_status == 'approved' %}
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1.5 fw-semibold">
+          <i class="bi bi-check2-circle me-1"></i> Approved (Ready to Publish)
+        </span>
+        {% elif c.review_status in ['needs_review', 'pending'] %}
+        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 fw-semibold">
+          <i class="bi bi-hourglass-split me-1"></i> Needs Expert Review
+        </span>
+        {% elif c.review_status == 'detected' %}
+        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1.5 fw-semibold">
+          <i class="bi bi-eye me-1"></i> Detected & Ingested
+        </span>
+        {% else %}
+        <span class="badge bg-secondary-subtle text-secondary border px-2.5 py-1.5 fw-semibold">{{ c.review_status|capitalize }}</span>
+        {% endif %}
+
+        {% if c.affected_domain %}
+        <span class="badge bg-light text-secondary border px-2 py-1">
+          <i class="bi bi-tag me-1 text-muted"></i> {{ c.affected_domain }}
+        </span>
+        {% endif %}
+
+        <span class="badge bg-light text-secondary border px-2 py-1">
+          <i class="bi bi-geo me-1 text-muted"></i> {{ c.affected_jurisdiction or 'Central' }}
+        </span>
+      </div>
+
+      <div>
+        <a href="{{ c.source_url }}" target="_blank" class="btn btn-xs btn-outline-dark text-nowrap d-inline-flex align-items-center gap-1">
+          <span>Official Gazette / Source</span>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h5 class="fw-bold text-dark mt-2 mb-2" style="font-size: 1.05rem; letter-spacing: -0.015em;">
+      {{ c.title }}
+    </h5>
+
+    <!-- Detailed Attribute Metadata Row -->
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+      <div class="change-meta-pill">
+        <i class="bi bi-building text-primary"></i>
+        <span><strong>Authority:</strong> {{ c.issuing_authority }}</span>
+      </div>
+      <div class="change-meta-pill">
+        <i class="bi bi-calendar-event text-secondary"></i>
+        <span><strong>Effective:</strong> {{ c.effective_date.strftime('%d %b %Y') if c.effective_date else 'Immediate' }}</span>
+      </div>
+      {% if c.created_at %}
+      <div class="change-meta-pill">
+        <i class="bi bi-clock-history text-muted"></i>
+        <span>Logged {{ c.created_at.strftime('%d %b %Y') }}</span>
+      </div>
+      {% endif %}
+      {% if c.content_hash %}
+      <div class="change-meta-pill font-monospace" title="Cryptographic SHA-256 Digest">
+        <i class="bi bi-fingerprint text-primary"></i>
+        <span>SHA-256: {{ c.content_hash[:12] }}...</span>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Summary of Regulatory Amendment -->
+    <div class="p-3 rounded-2 border bg-light-subtle mb-3">
+      <div class="small fw-semibold text-secondary mb-1 d-flex align-items-center gap-1.5">
+        <i class="bi bi-file-text text-primary"></i>
+        <span>Summary of Regulatory Amendment</span>
+      </div>
+      <p class="small text-body mb-0 lh-base" style="font-size: 0.85rem;">
+        {{ c.summary_of_change }}
+      </p>
+    </div>
+
+    <!-- Collapsible Proposed Rule Diff / JSON Snapshot -->
+    {% if c.proposed_diff %}
+    <div class="mb-3">
+      <button class="btn btn-xs btn-outline-secondary d-flex align-items-center gap-1.5" type="button" data-bs-toggle="collapse" data-bs-target="#diffCollapse_{{ c.id }}">
+        <i class="bi bi-file-diff"></i>
+        <span>View Proposed Rule Delta / Technical Snapshot</span>
+      </button>
+      <div class="collapse mt-2" id="diffCollapse_{{ c.id }}">
+        <div class="border rounded-2 overflow-hidden">
+          <div class="bg-light px-3 py-1.5 border-bottom small fw-semibold text-muted d-flex align-items-center justify-content-between">
+            <span><i class="bi bi-code-slash me-1"></i> Technical Diff Inspector</span>
+            <span class="font-monospace" style="font-size: 0.72rem;">v{{ c.prior_version or '1.0' }} &rarr; v{{ c.new_version or '1.1' }}</span>
+          </div>
+          <pre class="mb-0 text-white p-3 small font-monospace" style="max-height: 180px; overflow-y: auto; background-color: #0F172A;">{{ c.proposed_diff }}</pre>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Reviewer Sign-off Notes (if available) -->
+    {% if c.review_notes %}
+    <div class="d-flex align-items-center gap-2 small text-secondary mb-3 p-2 rounded bg-light border">
+      <i class="bi bi-patch-check-fill text-success fs-6"></i>
+      <span><strong>Reviewer Sign-off:</strong> {{ c.review_notes }}</span>
+      {% if c.reviewed_at %}
+      <span class="text-muted ms-auto" style="font-size: 0.72rem;">{{ c.reviewed_at.strftime('%d %b %Y, %H:%M') }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Lifecycle Action Footer -->
+    <!-- Case 1: Needs Human Expert Sign-off -->
+    {% if c.review_status in ['needs_review', 'pending', 'detected'] %}
+    <div class="pt-2 border-top">
+      <form method="POST" action="{{ url_for('main.approve_change', change_id=c.id) }}" class="d-flex flex-column flex-md-row gap-2 align-items-md-center">
+        <div class="flex-grow-1">
+          <input type="text" name="notes" class="form-control form-control-sm" placeholder="Enter expert regulatory sign-off notes (e.g. Statutory enforcement verified for FY 2026-27)..." required>
+        </div>
+        <button type="submit" class="btn btn-sm btn-dark text-nowrap d-flex align-items-center gap-1.5 shadow-sm">
+          <i class="bi bi-check-circle"></i>
+          <span>Sign-off & Approve</span>
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+    <!-- Case 2: Approved & Staged for 1-Click Publication -->
+    {% if c.review_status == 'approved' %}
+    <div class="p-3 rounded-2 bg-success-subtle border border-success-subtle d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <div>
+        <div class="fw-semibold text-success-emphasis small d-flex align-items-center gap-1.5">
+          <i class="bi bi-shield-check fs-5"></i>
+          <span>Approved by qualified reviewer. Staged & Ready to publish.</span>
+        </div>
+        <div class="text-muted" style="font-size: 0.78rem;">
+          Publishing will update the live knowledge index, increment rule version to v{{ c.new_version or '1.1' }}, and synchronize compliance checks for enterprises.
+        </div>
+      </div>
+      <form method="POST" action="{{ url_for('main.publish_change', change_id=c.id) }}" class="ms-md-auto">
+        <button type="submit" class="btn btn-sm btn-success text-nowrap shadow-sm d-flex align-items-center gap-1.5">
+          <i class="bi bi-upload"></i>
+          <span>Publish to Active Knowledge Base</span>
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+    <!-- Case 3: Already Published -->
+    {% if c.review_status == 'published' %}
+    <div class="p-2.5 rounded-2 bg-light border d-flex align-items-center gap-2">
+      <i class="bi bi-check-circle-fill text-success fs-5"></i>
+      <div class="small">
+        <span class="fw-semibold text-dark">Live in Active Rules & Vector Knowledge Base</span>
+        <span class="text-muted ms-2">&bull; Version {{ c.new_version or '1.1' }} &bull; Synchronized</span>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+  {% else %}
+  <div class="card border-0 shadow-sm bg-white rounded-3 text-center py-5">
+    <div class="py-4">
+      <i class="bi bi-check2-all fs-1 d-block mb-3 text-success"></i>
+      <h6 class="fw-bold text-dark mb-1">All Official Circulars Up-to-Date</h6>
+      <p class="text-muted small mb-3">All monitored gazette notifications have been reviewed, verified, and published.</p>
+      <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ingestCircularModal">
+        <i class="bi bi-plus-circle me-1"></i> Ingest New Government Circular
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- Filter Empty State (Hidden by default, shown via JS if search/filter returns zero) -->
+  <div id="noMatchState" class="card border-0 shadow-sm bg-white rounded-3 text-center py-5 d-none">
+    <div class="py-4">
+      <i class="bi bi-funnel fs-1 d-block mb-2 text-muted"></i>
+      <h6 class="fw-bold text-dark mb-1">No Matching Circulars Found</h6>
+      <p class="text-muted small mb-0">Try adjusting your filter status or search keyword.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ingest Official Circular -->
+<div class="modal fade" id="ingestCircularModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <form method="POST" action="{{ url_for('main.detect_regulatory_change') }}" class="modal-content shadow-lg border-0" id="ingestCircularForm">
+      <div class="modal-header border-bottom">
+        <div class="d-flex align-items-center gap-2">
+          <div class="p-2 rounded-2 bg-primary-subtle text-primary">
+            <i class="bi bi-broadcast"></i>
+          </div>
+          <div>
+            <h6 class="modal-title fw-bold text-dark mb-0">Ingest Allowlisted Government Circular</h6>
+            <div class="text-muted" style="font-size: 0.72rem;">Central & State Gazette Notification Intake</div>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-light border small mb-3 text-muted d-flex align-items-start gap-2">
+          <i class="bi bi-shield-check text-primary fs-5 flex-shrink-0"></i>
+          <div>
+            Sources must be from authorized government domains (e.g. <code>msme.gov.in</code>, <code>cbic.gov.in</code>, <code>gst.gov.in</code>, <code>incometax.gov.in</code>). Untrusted domains are prohibited.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold text-secondary">Circular Title *</label>
+          <input type="text" name="title" class="form-control form-control-sm" required placeholder="e.g. Gazette Notification S.O. 2026/89: Section 43B(h) Clarification">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold text-secondary">Issuing Ministry / Authority *</label>
+          <input type="text" name="issuing_authority" class="form-control form-control-sm" required placeholder="e.g. Ministry of MSME / CBDT / CBIC">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold text-secondary">Official Source URL *</label>
+          <input type="url" name="source_url" class="form-control form-control-sm" required placeholder="https://msme.gov.in/notifications/2026/so-89.pdf">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold text-secondary">Gazette Notification Text / Summary *</label>
+          <textarea name="raw_content" class="form-control form-control-sm" rows="4" required placeholder="Paste official text extract for cryptographic hashing and AI proposed diff..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer border-top bg-light">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-primary">
+          <i class="bi bi-cloud-arrow-up me-1"></i> Ingest into Governance Queue
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Client-side Interactive Filter & Search Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const filterTabs = document.querySelectorAll('#statusFilterTabs .change-filter-pill');
+  const searchInput = document.getElementById('changeSearchInput');
+  const cards = document.querySelectorAll('#changeItemsContainer .change-item-card');
+  const noMatch = document.getElementById('noMatchState');
+
+  let activeFilter = 'all';
+  let searchTerm = '';
+
+  function applyFilters() {
+    let visibleCount = 0;
+    cards.forEach(card => {
+      const cardStatus = card.getAttribute('data-status');
+      const cardSearchText = card.getAttribute('data-search') || '';
+
+      const matchesStatus = (activeFilter === 'all') || (cardStatus === activeFilter);
+      const matchesSearch = !searchTerm || cardSearchText.includes(searchTerm);
+
+      if (matchesStatus && matchesSearch) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (noMatch) {
+      if (visibleCount === 0 && cards.length > 0) {
+        noMatch.classList.remove('d-none');
+      } else {
+        noMatch.classList.add('d-none');
+      }
+    }
+  }
+
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', function () {
+      filterTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      activeFilter = this.getAttribute('data-filter');
+      applyFilters();
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      searchTerm = this.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  // Handle Circular Ingestion AJAX Form
+  const form = document.getElementById('ingestCircularForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch('/admin/changes/detect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          window.location.reload();
+        } else {
+          alert('Ingestion error: ' + (res.error || 'Failed'));
+        }
+      })
+      .catch(err => alert('Error: ' + err));
+    });
+  }
+});
+</script>
+{% endblock %}

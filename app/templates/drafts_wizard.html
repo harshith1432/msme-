@@ -21,35 +21,35 @@
 </div>
 
 <div class="row g-4">
-  <div class="col-lg-8">
-    <div class="card border-0 shadow-sm p-4">
+  <div class="col-lg-8" style="min-width: 0;">
+    <div class="card border-0 shadow-sm p-4 overflow-hidden">
       <form method="POST" action="{{ url_for('main.drafts_wizard') }}" id="wizardForm">
         
         <!-- Step 1: Target Type -->
         <div class="mb-4">
           <label class="form-label fw-bold text-dark">1. Select Filing Objective</label>
           <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-md-6" style="min-width: 0;">
               <input type="radio" class="btn-check" name="workspace_type" id="typeIncentive" value="incentive" checked onchange="toggleFilingType()">
-              <label class="btn btn-outline-primary p-3 w-100 text-start h-100 d-flex flex-column justify-content-between" for="typeIncentive">
+              <label class="selection-tile" for="typeIncentive">
                 <div>
-                  <div class="fw-bold mb-1"><i class="bi bi-gift me-2"></i>Incentive / Subsidy Scheme</div>
-                  <div class="small text-muted">Apply for capital subsidies, credit guarantees (CGTMSE), interest subvention, or state industrial grants.</div>
+                  <div class="fw-bold mb-1 text-dark"><i class="bi bi-gift text-primary me-2"></i>Incentive / Subsidy Scheme</div>
+                  <div class="small text-muted mb-2">Apply for capital subsidies, credit guarantees (CGTMSE), interest subvention, or state industrial grants.</div>
                 </div>
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle mt-2 align-self-start">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle align-self-start">
                   {{ eval_res.matched_central_incentives|length + eval_res.matched_state_incentives|length }} Eligible Schemes
                 </span>
               </label>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" style="min-width: 0;">
               <input type="radio" class="btn-check" name="workspace_type" id="typeCompliance" value="compliance" onchange="toggleFilingType()">
-              <label class="btn btn-outline-primary p-3 w-100 text-start h-100 d-flex flex-column justify-content-between" for="typeCompliance">
+              <label class="selection-tile" for="typeCompliance">
                 <div>
-                  <div class="fw-bold mb-1"><i class="bi bi-shield-check me-2"></i>Statutory Compliance Return</div>
-                  <div class="small text-muted">Prepare annual filings, labour code registrations, environmental NOCs, or factory renewals.</div>
+                  <div class="fw-bold mb-1 text-dark"><i class="bi bi-shield-check text-success me-2"></i>Statutory Compliance Return</div>
+                  <div class="small text-muted mb-2">Prepare annual filings, labour code registrations, environmental NOCs, or factory renewals.</div>
                 </div>
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle mt-2 align-self-start">
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle align-self-start">
                   {{ eval_res.matched_central_compliance|length + eval_res.matched_state_compliance|length }} Active Obligations
                 </span>
               </label>
@@ -60,7 +60,7 @@
         <!-- Step 2: Choose Target Scheme or Obligation -->
         <div class="mb-4" id="incentiveSelectGroup">
           <label class="form-label fw-bold text-dark">2. Choose Eligible Incentive Scheme *</label>
-          <select name="reference_id" class="form-select" id="incentiveSelect">
+          <select name="reference_id" class="form-select text-truncate" id="incentiveSelect" style="max-width: 100%;">
             <optgroup label="Central Schemes">
               {% for inc in eval_res.matched_central_incentives %}
               <option value="{{ inc.ID or inc.get('ID', '') }}">{{ inc.Scheme or inc.get('Scheme', '') }} ({{ inc.get('Key benefit', '')[:60] }}...)</option>
@@ -76,7 +76,7 @@
 
         <div class="mb-4 d-none" id="complianceSelectGroup">
           <label class="form-label fw-bold text-dark">2. Choose Statutory Compliance Obligation *</label>
-          <select name="reference_id_compliance" class="form-select" id="complianceSelect" disabled>
+          <select name="reference_id_compliance" class="form-select text-truncate" id="complianceSelect" style="max-width: 100%;" disabled>
             <optgroup label="Central Regulatory Obligations">
               {% for comp in eval_res.matched_central_compliance[:15] %}
               <option value="{{ comp.ID or comp.get('ID', '') }}">{{ comp.Requirement or comp.get('Requirement', '') }} ({{ comp.get('Domain', '') }})</option>

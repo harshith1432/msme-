@@ -31,8 +31,8 @@
     
     <!-- Part 1: Immediate Priorities -->
     <div class="action-card mb-4">
-      <div class="action-card-header bg-dark">
-        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+      <div class="action-card-header bg-dark text-white">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2 text-white">
           <i class="bi bi-exclamation-octagon-fill text-danger"></i>
           {{ action_plan.headers.p1 }}
         </h6>
@@ -58,8 +58,8 @@
 
     <!-- Part 2: Periodic & Recurring Deadlines -->
     <div class="action-card mb-4">
-      <div class="action-card-header bg-secondary">
-        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
+      <div class="action-card-header bg-secondary text-white">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2 text-white">
           <i class="bi bi-clock-history text-warning"></i>
           {{ action_plan.headers.p2 }}
         </h6>
@@ -133,9 +133,9 @@
 
     <!-- Part 5: Direct Action Portals -->
     <div class="action-card mb-4">
-      <div class="action-card-header bg-dark">
-        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2">
-          <i class="bi bi-link-45deg"></i>
+      <div class="action-card-header bg-dark text-white">
+        <h6 class="mb-0 fw-bold d-flex align-items-center gap-2 text-white">
+          <i class="bi bi-link-45deg text-white"></i>
           {{ action_plan.headers.p5 }}
         </h6>
       </div>
@@ -149,8 +149,8 @@
                 <div class="text-muted" style="font-size: 0.75rem;">{{ p.purpose }}</div>
               </div>
               <div class="mt-2">
-                <a href="{{ p.url }}" target="_blank" class="btn btn-xs btn-outline-dark w-100">
-                  Open {{ p.name }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                <a href="{{ p.url }}" target="_blank" class="btn btn-xs btn-outline-dark w-100 justify-content-center text-truncate" title="Open {{ p.name }}">
+                  <span>Open Portal</span> <i class="bi bi-box-arrow-up-right ms-1"></i>
                 </a>
               </div>
             </div>
@@ -187,7 +187,7 @@
         </ul>
       </div>
 
-      <div id="advisorChatHistory" class="overflow-auto mb-3 border rounded p-2" style="max-height: 280px; min-height: 140px; background-color: #fafbfc;">
+      <div id="advisorChatHistory" class="overflow-y-auto overflow-x-hidden mb-3 border rounded p-2 w-100" style="max-height: 280px; min-height: 140px; background-color: #fafbfc; word-break: break-word; overflow-wrap: anywhere; box-sizing: border-box;">
         <div class="text-muted small text-center py-3">Ask any regulatory or scheme question below.</div>
       </div>
 
@@ -259,25 +259,111 @@ document.addEventListener('DOMContentLoaded', function () {
           citationsHtml += '</div></div>';
         }
 
+        let topicsHtml = '';
+        if (data.available_topics && isRefusal) {
+          const topDocs = data.available_topics.documents || [];
+          const topCompliances = data.available_topics.compliances || [];
+          const topIncentives = data.available_topics.incentives || [];
+          const topVault = data.available_topics.vault || [];
+
+          if (topDocs.length > 0 || topCompliances.length > 0 || topIncentives.length > 0 || topVault.length > 0) {
+            topicsHtml = `
+              <div class="mt-2 pt-2 border-top">
+                <div class="fw-semibold text-muted mb-1" style="font-size: 0.72rem;">
+                  <i class="bi bi-database-check text-success me-1"></i>Available in Authorized RAG Knowledge Base:
+                </div>
+                <div class="small text-muted" style="font-size: 0.74rem; line-height: 1.4; word-break: break-word; overflow-wrap: anywhere;">
+                  ${topDocs.length > 0 ? `<div class="mb-1">&bull; <strong>Regulations:</strong> ${escapeHtml(topDocs.join(', '))}</div>` : ''}
+                  ${topCompliances.length > 0 ? `<div class="mb-1">&bull; <strong>Compliances:</strong> ${escapeHtml(topCompliances.join(', '))}</div>` : ''}
+                  ${topIncentives.length > 0 ? `<div class="mb-1">&bull; <strong>Subsidies:</strong> ${escapeHtml(topIncentives.join(', '))}</div>` : ''}
+                  ${topVault.length > 0 ? `<div class="mb-1">&bull; <strong>Company Documents:</strong> ${escapeHtml(topVault.join(', '))}</div>` : ''}
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        let suggestionsHtml = '';
+        if (data.suggestions && data.suggestions.length > 0) {
+          suggestionsHtml = `
+            <div class="mt-2 pt-2 border-top">
+              <div class="fw-semibold text-dark mb-1 d-flex align-items-center gap-1" style="font-size: 0.74rem;">
+                <i class="bi bi-lightbulb-fill text-warning flex-shrink-0"></i>
+                <span>${isRefusal ? 'You can ask me questions like (Click to ask):' : 'Suggested questions (Click to ask):'}</span>
+              </div>
+              <div class="d-flex flex-column gap-1 mt-1 w-100">
+                ${data.suggestions.map(s => `
+                  <button type="button" class="btn btn-sm btn-outline-secondary text-start py-1 px-2 suggestion-chip w-100" data-query="${escapeHtml(s)}" style="font-size: 0.75rem; border-radius: 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere;">
+                    <i class="bi bi-arrow-right-circle text-primary me-1 flex-shrink-0"></i><span class="chip-text">${escapeHtml(s)}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        const isRefusal = data.refusal;
+        let statusBadge = '';
+        if (isRefusal) {
+          statusBadge = '<span class="fw-bold text-warning"><i class="bi bi-info-circle me-1"></i>Topic Not Found in RAG</span>';
+        } else if (data.is_greeting) {
+          statusBadge = '<span class="fw-bold text-primary"><i class="bi bi-stars me-1"></i>Regulatory Assistant</span>';
+        } else {
+          statusBadge = '<span class="fw-bold text-success"><i class="bi bi-shield-check me-1"></i>Grounded Guidance</span>';
+        }
+
         history.innerHTML += `
-          <div class="d-flex justify-content-start mb-2">
-            <div class="p-2 rounded bg-white border text-dark shadow-sm" style="font-size: 0.85rem; max-width: 95%;">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold text-success"><i class="bi bi-shield-check me-1"></i>Grounded Guidance</span>
+          <div class="d-flex justify-content-start mb-2 w-100">
+            <div class="p-2 rounded bg-white border text-dark shadow-sm copilot-msg-bubble w-100" style="font-size: 0.85rem; max-width: 100%; word-break: break-word; overflow-wrap: anywhere; box-sizing: border-box;">
+              <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
+                ${statusBadge}
                 ${toolName}
               </div>
-              <p class="mb-1 text-dark" style="line-height: 1.4;">${escapeHtml(answerText)}</p>
+              <div class="mb-1 text-dark" style="line-height: 1.4; word-break: break-word; overflow-wrap: anywhere;">${formatMarkdown(answerText)}</div>
               ${citationsHtml}
+              ${topicsHtml}
+              ${suggestionsHtml}
+            </div>
+          </div>
+        `;
+        history.scrollTop = history.scrollHeight;
+      })
+      .catch(err => {
+        const loading = document.getElementById('advisorLoading');
+        if (loading) loading.remove();
+        history.innerHTML += `
+          <div class="d-flex justify-content-start mb-2">
+            <div class="p-2 rounded bg-danger-subtle border border-danger-subtle text-danger" style="font-size: 0.85rem;">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> An error occurred contacting the regulatory reasoning service. Please try again.
             </div>
           </div>
         `;
         history.scrollTop = history.scrollHeight;
       });
     });
+    // Handle suggestion chip clicks in advisor workspace
+    history.addEventListener('click', function(e) {
+      const chip = e.target.closest('.suggestion-chip');
+      if (chip) {
+        const q = chip.getAttribute('data-query');
+        if (q) {
+          input.value = q;
+          form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      }
+    });
   }
 
   function escapeHtml(t) {
-    return t.replace(/[&<>"']/g, function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]; });
+    return (t || '').replace(/[&<>"']/g, function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]; });
+  }
+
+  function formatMarkdown(text) {
+    if (!text) return '';
+    let escaped = escapeHtml(text);
+    escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    escaped = escaped.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    return escaped;
   }
 });
 </script>

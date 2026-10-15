@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('nav_compliance', 'Compliance') }} — {{ t('app_title', 'MSME Navigator') }}{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div>
+    <h4 class="fw-bold mb-1 text-dark">{{ t('compliance_catalogue', 'Compliance Catalogue') }}</h4>
+    <p class="text-muted small mb-0">{{ t('compliance_catalogue_sub', 'Browse all 424 statutory obligations (94 Central + 330 State & UT requirements).') }}</p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('main.export_csv') }}" class="btn btn-outline-dark btn-sm">
+      <i class="bi bi-download me-1"></i> {{ t('export_csv', 'Export Active Obligations (CSV)') }}
+    </a>
+  </div>
+</div>
+
+<!-- Tabs & Search Controls -->
+<div class="card border-0 shadow-sm bg-white p-3 rounded-3 mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col-md-5">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" id="complianceSearch" class="form-control border-start-0" placeholder="{{ t('search_placeholder', 'Search by law, keyword, requirement...') }}">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <select id="complianceDomainFilter" class="form-select form-select-sm">
+        <option value="">{{ t('all_regulatory_domains', 'All Regulatory Domains') }}</option>
+        {% for d in all_domains %}
+        <option value="{{ d }}">{{ d|translate_dynamic }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <ul class="nav nav-pills nav-fill bg-light p-1 rounded-2" id="complianceTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active py-1 small fw-semibold" id="central-tab" data-bs-toggle="tab" data-bs-target="#central" type="button">
+            {{ t('central', 'Central') }} ({{ central_reqs|length }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link py-1 small fw-semibold" id="state-tab" data-bs-toggle="tab" data-bs-target="#state" type="button">
+            {{ t('state_uts', 'State & UTs') }} ({{ state_reqs|length }})
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content" id="complianceTabContent">
+  <!-- Central Compliance Tab -->
+  <div class="tab-pane fade show active" id="central" role="tabpanel">
+    <div class="card border-0 shadow-sm bg-white rounded-3 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table-custom mb-0">
+          <thead>
+            <tr>
+              <th style="width: 80px;">{{ t('th_id', 'ID') }}</th>
+              <th style="width: 120px;">{{ t('th_domain', 'Domain') }}</th>
+              <th>{{ t('th_requirement_statute', 'Requirement & Statute') }}</th>
+              <th>{{ t('th_applies_to', 'Applies To / Trigger') }}</th>
+              <th>{{ t('th_frequency', 'Frequency / Due Date') }}</th>
+              <th>{{ t('authority', 'Authority') }}</th>
+              <th style="width: 140px;">{{ t('official_source', 'Official Source') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in central_reqs %}
+            <tr class="compliance-row" data-domain="{{ r.domain }}">
+              <td class="fw-bold text-dark">{{ r.id }}</td>
+              <td><span class="badge badge-custom">{{ r.domain|translate_dynamic }}</span></td>
+              <td>
+                <div class="fw-semibold text-dark">{{ r.requirement|translate_dynamic }}</div>
+                <div class="text-muted small">{{ r.law_basis }}</div>
+              </td>
+              <td><span class="small text-dark">{{ r.applies_to_trigger|translate_dynamic }}</span></td>
+              <td><span class="small text-muted">{{ r.frequency_due_date|translate_dynamic or t('event_based', 'Event-based') }}</span></td>
+              <td><span class="small text-muted">{{ r.authority|translate_dynamic }}</span></td>
+              <td>
+                {% if r.official_link %}
+                <a href="{{ r.official_link }}" target="_blank" class="btn btn-xs btn-outline-dark">
+                  {{ t('btn_view_official', 'Official Portal') }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+                {% else %}
+                <span class="text-muted small">—</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- State & UT Compliance Tab -->
+  <div class="tab-pane fade" id="state" role="tabpanel">
+    <div class="card border-0 shadow-sm bg-white rounded-3 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table-custom mb-0">
+          <thead>
+            <tr>
+              <th style="width: 80px;">{{ t('th_id', 'ID') }}</th>
+              <th style="width: 160px;">{{ t('label_state', 'State / UT') }}</th>
+              <th style="width: 120px;">{{ t('th_domain', 'Domain') }}</th>
+              <th>{{ t('th_requirement', 'Requirement') }}</th>
+              <th>{{ t('th_statutory_basis', 'Statutory Basis') }}</th>
+              <th>{{ t('th_what_to_do', 'What To Do') }}</th>
+              <th style="width: 140px;">{{ t('th_portal_link', 'Portal Link') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in state_reqs %}
+            <tr class="compliance-row" data-domain="{{ r.domain }}" data-state="{{ r.jurisdiction }}">
+              <td class="fw-bold text-dark">{{ r.id }}</td>
+              <td>
+                <span class="fw-semibold text-dark">{{ r.jurisdiction }}</span>
+                <span class="badge bg-light text-muted border" style="font-size: 0.7rem;">{{ r.jurisdiction_type }}</span>
+              </td>
+              <td><span class="badge badge-custom">{{ r.domain|translate_dynamic }}</span></td>
+              <td><div class="fw-semibold text-dark">{{ r.requirement|translate_dynamic }}</div></td>
+              <td><span class="small text-muted">{{ r.law_basis }}</span></td>
+              <td><span class="small text-dark">{{ r.what_to_do|translate_dynamic }}</span></td>
+              <td>
+                {% if r.official_link %}
+                <a href="{{ r.official_link }}" target="_blank" class="btn btn-xs btn-outline-dark">
+                  {{ t('portal', 'Portal') }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+                {% else %}
+                <span class="text-muted small">—</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

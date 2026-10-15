@@ -31,11 +31,20 @@
     All Documents
   </a>
   {% for f in folders %}
-  <a href="{{ url_for('main.documents', folder_id=f.id) }}" class="btn btn-sm {% if active_folder and active_folder.id == f.id %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-3 d-inline-flex align-items-center gap-1">
-    <i class="bi bi-folder-fill {% if active_folder and active_folder.id == f.id %}text-warning{% else %}text-secondary{% endif %}"></i>
-    <span>{{ f.name }}</span>
-    <span class="badge bg-light text-dark rounded-pill ms-1" style="font-size: 0.65rem;">{{ f.links|length }}</span>
-  </a>
+  <div class="btn-group btn-group-sm">
+    <a href="{{ url_for('main.documents', folder_id=f.id) }}" class="btn btn-sm {% if active_folder and active_folder.id == f.id %}btn-dark rounded-end-0{% else %}btn-outline-secondary rounded-pill{% endif %} px-3 d-inline-flex align-items-center gap-1">
+      <i class="bi bi-folder-fill {% if active_folder and active_folder.id == f.id %}text-warning{% else %}text-secondary{% endif %}"></i>
+      <span>{{ f.name }}</span>
+      <span class="badge bg-light text-dark rounded-pill ms-1" style="font-size: 0.65rem;">{{ f.links|length }}</span>
+    </a>
+    {% if active_folder and active_folder.id == f.id %}
+    <form action="{{ url_for('main.delete_folder', folder_id=f.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete virtual folder \'{{ f.name }}\'? Documents will remain safely in the vault.');">
+      <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill rounded-start-0 px-2" title="Delete folder">
+        <i class="bi bi-trash"></i>
+      </button>
+    </form>
+    {% endif %}
+  </div>
   {% endfor %}
 </div>
 
@@ -44,10 +53,19 @@
   <div class="col-lg-8">
     <div class="card border-0 shadow-sm bg-white rounded-3 p-3 p-md-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h6 class="fw-bold mb-0">
-          <i class="bi bi-files me-1"></i>
-          {% if active_folder %}Folder: {{ active_folder.name }} ({{ documents|length }}){% else %}Central Physical Vault ({{ documents|length }}){% endif %}
-        </h6>
+        <div class="d-flex align-items-center gap-2">
+          <h6 class="fw-bold mb-0">
+            <i class="bi bi-files me-1"></i>
+            {% if active_folder %}Folder: {{ active_folder.name }} ({{ documents|length }}){% else %}Central Physical Vault ({{ documents|length }}){% endif %}
+          </h6>
+          {% if active_folder %}
+          <form action="{{ url_for('main.delete_folder', folder_id=active_folder.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete virtual folder \'{{ active_folder.name }}\'? Documents will remain safely in the vault.');">
+            <button type="submit" class="btn btn-xs btn-outline-danger py-0 px-2 d-flex align-items-center gap-1" title="Delete Folder">
+              <i class="bi bi-trash"></i> Delete Folder
+            </button>
+          </form>
+          {% endif %}
+        </div>
         <span class="badge bg-light text-muted border small">Multi-Tenant Vault</span>
       </div>
 
@@ -106,9 +124,15 @@
             <button class="btn btn-sm btn-outline-primary extract-btn" data-doc-id="{{ d.id }}" data-doc-title="{{ d.title }}">
               <i class="bi bi-magic me-1"></i> Extract Data
             </button>
-            <a href="{{ url_for('main.download_document', doc_id=d.id) }}" class="btn btn-sm btn-outline-custom">
+            <a href="{{ url_for('main.download_document', doc_id=d.id) }}" class="btn btn-sm btn-outline-custom" title="Download">
               <i class="bi bi-download"></i>
             </a>
+            <!-- Delete Document -->
+            <form action="{{ url_for('main.delete_document', doc_id=d.id, folder_id=active_folder.id if active_folder else None) }}" method="POST" class="d-inline" onsubmit="return confirm('Permanently delete document \'{{ d.title }}\' from the vault?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Document">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
           </div>
         </div>
         {% else %}

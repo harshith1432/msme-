@@ -26,8 +26,8 @@ from flask import (
     redirect, url_for, current_app, flash, send_from_directory,
     Response, abort
 )
-from app.extensions import db
-from app.models import (
+from backend.extensions import db
+from backend.models import (
     Tenant, User, Membership, Company, CompanyMetric, 
     ComplianceRequirement, IncentiveScheme, CompanyObligation,
     Task, Document, ClientAccess, RegulatoryChange, AuditEvent,
@@ -35,17 +35,17 @@ from app.models import (
     KnowledgeCollection, KnowledgeDocument, DocumentChunk, IngestionJob, KnowledgeSource,
     DocumentFolder, DocumentFolderLink, ApplicationWorkspace, GeneratedArtifact, TranslationCache
 )
-from app.services.rules_engine import RulesEngine
-from app.services.ai_advisor import AIAdvisor, LANGUAGE_NAMES
-from app.services.extraction_service import ExtractionService
-from app.services.readiness_service import ReadinessService
-from app.services.incentive_service import IncentiveEligibilityService
-from app.services.regulatory_service import RegulatoryIntelligenceService
-from app.services.action_service import ComplianceActionService
-from app.services.tool_dispatcher import ToolDispatcher
-from app.services.rag_service import rag_service
-from app.services.website_research import website_research_service, SSRFProtectionError
-from app.services.document_generator import document_generator
+from backend.services.rules_engine import RulesEngine
+from backend.services.ai_advisor import AIAdvisor, LANGUAGE_NAMES
+from backend.services.extraction_service import ExtractionService
+from backend.services.readiness_service import ReadinessService
+from backend.services.incentive_service import IncentiveEligibilityService
+from backend.services.regulatory_service import RegulatoryIntelligenceService
+from backend.services.action_service import ComplianceActionService
+from backend.services.tool_dispatcher import ToolDispatcher
+from backend.services.rag_service import rag_service
+from backend.services.website_research import website_research_service, SSRFProtectionError
+from backend.services.document_generator import document_generator
 
 main_bp = Blueprint('main', __name__)
 rules_engine = RulesEngine()
@@ -160,6 +160,7 @@ def get_company_profile_dict(company):
 
     return {
         "id": company.id,
+        "tenant_id": getattr(company, 'tenant_id', None),
         "name": company.name,
         "trade_name": company.trade_name or company.name,
         "state": company.state,
@@ -182,7 +183,8 @@ def get_company_profile_dict(company):
 def inject_global_data():
     user_role = session.get('user_role', 'owner')
     is_admin = (user_role == 'platform_admin' or request.path.startswith('/admin'))
-    company = None if is_admin else get_current_company()
+    is_consultant = (user_role == 'consultant' or request.path.startswith('/consultant'))
+    company = None if (is_admin or is_consultant) else get_current_company()
     pending_changes = 0
     if is_admin:
         try:
@@ -192,6 +194,7 @@ def inject_global_data():
     return {
         'active_company': company,
         'is_admin': is_admin,
+        'is_consultant': is_consultant,
         'pending_changes_count': pending_changes
     }
 
@@ -217,6 +220,7 @@ def landing():
     return render_template('landing.html')
 
 @main_bp.route('/set-language/<lang>')
+@main_bp.route('/set_language/<lang>')
 def set_language(lang):
     if lang in current_app.config['SUPPORTED_LANGUAGES']:
         session['lang'] = lang
@@ -569,6 +573,8 @@ def dashboard():
     user_role = session.get('user_role', 'owner')
     if user_role == 'platform_admin':
         return redirect(url_for('main.admin_dashboard'))
+    if user_role == 'consultant':
+        return redirect(url_for('main.consultant_workspace'))
         
     lang = session.get('lang', 'en')
     company = get_current_company()
@@ -1435,7 +1441,13 @@ def verify_record(req_id):
 @role_required('platform_admin')
 def admin_changes():
     changes = RegulatoryChange.query.order_by(RegulatoryChange.created_at.desc()).all()
-    return render_template('admin_changes.html', changes=changes)
+    stats = {
+        'total': len(changes),
+        'needs_review': sum(1 for c in changes if c.review_status in ['needs_review', 'pending', 'detected']),
+        'approved': sum(1 for c in changes if c.review_status == 'approved'),
+        'published': sum(1 for c in changes if c.review_status == 'published'),
+    }
+    return render_template('admin_changes.html', changes=changes, stats=stats)
 
 @main_bp.route('/admin/changes/approve/<int:change_id>', methods=['POST'])
 @login_required

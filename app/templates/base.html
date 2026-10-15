@@ -36,33 +36,6 @@
       {% endif %}
     </div>
 
-    <!-- Active Context Summary Card -->
-    {% if is_admin %}
-    <!-- Admin Portal Status Card (Only Admin Controls) -->
-    <div class="sidebar-company-card" style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(59, 130, 246, 0.3);">
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="small fw-bold text-white"><i class="bi bi-shield-lock-fill text-primary me-1"></i> Admin Console</span>
-        <span class="badge bg-danger text-white" style="font-size: 0.65rem;">Platform</span>
-      </div>
-      <div class="d-flex align-items-center gap-1">
-        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.68rem;">Central & State Gov</span>
-        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.68rem;">RAG Engine</span>
-      </div>
-    </div>
-    {% elif active_company %}
-    <!-- Active Company Summary Card (Only for Organization/Company views) -->
-    <div class="sidebar-company-card">
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="small fw-bold text-white text-truncate" style="max-width: 150px;">{{ active_company.name }}</span>
-        <a href="{{ url_for('main.company_profile') }}" class="text-secondary text-decoration-none small" title="Edit Profile"><i class="bi bi-pencil-square"></i></a>
-      </div>
-      <div class="d-flex align-items-center gap-1">
-        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.7rem;">{{ active_company.state }}</span>
-        <span class="badge bg-dark border border-secondary text-light" style="font-size: 0.7rem;">{{ active_company.entity_type.split(' ')[0] }}</span>
-      </div>
-    </div>
-    {% endif %}
-
     <!-- Sidebar Menu Links -->
     <div class="sidebar-menu">
       {% if is_admin %}
@@ -80,7 +53,7 @@
       </a>
 
       <a href="{{ url_for('main.admin_changes') }}" class="sidebar-link {% if request.endpoint in ['main.admin_changes', 'main.approve_change', 'main.publish_change'] %}active{% endif %}">
-        <i class="bi bi-bell-history"></i>
+        <i class="bi bi-broadcast"></i>
         <span>Change Intelligence</span>
         {% if pending_changes_count and pending_changes_count > 0 %}
         <span class="badge bg-danger ms-auto rounded-pill" style="font-size: 0.65rem;">{{ pending_changes_count }}</span>
@@ -119,6 +92,30 @@
       <a href="{{ url_for('main.admin_audit') }}" class="sidebar-link {% if request.endpoint == 'main.admin_audit' %}active{% endif %}">
         <i class="bi bi-journal-text"></i>
         <span>System Audit Logs</span>
+      </a>
+
+      {% elif is_consultant %}
+      <!-- ================= CA & CONSULTANT CONTROLS ONLY ================= -->
+      <div class="sidebar-section-header">CA Practice Management</div>
+
+      <a href="{{ url_for('main.consultant_workspace') }}" class="sidebar-link {% if request.endpoint in ['main.consultant_workspace', 'main.switch_client'] %}active{% endif %}">
+        <i class="bi bi-briefcase-fill text-success"></i>
+        <span>Client Portfolio</span>
+      </a>
+
+      <a href="{{ url_for('main.consultant_workspace') }}#compliance-overview" class="sidebar-link">
+        <i class="bi bi-clipboard2-check"></i>
+        <span>Client Audits</span>
+      </a>
+
+      <a href="{{ url_for('main.consultant_workspace') }}#delegated-access" class="sidebar-link">
+        <i class="bi bi-shield-lock"></i>
+        <span>Delegated Authorizations</span>
+      </a>
+
+      <a href="{{ url_for('main.reports') }}" class="sidebar-link {% if request.endpoint == 'main.reports' %}active{% endif %}">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        <span>Portfolio Reports</span>
       </a>
 
       {% else %}
@@ -169,16 +166,6 @@
         <i class="bi bi-file-earmark-bar-graph"></i>
         <span>{{ t('nav_reports', 'Reports & Export') }}</span>
       </a>
-
-      <!-- Advisory & CA Workspace (Role Protected for consultant) -->
-      {% if current_user and current_user.role == 'consultant' or session.get('user_role') == 'consultant' %}
-      <div class="sidebar-section-header mt-3">CA Advisory</div>
-      <a href="{{ url_for('main.consultant_workspace') }}" class="sidebar-link {% if request.endpoint in ['main.consultant_workspace', 'main.switch_client'] %}active{% endif %}">
-        <i class="bi bi-briefcase"></i>
-        <span>{{ t('nav_ca_workspace', 'CA Workspace') }}</span>
-      </a>
-      {% endif %}
-
       {% endif %}
     </div>
 
@@ -219,11 +206,11 @@
             {% if is_admin %}
               <span class="breadcrumb-page">{{ t('super_admin_console', 'Super Admin Console') }}</span>
               <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1" style="font-size: 0.68rem;">{{ t('governance', 'Governance') }}</span>
+            {% elif is_consultant %}
+              <span class="breadcrumb-page">CA & Consultant Portfolio</span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle ms-1" style="font-size: 0.68rem;">Practice Workspace</span>
             {% else %}
               <span class="breadcrumb-page">{{ active_company.name if active_company else t('nav_overview', 'Dashboard') }}</span>
-              {% if active_company and active_company.is_onboarded %}
-                <span class="badge badge-online ms-1"><span class="status-dot"></span> {{ t('status_active', 'Active') }}</span>
-              {% endif %}
             {% endif %}
           </div>
         </div>
@@ -305,7 +292,7 @@
             </li>
             <li>
               <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('main.admin_changes') }}">
-                <i class="bi bi-bell-history"></i> {{ t('change_queue', 'Change Queue') }}
+                <i class="bi bi-broadcast"></i> {{ t('change_queue', 'Change Queue') }}
               </a>
             </li>
             <li>
@@ -378,7 +365,7 @@
   </div>
 
   <!-- AI Copilot Offcanvas -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="copilotOffcanvas" aria-labelledby="copilotLabel" style="width: 440px;">
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="copilotOffcanvas" aria-labelledby="copilotLabel" style="width: 440px; max-width: 100vw;">
     <div class="offcanvas-header border-bottom bg-dark text-white">
       <div class="d-flex align-items-center gap-2">
         <i class="bi bi-stars text-warning fs-5"></i>
@@ -389,13 +376,36 @@
       </div>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body d-flex flex-column p-3">
-      <div id="copilotMessages" class="flex-grow-1 overflow-auto mb-3" style="min-height: 300px;">
-        <div class="d-flex justify-content-start mb-3">
-          <div class="p-3 rounded bg-light border text-dark" style="font-size: 0.875rem;">
+    <div class="offcanvas-body d-flex flex-column p-3 overflow-x-hidden" style="width: 100%; box-sizing: border-box;">
+      <div id="copilotMessages" class="flex-grow-1 overflow-y-auto overflow-x-hidden mb-3 w-100" style="min-height: 300px; word-break: break-word; overflow-wrap: anywhere;">
+        <div class="d-flex justify-content-start mb-3 w-100">
+          <div class="p-3 rounded bg-light border text-dark shadow-sm copilot-msg-bubble w-100" style="font-size: 0.85rem; box-sizing: border-box; word-break: break-word; overflow-wrap: anywhere;">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 0.7rem;"><i class="bi bi-stars me-1"></i>MSME Regulatory Copilot</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Grounded RAG</span>
+            </div>
             <p class="mb-2 fw-semibold">Hello! I am your MSME Regulatory Copilot.</p>
-            <p class="small text-muted mb-2">I analyze your specific headcount, turnover, and state to give you exact statutory next steps in Indian languages.</p>
-            <div class="d-grid gap-1">
+            <p class="small text-muted mb-2">I check authorized regulatory documents and statutory rules in my RAG software to answer your compliance and incentive questions.</p>
+            
+            <div class="mt-2 pt-2 border-top">
+              <div class="fw-semibold text-dark mb-1 d-flex align-items-center gap-1" style="font-size: 0.74rem;">
+                <i class="bi bi-lightbulb-fill text-warning flex-shrink-0"></i>
+                <span>You can ask questions like (Click to ask):</span>
+              </div>
+              <div class="d-flex flex-column gap-1 w-100">
+                <button type="button" class="btn btn-sm btn-outline-secondary text-start py-1 px-2 suggestion-chip w-100" data-query="What does the Master Circular on CGTMSE Coverage say about eligibility?" style="font-size: 0.75rem; border-radius: 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere;">
+                  <i class="bi bi-arrow-right-circle text-primary me-1 flex-shrink-0"></i><span class="chip-text">What does CGTMSE say about collateral-free loan coverage?</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary text-start py-1 px-2 suggestion-chip w-100" data-query="What are our mandatory obligations for EPF and ESI rules?" style="font-size: 0.75rem; border-radius: 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere;">
+                  <i class="bi bi-arrow-right-circle text-primary me-1 flex-shrink-0"></i><span class="chip-text">What are our mandatory obligations for EPF and ESI?</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary text-start py-1 px-2 suggestion-chip w-100" data-query="How can we apply for PM Employment Generation Programme (PMEGP)?" style="font-size: 0.75rem; border-radius: 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere;">
+                  <i class="bi bi-arrow-right-circle text-primary me-1 flex-shrink-0"></i><span class="chip-text">How can we apply for PMEGP subsidy scheme?</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-grid gap-1 mt-3">
               <a href="{{ url_for('main.advisor') }}" class="btn btn-sm btn-dark text-center">Open Full 5-Part Action Plan</a>
             </div>
           </div>

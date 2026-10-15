@@ -28,6 +28,9 @@ class Config:
     
     # Database
     _raw_db_url = os.environ.get('DATABASE_URL')
+    if _raw_db_url and (os.environ.get('RENDER') or os.environ.get('VERCEL')) and ('127.0.0.1' in _raw_db_url or 'localhost' in _raw_db_url):
+        _raw_db_url = None
+
     if _raw_db_url:
         if _raw_db_url.startswith('postgres://'):
             _raw_db_url = _raw_db_url.replace('postgres://', 'postgresql://', 1)

@@ -19,16 +19,15 @@ RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
 # Copy application source code
+COPY --chown=appuser:appuser app/ /app/app/
 COPY --chown=appuser:appuser backend/ /app/backend/
 COPY --chown=appuser:appuser frontend/ /app/frontend/
 COPY --chown=appuser:appuser data/ /app/data/
+COPY --chown=appuser:appuser run.py /app/run.py
 COPY --chown=appuser:appuser wsgi.py /app/wsgi.py
 
 USER appuser
 
 EXPOSE 5000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://127.0.0.1:5000/health/live || exit 1
-
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--threads", "2", "--timeout", "60", "wsgi:app"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120 wsgi:app"]
